@@ -22,8 +22,9 @@
   "dependencies": {
     "@astrojs/mdx": "^4.2.2",
     "@astrojs/solid-js": "^5.0.6",
+    "@tailwindcss/vite": "^4.0.17",
     "astro": "^5.5.5",
     "solid-devtools": "^0.30.1",
-    "solid-js": "^1.9.5"
+    "tailwindcss": "^4.0.17"
   }
 }
