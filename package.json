@@ -1,0 +1,29 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/bsraya/personal-website#readme",
+  "bugs": {
+    "url": "https://github.com/bsraya/personal-website/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsraya/personal-website.git"
+  },
+  "license": "MIT",
+  "author": "Bijon Setyawan Raya",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.2.2",
+    "@astrojs/solid-js": "^5.0.6",
+    "astro": "^5.5.5",
+    "solid-devtools": "^0.30.1",
+    "solid-js": "^1.9.5"
+  }
+}
