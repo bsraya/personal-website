@@ -1,6 +1,6 @@
 import expressiveCode from "astro-expressive-code";
 import mdx from "@astrojs/mdx";
-import solidJs from "@astrojs/solid-js";
+import solid from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import rehypeKatex from "rehype-katex";
@@ -14,7 +14,7 @@ import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
 
 export default defineConfig({
   integrations: [
-    mdx({
+    solid({ devtools: true }),
     expressiveCode({
       themes: ['github-light'],
       plugins: [pluginLineNumbers(), pluginCodeOutput()]
