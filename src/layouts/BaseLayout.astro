@@ -15,9 +15,8 @@ const { pageTitle } = Astro.props;
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body class="h-full mx-auto max-w-xl py-5">
     <Header />
-    <h1 class="text-3xl font-bold underline">{pageTitle}</h1>
     <slot />
     <Footer />
   </body>
