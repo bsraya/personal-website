@@ -1,0 +1,17 @@
+---
+const dateObject: object = {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+}
+
+const { content } = Astro.props;
+---
+
+<div>
+    <div class="text-slate-400">{new Date(content.frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
+    <a class="w-fit hover:underline decoration-slate-500 md:text-2xl text-xl" href={content.url}>
+        {content.frontmatter.title}
+    </a>
+    <p class="text-md md:text-lg mt-auto text-slate-500">{content.frontmatter.description}</p>
+</div>
