@@ -3,18 +3,42 @@ layout: ../../layouts/PostLayout.astro
 title: "My First Post"
 description: "This is my very first post"
 publishedDate: 2024-05-03
-tags: ["Post"]
+tags: ["post", "first"]
 published: true
-type: "Post"
 ---
 
 # {frontmatter.title}
 
+{frontmatter.description}
 
-```python
-print("Hello, world!")
+I run the following code `print("something")`.
+
+```js title="app.js" {1, 4}
+// Javascript code with syntax highlighting.
+var fun = function lang(l) {
+  dateformat.i18n = require('./lang/' + l);
+  return true;
+};
+```
+
+haha
+
+```python showLineNumbers=false
+def fibonacci(number: int) -> list(int):
+  pass
+
+if __name__ == "__main__":
+  print("Hello, world!")
+  print(fibonnaci(number=10))
 ```
 
 $$$
 \alpha = \beta + 1
 $$$
+
+```bash showLineNumbers=false withOutput
+> def print(test: str) -> null:
+>   print(f"{test}")
+
+/usr/home/boba-tan/programming
+```

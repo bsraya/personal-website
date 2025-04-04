@@ -1,8 +1,15 @@
+import { defineConfig } from "astro/config";
+
+// Astro Intregrations
 import expressiveCode from "astro-expressive-code";
 import mdx from "@astrojs/mdx";
 import solid from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap"
+import metaTags from "astro-meta-tags";
+import robotsTxt from "astro-robots-txt";
+
+// Markdown plugins
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
@@ -19,12 +26,22 @@ export default defineConfig({
       themes: ['github-light'],
       plugins: [pluginLineNumbers(), pluginCodeOutput()]
     }),
-      remarkRehype: { footnoteLabel: 'Footnotes' },
-      gfm: true,
-    }),
-    solidJs({ devtools: true })
+    mdx(),
+    sitemap(),
+    metaTags(),
+    robotsTxt(),
   ],
   vite: {
     plugins: [tailwindcss()],
+  },
+  markdown: {
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "github-light",
+    },
+    remarkPlugins: [remarkMath, remarkToc],
+    rehypePlugins: [rehypeKatex],
+    remarkRehype: { footnoteLabel: 'Footnotes' },
+    gfm: true
   }
 });
