@@ -1,0 +1,66 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "My Third Work"
+description: "This is my third Work"
+publishedDate: 2024-05-03
+tags: ["Work"]
+published: true
+---
+
+import BarChart from "../../components/chart/Bar";
+import PieChart from "../../components/chart/Pie";
+
+<BarChart
+  client:visible
+  width={500}
+  height={500}
+  data={{
+  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  datasets: [{
+      label: 'My First Dataset',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1
+    }]
+  }}
+/>
+
+<PieChart
+  client:visible
+  width={500}
+  height={500}
+  data={{
+    labels: [
+      'Red',
+      'Blue',
+      'Yellow'
+    ],
+    datasets: [{
+      label: 'My First Dataset',
+      data: [300, 50, 100],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+        'rgb(255, 205, 86)'
+      ],
+      hoverOffset: 4
+    }]
+  }}
+/>
