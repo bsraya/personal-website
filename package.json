@@ -22,8 +22,11 @@
   "dependencies": {
     "@astrojs/mdx": "^4.2.2",
     "@astrojs/solid-js": "^5.0.6",
+    "@expressive-code/plugin-line-numbers": "^0.40.2",
+    "@fujocoded/expressive-code-output": "^0.0.1",
     "@tailwindcss/vite": "^4.0.17",
     "astro": "^5.5.5",
+    "astro-expressive-code": "^0.40.2",
     "rehype-katex": "^7.0.1",
     "rehype-preset-minify": "^7.0.1",
     "remark-math": "^6.0.0",

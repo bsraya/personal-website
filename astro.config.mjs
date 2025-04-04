@@ -1,3 +1,4 @@
+import expressiveCode from "astro-expressive-code";
 import mdx from "@astrojs/mdx";
 import solidJs from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
@@ -5,15 +6,19 @@ import { defineConfig } from "astro/config";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
-import rehypePresetMinify from "rehype-preset-minify";
+
+// Expressive code plugins
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
+
 
 export default defineConfig({
   integrations: [
     mdx({
-      syntaxHighlight: 'shiki',
-      shikiConfig: { theme: 'dracula' },
-      remarkPlugins: [remarkMath, remarkToc],
-      rehypePlugins: [rehypeKatex, rehypePresetMinify],
+    expressiveCode({
+      themes: ['github-light'],
+      plugins: [pluginLineNumbers(), pluginCodeOutput()]
+    }),
       remarkRehype: { footnoteLabel: 'Footnotes' },
       gfm: true,
     }),

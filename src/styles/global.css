@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.expressive-code .frame.is-terminal .output {
+  background-color: #f0f0f0; /* Light grey background */     /* Rounded corners for a nicer look */
+}
