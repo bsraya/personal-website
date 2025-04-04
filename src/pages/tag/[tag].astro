@@ -1,0 +1,40 @@
+---
+import type { MarkdownInstance } from "astro";
+import type { Frontmatter } from "../../types/frontmatter";
+
+import PostCard from "../../components/PostCard.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Heading from "../../components/Heading.astro";
+
+export function getStaticPaths() {
+    const tags = new Set<string>();
+    const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../posts/*.mdx", { eager: true }));
+
+    for (const post of allPosts) {
+        if (post.frontmatter.tags) {
+            for (const tag of post.frontmatter.tags) {
+                tags.add(tag);
+            }
+        }
+    }
+
+    return Array.from(tags).map((tag) => ({
+        params: { tag: tag },
+    }));
+}
+
+const { tag } = Astro.params;
+const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../posts/*.mdx", { eager: true }));
+const similarPosts = allPosts.filter(post => post.frontmatter.tags && post.frontmatter.tags.includes(tag));
+---
+
+<BaseLayout>
+  <div class="flex flex-row gap-1 mb-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{tag}</Heading></div>
+  <div class="grid grid-col gap-5">
+    {
+      similarPosts.map((work) =>
+        <PostCard post={work} />
+      )
+    }
+  </div>
+</BaseLayout>
