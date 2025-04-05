@@ -22,11 +22,13 @@ const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("
     <div class="grid grid-col gap-3">
       <Heading as="h1" weight="bold">Selected Works</Heading>
       { allWorks.map((work) => <ContentCard content={work} />) }
+      <a href="/works" class="underline">See more</a>
     </div>
     
     <div class="grid grid-col gap-3">
       <Heading as="h1" weight="bold">Latest Posts</Heading>
       { allPosts.map((post) => <ContentCard content={post} />) }
+      <a href="/works" class="underline">See more</a>
     </div>
   </div>
 </BaseLayout>
