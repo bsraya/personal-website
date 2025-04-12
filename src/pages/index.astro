@@ -21,13 +21,13 @@ const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("
 
     <div class="grid grid-col gap-3">
       <Heading as="h1" weight="bold">Selected Works</Heading>
-      { allWorks.map((work) => <ContentCard content={work} />) }
+      { allWorks.map((work) => <ContentCard frontmatter={work.frontmatter} type="works" />) }
       <a href="/works" class="underline">See more</a>
     </div>
     
     <div class="grid grid-col gap-3">
       <Heading as="h1" weight="bold">Latest Posts</Heading>
-      { allPosts.map((post) => <ContentCard content={post} />) }
+      { allPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
       <a href="/works" class="underline">See more</a>
     </div>
   </div>
