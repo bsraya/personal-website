@@ -2,7 +2,7 @@ export interface Frontmatter {
   title: string;
   description: string;
   publishedDate: Date;
-  tags: Array<string>;
+  tag: string;
   published: boolean;
   type: string;
 }

@@ -10,7 +10,7 @@ const posts = defineCollection({
     title: z.string(),
     description: z.string(),
     publishedDate: z.coerce.date(),
-    tags: z.array(z.string()),
+    tag: z.string(),
     published: z.boolean()
   })
 })
@@ -24,7 +24,7 @@ const works = defineCollection({
     title: z.string(),
     description: z.string(),
     publishedDate: z.coerce.date(),
-    tags: z.array(z.string()),
+    tag: z.string(),
     published: z.boolean()
   })
 })

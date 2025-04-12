@@ -12,10 +12,8 @@ export function getStaticPaths() {
   const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../../content/posts/*.mdx", { eager: true }));
 
   for (const post of allPosts) {
-    if (post.frontmatter.tags) {
-      for (const tag of post.frontmatter.tags) {
-        tags.add(toKebabCase(tag));
-      }
+    if (post.frontmatter.tag) {
+      tags.add(toKebabCase(post.frontmatter.tag));
     }
   }
 
@@ -26,7 +24,7 @@ export function getStaticPaths() {
 
 const { tag } = Astro.params;
 const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../posts/*.mdx", { eager: true }));
-const similarPosts = allPosts.filter(post => post.frontmatter.tags && post.frontmatter.tags.includes(tag));
+const similarPosts = allPosts.filter(post => post.frontmatter.tag && (post.frontmatter.tag == tag));
 ---
 
 <BaseLayout>
