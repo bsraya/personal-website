@@ -20,6 +20,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^6.3.1",
     "@astrojs/mdx": "^4.2.2",
     "@astrojs/sitemap": "^3.3.0",
     "@astrojs/solid-js": "^5.0.6",
@@ -33,8 +34,11 @@
     "astro-seo": "^0.8.4",
     "chart.js": "^4.4.8",
     "daisyui": "^5.0.12",
+    "rehype-accessible-emojis": "^0.3.2",
+    "rehype-autolink-headings": "^7.1.0",
     "rehype-katex": "^7.0.1",
     "rehype-preset-minify": "^7.0.1",
+    "rehype-slug": "^6.0.0",
     "remark-math": "^6.0.0",
     "remark-toc": "^9.0.0",
     "solid-chartjs": "^1.3.11",

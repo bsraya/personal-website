@@ -13,6 +13,10 @@ import robotsTxt from "astro-robots-txt";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
+import rehypeSlug from 'rehype-slug';
+import { rehypeHeadingIds } from "@astrojs/markdown-remark";
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 
 // Expressive code plugins
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
@@ -20,28 +24,30 @@ import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
 
 
 export default defineConfig({
+  markdown: {
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "github-light",
+    },
+    remarkPlugins: [remarkMath, [remarkToc, { heading: 'toc', maxDepth: 3 }]],
+    rehypePlugins: [rehypeKatex, rehypeHeadingIds, rehypeSlug, rehypeAccessibleEmojis, [rehypeAutolinkHeadings, { behavior: 'append' }]],
+    remarkRehype: { footnoteLabel: 'Footnotes' },
+    gfm: true
+  },
   integrations: [
     solid({ devtools: true }),
     expressiveCode({
       themes: ['github-light'],
       plugins: [pluginLineNumbers(), pluginCodeOutput()]
     }),
-    mdx(),
+    mdx({
+      extendMarkdownConfig: true
+    }),
     sitemap(),
     metaTags(),
     robotsTxt(),
   ],
   vite: {
     plugins: [tailwindcss()],
-  },
-  markdown: {
-    syntaxHighlight: "shiki",
-    shikiConfig: {
-      theme: "github-light",
-    },
-    remarkPlugins: [remarkMath, remarkToc],
-    rehypePlugins: [rehypeKatex],
-    remarkRehype: { footnoteLabel: 'Footnotes' },
-    gfm: true
   }
 });
