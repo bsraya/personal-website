@@ -1,0 +1,13 @@
+---
+import ExternalLinkIcon from "../ExternalLinkIcon.astro";
+const props = Astro.props;
+const isExternal = props.href.includes("http");
+---
+
+<a 
+    {...props}
+    class="underline cursor-pointer"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={props.label || "Link"}
+><slot />{isExternal && <ExternalLinkIcon />}</a>
