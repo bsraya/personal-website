@@ -1,20 +1,21 @@
 import { onMount } from 'solid-js';
-import { Chart, Title, Tooltip, Legend } from 'chart.js';
+import { Chart, Title, Tooltip, Legend, Colors } from 'chart.js';
 import { Bar } from 'solid-chartjs';
 import type { BarChartData } from '../../types/chart';
 
 
 export default function BarChart(
-  { data, height, width }:
-    { data: BarChartData, height: number, width: number }
+  { data, height, width, options }:
+    { data: BarChartData, height: number, width: number, options: any }
 ) {
   onMount(() => {
-    Chart.register(Title, Tooltip, Legend);
+    Chart.register(Title, Tooltip, Legend, Colors);
   })
 
   const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    ...options
   }
 
   return (
