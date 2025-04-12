@@ -5,7 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ContentCard from "../components/ContentCard.astro"
 
 const pageTitle = "Works";
-const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("./works/*.mdx", { eager: true }))
+const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("./content/works/*.mdx", { eager: true }))
 ---
 
 <BaseLayout pageTitle={pageTitle}>
