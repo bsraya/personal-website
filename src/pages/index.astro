@@ -7,8 +7,8 @@ import ExternalLink from "../components/ExternalLink.astro";
 import Heading from "../components/Heading.astro"
 
 const pageTitle = "Home";
-const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/posts/*.mdx", { eager: true }))
-const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true }))
+const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/posts/*.mdx", { eager: true })).slice(0, 3)
+const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true })).slice(0, 3)
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -28,7 +28,7 @@ const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("
     <div class="grid grid-col gap-3">
       <Heading as="h1" weight="bold">Latest Posts</Heading>
       { allPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
-      <a href="/works" class="underline">See more</a>
+      <a href="/posts" class="underline">See more</a>
     </div>
   </div>
 </BaseLayout>
