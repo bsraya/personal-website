@@ -3,16 +3,18 @@ import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../types/frontmatter.ts"
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ContentCard from "../components/ContentCard.astro"
+import Heading from "../components/Heading.astro";
 
 const pageTitle = "Works";
-const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("./content/works/*.mdx", { eager: true }))
+const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true }))
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <Heading as="h1" weight="bold" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
       allWorks.map((work) =>
-        <ContentCard content={work} />
+        <ContentCard frontmatter={work.frontmatter} type="works" />
       )
     }
   </div>
