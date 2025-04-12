@@ -1,0 +1,14 @@
+---
+import { Image, Picture } from 'astro:assets';
+const props = Astro.props;
+---
+
+{
+    props.title ?
+        <figure class="w-full my-5">
+            <img {...props} class="w-full mb-1" decoding="async" loading="lazy"/>
+            <figcaption class="text-center text-slate-400">Figure: {props.title}</figcaption>
+        </figure>
+    :
+        <img {...props} class="w-full my-5" />
+}
