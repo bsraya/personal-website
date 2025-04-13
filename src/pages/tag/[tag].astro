@@ -23,13 +23,13 @@ export function getStaticPaths() {
 }
 
 const { tag } = Astro.params;
-const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../posts/*.mdx", { eager: true }));
-const similarPosts = allPosts.filter(post => post.frontmatter.tag && (post.frontmatter.tag == tag));
+const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../../content/posts/*.mdx", { eager: true }));
+const similarPosts = allPosts.filter(post => post.frontmatter.tag && (toKebabCase(post.frontmatter.tag) == tag));
 ---
 
 <BaseLayout>
   <div class="flex flex-row gap-2 mb-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{fromKebabCase(tag)}</Heading></div>
   <div class="grid grid-col gap-5">
-    { similarPosts.map((post) => <ContentCard content={post} type="posts" /> ) }
+    { similarPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" /> ) }
   </div>
 </BaseLayout>
