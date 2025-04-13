@@ -10,7 +10,7 @@ const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <Heading as="h1" weight="bold" class="mb-5">Latest {pageTitle}</Heading>
+  <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
       allPosts.map((post) =>

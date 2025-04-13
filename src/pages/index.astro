@@ -13,22 +13,22 @@ const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("
 
 <BaseLayout pageTitle={pageTitle}>
   <div class="grid grid-col gap-10">
-    <div class="grid grid-col gap-2">
-      <Heading as="h1" weight="bold">Bijon Setyawan Raya</Heading>
-      <div class="text-slate-600 font-khula text-xl">I make machines learn, and I write about it</div>
+    <div class="grid grid-col">
+      <Heading as="h1" size="2xl" weight="bold">Bijon Setyawan Raya</Heading>
+      <div class="text-slate-600 text-lg">I make machines learn, and I write about it</div>
       <div>Get my resume <ExternalLink text="here" url="/resume.pdf" /></div>
     </div>
 
     <div class="grid grid-col gap-3">
-      <Heading as="h1" weight="bold">Selected Works</Heading>
+      <Heading as="h2" size="lg">Selected Works</Heading>
       { allWorks.map((work) => <ContentCard frontmatter={work.frontmatter} type="works" />) }
-      <a href="/works" class="underline">See more</a>
+      <a href="/works" class="w-fit underline">See more</a>
     </div>
     
     <div class="grid grid-col gap-3">
-      <Heading as="h1" weight="bold">Latest Posts</Heading>
+      <Heading as="h2" size="lg">Latest Posts</Heading>
       { allPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
-      <a href="/posts" class="underline">See more</a>
+      <a href="/posts" class="w-fit underline">See more</a>
     </div>
   </div>
 </BaseLayout>
