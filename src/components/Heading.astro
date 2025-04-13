@@ -32,3 +32,9 @@ const { as: As = "h2", weight = "medium", size = "2xl" } = Astro.props;
 <As class:list={[sizes[size], weights[weight]]} {...Astro.props}>
     <slot />
 </As>
+
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
+    }
+</style>

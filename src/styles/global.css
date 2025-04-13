@@ -1,8 +1,28 @@
 @import "tailwindcss";
-@Import "daisyui";
+@import "@fontsource/share-tech-mono";
+@import "@fontsource-variable/dm-sans";
+@import '@fontsource-variable/newsreader';
+
+:root {
+  --font-body: 'DM Sans Variable', sans-serif;
+  --font-heading: 'Newsreader Variable', serif;
+  --font-monospace: 'Share Tech Mono', monospace;
+}
+
+body {
+  font-family: var(--font-body);
+}
 
 .expressive-code .frame.is-terminal .output {
   background-color: #f0f0f0;
+}
+
+.expressive-code pre code .ec-line {
+  font-family: var(--font-monospace);
+}
+
+code {
+  font-family: var(--font-monospace);
 }
 
 .table-wrapper {	

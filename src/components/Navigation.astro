@@ -4,9 +4,15 @@ import BurgerMenu from "./BurgerMenu.tsx";
 
 <div class="flex pb-10">
   <div class="font-bold md:text-[1.5rem] text-[1.15rem]">
-    <a href="/">BSR</a>
+    <a class="home" href="/">BSR</a>
   </div>
   <div class='flex ml-auto items-center'>
     <BurgerMenu client:load />
   </div>
 </div></div>
+
+<style>
+  .home {
+    font-family: var(--font-heading);
+  }
+</style>
