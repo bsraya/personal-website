@@ -1,4 +1,6 @@
 ---
+import Heading from "./Heading.astro";
+
 const dateObject: object = {
     year: "numeric",
     month: "long",
@@ -10,9 +12,9 @@ const slug = frontmatter.title.toLowerCase().replace(/ /g, '-');
 ---
 
 <div>
-    <div class="text-slate-400">{new Date(frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
-    <a class="w-fit hover:underline decoration-slate-500 md:text-2xl text-xl" href=`${type}/${slug}`>
-        {frontmatter.title}
-    </a>
-    <p class="text-md mt-auto text-slate-500">{frontmatter.description}</p>
+    <div class="text-slate-500">{new Date(frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
+    <Heading as="h1" size="2xl">
+        <a class="hover:underline" href=`/${type}/${slug}`>{frontmatter.title}</a>
+    </Heading>
+    <p class="text-md mt-auto text-slate-600">{frontmatter.description}</p>
 </div>
