@@ -52,21 +52,22 @@ const { Content } = await render(work);
 ---
 
 <BaseLayout>
-    <div class="justify-center text-center mb-10">
-        {
-            work.data.publishedDate && (
-                <div class="text-slate-500">{new Date(work.data.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
-            )
-        }
-        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl mb-1">{work.data.title}</Heading>
+    <div class="flex gap-2 mb-2 text-slate-700">
         {
             work.data.tag && (
-                <a 
-                    class="text-md text-slate-600 underline cursor-pointer"
-                    href=`/tag/${toKebabCase(work.data.tag)}`
-                >{work.data.tag}</a>
+                <div>{work.data.tag}</div>
             )
         }
+        <p>•</p>
+        {
+            work.data.publishedDate && (
+                <div>{new Date(work.data.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
+            )
+        }
+    </div>
+    <div class="mb-10">
+        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl">{work.data.title}</Heading>
+        <p class="text-slate-600">{work.data.description}</p>
     </div>
     <Content
         class="w-fit"
