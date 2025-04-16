@@ -1,19 +1,22 @@
 ---
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../types/frontmatter.ts"
+import { sortContent } from "../utils/content";
+
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ContentCard from "../components/ContentCard.astro"
 import Heading from "../components/Heading.astro";
 
 const pageTitle = "Works";
 const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true }))
+const sortedWorks = sortContent(allWorks);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
-      allWorks.map((work) =>
+      sortedWorks.map((work) =>
         <ContentCard frontmatter={work.frontmatter} type="works" />
       )
     }
