@@ -29,8 +29,17 @@ export default defineConfig({
     shikiConfig: {
       theme: "github-light",
     },
-    remarkPlugins: [remarkMath, [remarkToc, { heading: 'toc', maxDepth: 3 }]],
-    rehypePlugins: [rehypeKatex, rehypeHeadingIds, rehypeSlug, rehypeAccessibleEmojis, [rehypeAutolinkHeadings, { behavior: 'append' }]],
+    remarkPlugins: [
+      remarkMath,
+      [remarkToc, { heading: 'toc', maxDepth: 3 }]
+    ],
+    rehypePlugins: [
+      rehypeKatex,
+      rehypeHeadingIds,
+      rehypeSlug,
+      rehypeAccessibleEmojis,
+      [rehypeAutolinkHeadings, { behavior: 'append' }]
+    ],
     remarkRehype: { footnoteLabel: 'Footnotes' },
     gfm: true
   },
