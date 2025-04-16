@@ -7,6 +7,11 @@
   "exclude": [
     "dist"
   ],
+  "baseUrl": "./src",
+  "typeRoots": [
+    "./src/types",
+    "./node-modules/@types",
+  ],
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
