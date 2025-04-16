@@ -1,0 +1,24 @@
+---
+import { toKebabCase } from "../utils/string";
+import Heading from "../components/Heading.astro";
+
+const { series, posts, currentPost } = Astro.props;
+---
+
+<div class="border border-2 rounded-md md:p-5 p-2">
+    <Heading as="h3" size="xl" class="mb-2">{series} (Series)</Heading>
+    <ol class="list-decimal flex flex-col gap-1">
+        {
+            posts.map((post)  => (
+                <li class:list={["ml-6", "text-lg", { "font-bold": currentPost === post.frontmatter.title }]}>
+                    <a 
+                        href={`/posts/${toKebabCase(post.frontmatter.title)}`}
+                        class="cursor-pointer hover:underline"
+                    >
+                        {post.frontmatter.title}
+                    </a>
+                </li>
+            ))
+        }
+    </ol>
+</div>

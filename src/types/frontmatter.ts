@@ -4,5 +4,5 @@ export interface Frontmatter {
   publishedDate: Date;
   tag: string;
   published: boolean;
-  type: string;
+  series?: string;
 }

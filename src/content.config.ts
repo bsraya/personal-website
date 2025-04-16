@@ -11,6 +11,7 @@ const posts = defineCollection({
     description: z.string(),
     publishedDate: z.coerce.date(),
     tag: z.string(),
+    series: z.string().nullable(),
     published: z.boolean()
   })
 })
