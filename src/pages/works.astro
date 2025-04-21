@@ -6,15 +6,14 @@ import ContentCard from "../components/ContentCard.astro"
 import Heading from "../components/Heading.astro";
 
 const pageTitle = "Works";
-const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true }))
-const sortedWorks = sortContent(allWorks);
+const works = getSortedWorks();
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
-      sortedWorks.map((work) =>
+      works.map((work) =>
         <ContentCard frontmatter={work.frontmatter} type="works" />
       )
     }

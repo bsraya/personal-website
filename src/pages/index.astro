@@ -1,6 +1,4 @@
 ---
-import type { MarkdownInstance } from "astro";
-import type { Frontmatter } from "../types/frontmatter.ts"
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ContentCard from "../components/ContentCard.astro";
 import ExternalLink from "../components/ExternalLink.astro";
@@ -8,11 +6,8 @@ import Heading from "../components/Heading.astro"
 import { getSortedPosts, getSortedWorks } from "../utils/content.ts";
 
 const pageTitle = "Home";
-const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/posts/*.mdx", { eager: true })).slice(0, 3)
-const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true })).slice(0, 3)
-
-const sortedPosts = sortContent(allPosts);
-const sortedWorks = sortContent(allWorks);
+const posts = getSortedPosts().slice(0, 3);
+const works = getSortedWorks().slice(0, 3);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -25,13 +20,13 @@ const sortedWorks = sortContent(allWorks);
 
     <div class="grid grid-col gap-3">
       <Heading as="h2" size="lg">Selected Works</Heading>
-      { sortedWorks.map((work) => <ContentCard frontmatter={work.frontmatter} type="works" />) }
+      { works.map((work) => <ContentCard frontmatter={work.frontmatter} type="works" />) }
       <a href="/works" class="w-fit underline">See more</a>
     </div>
     
     <div class="grid grid-col gap-3">
       <Heading as="h2" size="lg">Latest Posts</Heading>
-      { sortedPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
+      { posts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
       <a href="/posts" class="w-fit underline">See more</a>
     </div>
   </div>

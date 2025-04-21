@@ -10,9 +10,9 @@ import { getAllPosts, getSortedPosts } from "../../utils/content.ts";
 
 export function getStaticPaths() {
   const tags = new Set<string>();
-  const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../../content/posts/*.mdx", { eager: true }));
+  const posts = getAllPosts();
 
-  for (const post of allPosts) {
+  for (const post of posts) {
     if (post.frontmatter.tag) {
       tags.add(toKebabCase(post.frontmatter.tag));
     }
