@@ -5,7 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ContentCard from "../components/ContentCard.astro";
 import ExternalLink from "../components/ExternalLink.astro";
 import Heading from "../components/Heading.astro"
-import { sortContent } from "../utils/content";
+import { getSortedPosts, getSortedWorks } from "../utils/content.ts";
 
 const pageTitle = "Home";
 const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../content/posts/*.mdx", { eager: true })).slice(0, 3)

@@ -5,7 +5,8 @@ import type { Frontmatter } from "../../types/frontmatter";
 import ContentCard from "../../components/ContentCard.astro"
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Heading from "../../components/Heading.astro";
-import { toKebabCase, fromKebabCase } from "../../utils/string"
+import { toKebabCase, fromKebabCase } from "../../utils/string.ts"
+import { getAllPosts, getSortedPosts } from "../../utils/content.ts";
 
 export function getStaticPaths() {
   const tags = new Set<string>();
