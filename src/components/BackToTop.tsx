@@ -1,7 +1,6 @@
 import scrollToTop from '../utils/scroll-to-top';
 import { BsTriangleFill } from 'solid-icons/bs';
 
-
 export default function BackToTop() {
   const scrollToTopFn = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
