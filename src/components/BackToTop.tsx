@@ -10,9 +10,9 @@ export default function BackToTop() {
     <button
       use:scrollToTop={50}
       onClick={scrollToTopFn}
-      class="fixed bottom-5 right-5 z-10 p-2 border-2 rounded cursor-pointer"
+      class="fixed bottom-5 right-5 z-10 p-2 bg-white border-2 rounded cursor-pointer"
     >
-      <BsTriangleFill />
+      <BsTriangleFill color="#000000" />
     </button>
   )
 }
