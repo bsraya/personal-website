@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, lofi;
+}
 @import "@fontsource/share-tech-mono";
 @import "@fontsource-variable/dm-sans";
 @import '@fontsource-variable/newsreader';
