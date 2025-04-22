@@ -5,6 +5,9 @@ import type { Frontmatter } from "../../types/frontmatter";
 import ContentCard from "../../components/ContentCard.astro"
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Heading from "../../components/Heading.astro";
+
+import { AiOutlineArrowLeft } from 'solid-icons/ai';
+
 import { toKebabCase, fromKebabCase } from "../../utils/string.ts"
 import { getAllPosts, getSortedPosts } from "../../utils/content.ts";
 
@@ -29,7 +32,7 @@ const similarPosts = allPosts.filter(post => post.frontmatter.tag && (toKebabCas
 ---
 
 <BaseLayout>
-  <div class="flex flex-row gap-2 mb-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{fromKebabCase(tag)}</Heading></div>
+  <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>All posts</a>
   <div class="grid grid-col gap-5">
     { similarPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" /> ) }
   </div>

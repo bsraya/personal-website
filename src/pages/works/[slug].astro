@@ -4,6 +4,8 @@ import type { Frontmatter } from "../../types/frontmatter.ts";
 import { render } from "astro:content";
 import { getEntry } from "astro:content";
 
+import { AiOutlineArrowLeft } from 'solid-icons/ai';
+
 import Heading from "../../components/Heading.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
@@ -51,6 +53,7 @@ const { Content } = await render(work);
 ---
 
 <BaseLayout>
+    <a href="/works" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
     <div class="flex gap-2 mb-2 text-slate-700">
         {
             work.data.tag && (
