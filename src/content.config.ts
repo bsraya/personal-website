@@ -25,7 +25,7 @@ const works = defineCollection({
     title: z.string(),
     description: z.string(),
     publishedDate: z.coerce.date(),
-    tag: z.string(),
+    tag: z.string().nullable(),
     published: z.boolean()
   })
 })
