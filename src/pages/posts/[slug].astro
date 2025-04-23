@@ -60,6 +60,7 @@ const { Content, headings } = await render(post);
 
 <BaseLayout>
     <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
+    <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {
             post.data.tag && (
                 <a 
