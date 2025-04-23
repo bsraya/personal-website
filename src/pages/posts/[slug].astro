@@ -10,6 +10,7 @@ import { AiOutlineArrowLeft } from 'solid-icons/ai';
 import Heading from "../../components/Heading.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SeriesTable from "../../components/SeriesTable.astro";
+import TableOfContent from "../../components/TableOfContent";
 
 import Blockquote from "../../components/mdx/Blockquote.astro";
 import H1 from "../../components/mdx/H1.astro";
@@ -102,4 +103,8 @@ const { Content } = await render(post);
             p: Paragraph,
         }}
     />
+    {
+        headings &&
+            <TableOfContent url={`/posts/${slug}`} headings={headings} client:load />
+    }
 </BaseLayout>
