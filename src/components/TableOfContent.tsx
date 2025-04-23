@@ -1,6 +1,7 @@
 import { createSignal, Show, For } from "solid-js";
 import type { Heading } from "../types/heading";
 import { VsTriangleUp, VsTriangleDown } from "solid-icons/vs";
+import clickOutside from "../utils/click-outside.ts";
 
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
@@ -17,7 +18,7 @@ export default function TableOfContent({ url, headings }: { url: string, heading
         </span>
       </button>
       <Show when={tocOpen()}>
-        <ul class="list-disc flex flex-col gap-1 mt-2">
+        <ul class="list-disc flex flex-col gap-1 mt-2" use:clickOutside={toggleToc}>
           <For each={headings}>
             {
               (heading) => (
