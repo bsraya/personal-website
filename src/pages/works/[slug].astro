@@ -46,7 +46,7 @@ const dateObject: object = {
 }
 
 const { slug } = Astro.params;
-const work = await getEntry('works', slug)
+const work = await getEntry('works', slug);
 
 if (!work.data.published) {
     return Astro.redirect("/404");
