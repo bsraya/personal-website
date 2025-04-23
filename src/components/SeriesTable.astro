@@ -9,7 +9,7 @@ const { series, posts, currentPost } = Astro.props;
     <Heading as="h3" size="xl" class="mb-2">{series} (Series)</Heading>
     <ol class="list-decimal flex flex-col gap-1">
         {
-            posts.map((post)  => (
+            posts.map((post: any) => (
                 <li class:list={["ml-6", "text-lg", { "font-bold": currentPost === post.frontmatter.title }]}>
                     <a 
                         href={`/posts/${slugify(post.frontmatter.title)}`}
