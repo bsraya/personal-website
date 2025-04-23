@@ -55,7 +55,7 @@ if (!post.data.published) {
     return Astro.redirect("/404");
 }
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 ---
 
 <BaseLayout>

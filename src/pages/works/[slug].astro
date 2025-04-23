@@ -52,7 +52,7 @@ if (!work.data.published) {
     return Astro.redirect("/404");
 } 
 
-const { Content } = await render(work);
+const { Content, headings } = await render(work);
 ---
 
 <BaseLayout>
