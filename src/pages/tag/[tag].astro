@@ -8,8 +8,8 @@ import Heading from "../../components/Heading.astro";
 
 import { AiOutlineArrowLeft } from 'solid-icons/ai';
 
-import { toKebabCase, fromKebabCase } from "../../utils/string.ts"
-import { getAllPosts, getSortedPosts } from "../../utils/content.ts";
+import { slugify, deslugify } from "../../utils/string.ts"
+import { getAllPosts, getPostsByTag } from "../../utils/content.ts";
 
 export function getStaticPaths() {
   const tags = new Set<string>();
@@ -17,7 +17,7 @@ export function getStaticPaths() {
 
   for (const post of posts) {
     if (post.frontmatter.tag) {
-      tags.add(toKebabCase(post.frontmatter.tag));
+      tags.add(slugify(post.frontmatter.tag));
     }
   }
 
@@ -27,13 +27,13 @@ export function getStaticPaths() {
 }
 
 const { tag } = Astro.params;
-const allPosts = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../../content/posts/*.mdx", { eager: true }));
-const similarPosts = allPosts.filter(post => post.frontmatter.tag && (toKebabCase(post.frontmatter.tag) == tag));
+const allPosts = getPostsByTag(tag);
 ---
 
 <BaseLayout>
   <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>All posts</a>
+  <div class="flex flex-row gap-2 my-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{deslugify(tag)}</Heading></div>
   <div class="grid grid-col gap-5">
-    { similarPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" /> ) }
+    { allPosts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" /> ) }
   </div>
 </BaseLayout>

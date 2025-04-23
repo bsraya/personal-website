@@ -1,6 +1,6 @@
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../types/frontmatter.ts";
-import { toKebabCase } from "./string.ts";
+import { slugify } from "./string.ts";
 
 enum SortOrder {
     Ascending = "ascending",
@@ -51,7 +51,7 @@ export function getSortedWorks() {
 
 
 export function getSeriesPosts(series: string) {
-    const posts = getAllPosts();
+    const posts = getSortedPosts(SortOrder.Ascending);
 
     return Array.from(posts).filter((post) => {
         if (post.frontmatter.series === series) {
@@ -64,5 +64,5 @@ export function getSeriesPosts(series: string) {
 export function getPostsByTag(tag: string) {
     const posts = getAllPosts();
 
-    return posts.filter(post => post.frontmatter.tag && (toKebabCase(post.frontmatter.tag) == tag));
+    return posts.filter(post => post.frontmatter.tag && (slugify(post.frontmatter.tag) == tag));
 }

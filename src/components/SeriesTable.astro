@@ -1,5 +1,5 @@
 ---
-import { toKebabCase } from "../utils/string.ts";
+import { slugify } from "../utils/string.ts";
 import Heading from "../components/Heading.astro";
 
 const { series, posts, currentPost } = Astro.props;
@@ -12,7 +12,7 @@ const { series, posts, currentPost } = Astro.props;
             posts.map((post)  => (
                 <li class:list={["ml-6", "text-lg", { "font-bold": currentPost === post.frontmatter.title }]}>
                     <a 
-                        href={`/posts/${toKebabCase(post.frontmatter.title)}`}
+                        href={`/posts/${slugify(post.frontmatter.title)}`}
                         class="cursor-pointer hover:underline"
                     >
                         {post.frontmatter.title}

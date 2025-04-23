@@ -28,12 +28,14 @@ import Anchor from "../../components/mdx/Anchor.astro";
 import Img from "../../components/mdx/Img.astro";
 import Paragraph from "../../components/mdx/Paragraph.astro";
 
+import { getSortedWorks } from "../../utils/content.ts";
+import { slugify } from "../../utils/string.ts";
 
 export function getStaticPaths() {
-    const allWorks = Object.values(import.meta.glob<MarkdownInstance<Frontmatter>>("../../content/works/*.mdx", { eager: true }));
+    const allWorks = getSortedWorks();
 
     return Array.from(allWorks).map((work) => ({
-        params: { slug: work.frontmatter.title.toLowerCase().replace(/ /g, '-') },
+        params: { slug: slugify(work.frontmatter.title) },
     }));
 }
 
