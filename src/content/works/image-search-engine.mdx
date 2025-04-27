@@ -1,0 +1,157 @@
+---
+title: Image Search Engine
+description: A reverse image search engine for fast meme search and retrieval
+publishedDate: 2024-09-02
+tag: Search Engine
+published: true
+---
+
+**Tech stack**: [Daisy UI](https://daisyui.com/), [DuckDB](https://duckdb.org/), [FastAPI](https://fastapi.tiangolo.com/), [Jinja](https://jinja.palletsprojects.com/), Python, [PyTorch](https://pytorch.org/), and [TailwindCSS](https://tailwindcss.com/)
+
+**Update**:
+
+1. Changed the image feature extraction model from the smaller model to the larger model for better image feature extraction.
+2. Reduced image features dimensionality using PCA to speed up the search process and reduce memory usage.
+3. Incorporated DuckDB to store the image features and the image paths to improve the search speed.
+4. Enabled keyword search to find images based on image descriptions.
+
+**_TL;DR_**: An image search engine powered by ResNet, allowing users to upload an image and instantly
+retrieve similar matches from its database, leveraging cosine similarity and PCA for efficient feature extraction and rapid search results.
+
+## Introduction
+
+![Image search engine homepage](/assets/works/image-search-engine/thumbnail.png "Image search engine homepage")
+
+I present you an image search engine capable of extracting image featues
+with the pre-trained neural network model and retrieving similar images from a dataset of memes.
+
+The UI is made using Jinja2 templates for simplicity and TailwindCSS for quick styling.
+The backend uses FastAPI as it's lightweight and easy to use.
+As for the deep learning framework, I chose PyTorch because its API is easy to use and
+well-written documentation. Most importantly, many pre-trained models are also installed with it.
+For the backend database, I chose DuckDB because of its speed and plugins support.
+
+## How It Works?
+
+### Reverse Image Search
+
+The image search engine allows users to find images in the database using a single image.
+Once the query image is uploaded, the system would preprocess the image and extract its
+features with a modified `ResNet` model and represent them in a $2048$-dimensional vector.
+
+Finally, the distance between the query image's feature vector and the feature vectors of all images in the database
+is calculated using cosine similarity. The distance is represented in a range of $0$ to $1$,
+with $0$ indicating _not identical_ and $1$ indicating _identical_.
+
+!["For the better right?" similar memes](/assets/works/image-search-engine/for-the-better-right.png)
+
+!["Batman slaps Robin" similar memes](/assets/works/image-search-engine/batman-slaps-robin.png)
+
+### Keyword Search
+
+Every image that gets uploaded to the search engine will be assigned a description using a multi-modal language model
+before being stored in the database. This allows users to search for images based on their descriptions.
+
+When users input keywords into the search bar, the search engine will turn
+the keywords into an embedding vector and compare it with the embedding vectors of the image descriptions in the database.
+The closer the distance between the keyword embedding vector and the image description embedding vector, the more relevant the image is.
+
+!["batman" keyword search results](/assets/works/image-search-engine/keyword-search.png)
+
+## Improvements
+
+### Accurate Feature Extractions
+
+I decided to use `ResNet50` since it's capable to capturing
+more complex features in the images compared to `ResNet18`.
+However, it requires more memory and computational power.
+On the other hand, the search engine will be able
+to provide more accurate results.
+
+The following figures show the similar images which distances are above $0.7$ from the query image with **ResNet18**.
+
+!["Bernie Sanders: I am once again asking" similar memes with ResNet18](/assets/works/image-search-engine/similar-bernie-resnet18.png)
+!["Disaster Girl" similar memes with ResNet18](/assets/works/image-search-engine/similar-disaster-resnet18.png)
+!["Pablo Escobar" similar memes with ResNet18](/assets/works/image-search-engine/similar-pablo-resnet18.png)
+
+With `ResNet18` as the feature extraction model, the search engines is more likely to provide
+images that have the same feature composition as the query image even though they are completely different.
+
+Similarly, the following figures show the similar images which distances are above $0.7$ from the query image with **ResNet50**.
+
+!["Bernie Sanders: I am once again asking" similar memes with ResNet50](/assets/works/image-search-engine/similar-bernie-resnet50.png)
+!["Disaster Girl" similar memes with ResNet50](/assets/works/image-search-engine/similar-disaster-resnet50.png)
+!["Pablo Escobar" similar memes with ResNet50](/assets/works/image-search-engine/similar-pablo-resnet50.png)
+
+With `ResNet50`, those query results appearing above are not shown because `ResNet50`
+is capable of capturing more complex features in images.
+However, it requires more memory and computational power.
+On the other hand, the search engine will be able
+to provide more accurate results.
+
+### Dimentionality Reduction
+
+With Principal Component Analysis (PCA), the dimensionality of the image features can reduced from $2048$ to $200$.
+Consequently, the cosine similarity calculation is sped up and the memory usage is reduced.
+
+import LineChart from "../../components/chart/Line";
+
+<LineChart
+  client:visible
+  data={{
+    labels: [256, 512, 1024, 2048],
+    datasets: [
+      {
+        label: "Vector Size",
+        data: [2104, 4152, 8248, 16440],
+        borderColor: "blue",
+        fill: true,
+      },
+    ],
+  }}
+  options={{
+    plugins: {
+      title: {
+        display: true,
+        text: "Vector Size vs. Dimensionality",
+      },
+      legend: {
+        display: true,
+        position: "bottom",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Bytes",
+        },
+      },
+    },
+  }}
+/>
+
+With $200$ dimensions, they can explain $99\%$ of the variance
+in the original $2048$ dimensions, and the space required is
+reduced from $16440$ bytes to $2104$ bytes. That's a $87.26\%$ of size reduction!
+
+### Database Integration
+
+By transitioning from JSON to DuckDB and reducing vector dimensions, the search speed is improved significantly while using less RAM and storage.
+Storing image feature of $79$ images with a dimension of $1 \times 2048$ in DuckDb would require $2.1$ MB of space,
+and the time to search for similar images is $0.20620$ seconds.
+
+While storing the image features of the same $79$ images with a dimension of $1 \times 200$ in DuckDB would require $0.27$ MB of space,
+and the time to search for similar images is $0.01016$ seconds.
+
+## Challenges
+
+1. **Memory usage**: The image feature extraction model and a multi-modal model require a lot of memory and computational power.
+2. **Relevant result**: Image keyword search sometimes provides irrelevant results due to the nature of a multi-modal language model and the 
+descriptions its generates.
+
+## Future Work
+
+1. Include [SQLModel](https://sqlmodel.tiangolo.com/) to manage the database schema and prevent SQL injections.
+2. Reduce memory usage by using a smaller model for image feature extraction, but still maintain the accuracy of the search results.
