@@ -1,36 +1,27 @@
 ---
 title: "My Second Work"
 description: "This is my second Work"
-publishedDate: 2024-05-03
-tags: ["Work"]
-published: true
+publishedDate: 2024-05-02
+tag: Second Work
+published: false
 ---
 
 import ScatterChart from "../../components/chart/Scatter";
 
 <ScatterChart
   client:visible
-  fallback={
-    <span class="loading loading-spinner loading-xl"></span>
-  }
+  fallback={<span class="loading loading-spinner loading-xl"></span>}
   height={500}
   width={500}
   data={{
     datasets: [{
       label: 'Scatter Dataset',
-      data: [{
-        x: -10,
-        y: 0
-      }, {
-        x: 0,
-        y: 10
-      }, {
-        x: 10,
-        y: 5
-      }, {
-        x: 0.5,
-        y: 5.5
-      }],
+      data: [
+        { x: -10,  y: 0 },
+        { x: 0, y: 10 },
+        { x: 10,  y: 5 },
+        { x: 0.5, y: 5.5 }
+      ],
       backgroundColor: 'rgb(255, 99, 132)'
     }],
   }}

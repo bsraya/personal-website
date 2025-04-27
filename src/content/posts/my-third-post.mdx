@@ -1,0 +1,57 @@
+---
+title: My Third post
+description: This is my third attemp in writing content
+publishedDate: 2024-06-21
+tag: Test
+series:
+published: false
+---
+
+## {frontmatter.title}
+
+This is the first post of the series "Image Processing and Optimization", and we will explore different ways to process and optimize images using C++ or Python in this series.
+
+In this post, we are going to learn on how to minimize the size of an image by using Singular Value Decomposition (SVD).
+With SVD, we are going to find the least number of singular values that can be used to reconstruct an image.
+The less number of singular values we keep, the smaller the size of our image will be.
+
+For this example, we are going to use the raccoon image from `scipy`.
+
+```python
+from scipy import datasets
+from numpy import linalg
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+Then we import the image of a raccoon from `scipy` library.
+
+```python
+raccoon = datasets.face()
+plt.imshow(raccoon)
+```
+
+> This quote will be a custom Blockquote
+
+---
+
+Ordered list:
+1. First item [^1]
+2. Second item
+3. Third item
+
+[^1]: something.
+
+
+![L1 and L2 Contour](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/L1_and_L2_balls.svg/1024px-L1_and_L2_balls.svg.png "L1 and L2 Contour")
+
+
+I have been visiting [Wikipedia](https://www.wikipedia.org/) lately.
+Then I go to [Google](https://www.google.com/).
+Sometimes [Stack Overflow](https://stackoverflow.com/).
+
+
+| Header 1 | Header 2 | Header 2 | Header 2 |
+|----------|----------|----------|----------|
+| Row 1    | Data 1   | Data 1   | Data 1   |
+| Row 2    | Data 2   | Data 2   | Data 2   |
