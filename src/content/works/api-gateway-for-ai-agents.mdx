@@ -1,0 +1,94 @@
+---
+title: API Gateway for AI Agents
+description: AI Agents in Actions
+publishedDate: 2025-05-03
+tag: System Architecture
+published: true
+---
+
+In this project I made an API gateway that allow
+users to interact with different agents. Here is the design:
+
+![API Gateway Design](/assets/works/api-gateway-for-ai-agents/system-design.png "API Gateway Design")
+
+Before starting, there are two things you should familiar with:
+
+1. **Agent** is a system that utilizes a language model to achieve its objectives
+2. **Tool** is a function that agents can use to interact with the external environments.
+
+Note that I am not going to discuss what agents and tools can or can not do, but I am going to focus more on the system design as a whole.
+
+## Design
+
+### API Gateway
+
+This component is where the agents and its tools reside. In order to reduce surface attack, agents are not exposed one by one by their IDs, and interactions can only made through the gateway. Similarly, the system interacts with the persistent volumes through `services`.
+
+### Chat UI
+
+![Chat UI made with Streamlit](/assets/works/api-gateway-for-ai-agents/chatui.jpg "Chat UI made with Streamlit")
+
+The chat interface is made with Streamlit for fast development. Users are allowed to send prompts, change language and embedding models, and access chat history from previous sessions through the UI.
+
+### Persistent Volumes
+
+PostgresSQL is used to store documents and their vector embeddings, and Redis to store chat histories.
+
+![Redis Insight](/assets/works/api-gateway-for-ai-agents/redis-ui.png "Redis Insight")
+
+Since we understand what the system consists of, now let's talk about the advantages and disadvantages of the design above.
+
+### Advantages
+
+1. Any additional components to the system will not affect the entire system
+2. Tools are reuseable, and agents can have one or many tools in order to achieve their objectives.
+2. Creating an agent is easy, and the agent can be mapped into a new database without affecting other databases.
+
+### Disadvantages
+
+1. Due to its modularity, the system gets very complex to maintain.
+2. More developers required to maintain the system as demand increases.
+3. Tool creation can get complicated depending on business requirements.
+
+## Agents
+
+### Hacker News agent
+
+Hacker News agent fetches one or a few articles similar to user prompts. This agent will provide a list of links so that users can click and read them immediately without any hassle.
+
+### Reasoning agent
+
+Reasoning agent lays out a detailed, step-by-step reasoning argument based on
+the user's input.
+
+### Web research agent
+
+Web research agent goes on Seaxng, an open-source search engine, to
+find related links based on the result metadata and compile 
+them in a list of related resources.
+
+### Arxiv RAG agent
+
+Ariv RAG agent leverages hybrid search provided by Neo4j, where
+it combines the search results from the vector search and the graph search. Thus,
+it provides users more accurate document retrieval results that leads to better responses related to ArXiv papers.
+
+### GitHub agent
+
+GitHub agent fetches certain repositories's information using a custom-made GitHub tool.
+
+### Presentation agent
+
+Presentation agent leverages the web search tool to gather required resouces and compiles important keypoints into presentation slides using the Marp extension from VS Code.
+
+### Web summarizing agent
+
+Web summarizing agent fetches the content of one or many links, preprocess them, and summarise each site's content as bullet points.
+
+### Wiki agent
+
+Wiki agent fetches related wiki articles based on user queries.
+
+### Python agent
+
+Python agent generates a Python function and its tests, executes them in an isolated environment, and compiles its coverage result.
