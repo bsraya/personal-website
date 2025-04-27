@@ -1,0 +1,138 @@
+---
+title: Stochastic Gradient Descent
+description: Minimizing cost functions with a random data point at a time
+publishedDate: 2022-04-04
+tag: Optimization
+series: Gradient Descent Algorithms
+published: true
+---
+
+## Introduction
+
+In the [Batch Gradient Descent](/posts/batch-gradient-descent) and
+[Mini-Batch Gradient Descent](/posts/mini-batch-gradient-descent) posts,
+we have learned that the algorithm updates parameters $\theta_0$ and $\theta_1$ after it has seen the entire dataset and a fraction of the dataset respectively.
+With these two algorithms, we would need a certain amount of RAM so that the algorithms can converge.
+
+In this post, we are going to learn about Stochastic Gradient Descent, or SGD for short.
+The only difference between SGD and the other previous algorithms we have covered is that
+it updates parameters after it has seen a random data point, as the name suggests.
+Since it only requires a single data point, the need for RAM decreases, and it could help the algorithm converges faster with the least amount of memory.
+
+## Mathematics of Stochastic Gradient Descent
+
+The parameter update rule is expressed as
+
+$$
+\theta = \theta - \alpha \nabla_{\theta} J(\theta)
+$$
+
+where
+
+- $\theta$ is the parameter vector
+- $\alpha$ is the learning rate
+- $J(\theta)$ is the cost function
+- $\nabla_{\theta} J(\theta)$ is the gradient of the cost function $J(\theta)$
+
+The gradient of the cost function w.r.t. to the intercept $\theta_0$
+and the coefficient $\theta_1$ is expressed as the following.
+
+$$
+\begin{aligned}
+\nabla_{\theta_0} J(\theta) &= (\hat{y}_i - y_i) \\
+\nabla_{\theta_1} J(\theta) &= (\hat{y}_i - y_i) \cdot x_i
+\end{aligned}
+$$
+
+Notice that the gradient of the cost function is the prediction error.
+
+For more details, please refer to the [Mathematics of Gradient Descent](/posts/mathematics-of-gradient-descent) post.
+
+## Implementation of Stochastic Gradient Descent
+
+First, define the `predict` function.
+
+```python
+def predict(intercept, coefficient, x):
+  return intercept + coefficient * x
+```
+
+Second, get a random number between 0 and the
+length of the dataset and predict the value of the random x.
+
+```python
+length = len(x)
+random_index = np.random.randint(length)
+prediction = predict(intercept, coefficient, x[random_index])
+```
+
+Third, determine the error of the prediction and
+update the intercept $\theta_0$ and the coefficient $\theta_1$.
+
+```python
+error = prediction - y[random_index]
+intercept_gradient = error
+coefficient_gradient = error * x[random_index]
+```
+
+Lastly, update the intercept and the coefficient.
+
+```python
+intercept = intercept - alpha * intercept_gradient
+coefficient = coefficient - alpha * coefficient_gradient
+```
+
+## Conclusion
+
+![SGD vs BGD Pathways](/assets/posts/stochastic-gradient-descent/gd-sgd-pathways.png)
+
+You would notice that the pathway of Vanilla Gradient is much more smoother,
+and the pathway of SGD is much more thicker than Vanilla Gradient Descent pathway.
+If we zoom in, we would notice that the SGD pathway is much more noisier.
+
+![Zoomed in SGD vs BGD Pathways](/assets/posts/stochastic-gradient-descent/gd-sgd-pathways-zoomed.png)
+
+There are pros and cons for Vanilla Gradient Descent and SGD.
+For Vanilla Gradient Descent, it is slow but it is guaranteed to converge to the global minimum.
+In addition to that, it requires more memory and is not suitable for large dataset since datasets have to be loaded to the RAM before training.
+
+On the otherhand, SGD is faster and is suitable for large dataset since it only requires a single data point to be loaded to the RAM.
+However, it's not guaranteed to converge to the global minima since it updates parameters $\theta_0$ and $\theta_1$ after seeing a random data point.
+Not only that, it would struggle to escape local minima and avoid steep regions in the 3D plot of the cost function.
+
+## Code
+
+```python
+def sgd(x, y, df, epochs, alpha = 0.01):
+  intercept, coefficient = 2.0, -7.5
+
+  random_index = np.random.randint(len(x))
+  prediction = predict(intercept, coefficient, x[random_index])
+  error = prediction - y[random_index]
+  mse = (error ** 2) / 2
+  df.loc[0] = [intercept, coefficient, mse]
+
+  for i in range(1,epochs):
+    random_index = np.random.randint(len(x))
+    prediction = predict(intercept, coefficient, x[random_index])
+    error = prediction - y[random_index]
+    intercept_gradient = error
+    coefficient_gradient = error * x[random_index]
+
+    intercept = intercept - alpha * intercept_gradient
+    coefficient = coefficient - alpha * coefficient_gradient
+
+    mse = (error ** 2) / 2
+    df.loc[i] = [intercept, coefficient, mse]
+  return df
+```
+
+## References
+
+1. Sebastian Ruder. An overview of gradient descent optimization algorithms. [arXiv:1609.04747](https://arxiv.org/abs/1609.04747) (2016).
+2. O. Artem. _Stochastic, Batch, and Mini-Batch Gradient Descent_. [https://towardsdatascience.com/stochastic-batch-and-mini-batch-gradient-descent-demystified-8b28978f7f5](https://towardsdatascience.com/stochastic-batch-and-mini-batch-gradient-descent-demystified-8b28978f7f5)
+3. P. Sushant. _Batch, Mini Batch, and Stochastic Gradient Descent_. [https://towardsdatascience.com/batch-mini-batch-stochastic-gradient-descent-7a62ecba642a](https://towardsdatascience.com/batch-mini-batch-stochastic-gradient-descent-7a62ecba642a)
+4. Geeksforgeeks. _Difference between Batch Gradient Descent and Stochastic Gradient Descent_. [https://www.geeksforgeeks.org/difference-between-batch-gradient-descent-and-stochastic-gradient-descent/](https://www.geeksforgeeks.org/difference-between-batch-gradient-descent-and-stochastic-gradient-descent/)
+5. Sweta. _Batch, Mini Batch, and Stochastic Gradient Descent_. [https://sweta-nit.medium.com/batch-mini-batch-and-stochastic-gradient-descent-e9bc4cacd461](https://sweta-nit.medium.com/batch-mini-batch-and-stochastic-gradient-descent-e9bc4cacd461)
+6. R. Sebastian. _Gradient Descent and Stochastic Gradient Descent_. [https://rasbt.github.io/mlxtend/user_guide/general_concepts/gradient-optimization/](https://rasbt.github.io/mlxtend/user_guide/general_concepts/gradient-optimization/)
+7. Geeksforgeeks. _ML | Mini-Batch Gradient Descent with Python_. [https://www.geeksforgeeks.org/ml-mini-batch-gradient-descent-with-python/](https://www.geeksforgeeks.org/ml-mini-batch-gradient-descent-with-python/).
