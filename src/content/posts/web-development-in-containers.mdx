@@ -1,0 +1,124 @@
+---
+title: Web Development in Containers
+description: Efficient way to containerize and develop web apps 
+publishedDate: 2024-06-28
+tag: Containerization
+series:
+published: true
+---
+
+I have been using `asdf`, a version manager for every tool (e.g. Node,js, Ruby, MySQL, you name it) for years.
+It was great since I could manage multiple versions of the same tool.
+I could switch between versions easily.
+I could even have different versions of the same tool in different projects.
+
+There is nothing wrong with `asdf`.
+I thought to myself, "Is there a way to serve my web applications more efficiently?"
+Since I've been tinkering with Docker, maybe I could serve my web app with Docker
+and mount the working directory to the container so that any changes I make in the working directory
+would reflect in the container.
+
+By serving the web app with a container, I do not have to go to the working directory, run and stop the server.
+As soon as I turn on my computer, the server is already running.
+
+To do this, go to your working directory and create `docker-compose.yaml` and `Dockerfile`. 
+
+## Dockerfile
+
+```dockerfile title="Dockerfile"
+FROM node:current-alpine3.19
+
+WORKDIR /app
+COPY . /app
+
+RUN npm install
+CMD ["npm", "run", "dev"]
+```
+
+1. `FROM node:current-alpine3.19` - This line sets the `node` image with the tag `current-alpine3.19` as the base image for this container.
+2. `WORKDIR /app` - This line sets the working directory to `/app`.
+3. `COPY . /app` - This line copies everything in the working directory to `/app`.
+4. `RUN npm install` - This line installs the required dependencies in the container.
+5. `CMD ["npm", "run", "dev"]` - This line serve the service.
+
+By default, Next.js web applications are served on port 3000.
+
+## Docker Compose
+
+```yaml title="docker-compose.yaml"
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    volumes:
+      - /path/to/your/webapp:/app
+    restart: always
+    ports:
+      - 3000:3000
+```
+
+1. `webapp:` - This is the name of the service.
+2. `build:` - This tells Docker to build the image.
+3. `context: .` - This tells Docker to use the current directory you defined in `Dockerfile` above.
+4. `dockerfile: Dockerfile` - This tells Docker to use the `webapp.dockerfile` we just defined above.
+5. `container_name: webapp` - This is the name of the container, you could name whatever you like.
+6. `volumes:` - This tells Docker to mount the working directory to the container. (Use `pwd` on your terminal if you are sure about the path you're currently on).
+7. `restart: always` - This tells Docker to restart the container if it crashes.
+8. `ports:` - This tells maps the port 3000 in the container to the port 3000 on your computer.
+
+To start the server, run `docker compose up -d` in your terminal. `-d` means *detached* mode, meaning the container will run in the background.
+
+To make sure, go to your browser and access `http://localhost:3000`.
+
+If there are some files that you do not wish to be copied into the container,
+do add `.dockerignore` into your codebase.
+
+```text title=".dockerignore"
+.astro
+.next
+...
+```
+
+If you need to import some environment variables, there are two ways
+you could consider.
+
+1. Raw-dogging the environment values in the compose file like a real man.
+
+```yaml title="docker-compose.yaml"
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    environment:
+      - DEBUG=TRUE
+      - ...
+    volumes:
+      - /path/to/your/webapp:/app
+    restart: always
+    ports:
+      - 3000:3000
+```
+
+2. Import `.env` file inside the compose file.
+
+```yaml title="docker-compose.yaml"
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    env_file:
+      - .env
+    volumes:
+      - /path/to/your/webapp:/app
+    restart: always
+    ports:
+      - 3000:3000
+```
+
+That way would import the `.env` file in the current working directory into the container.
