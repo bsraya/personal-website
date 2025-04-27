@@ -1,0 +1,175 @@
+---
+title: Logistic Regression
+description: Binary prediction using the logit function made from scratch
+publishedDate: 2023-12-24
+tag: Machine Learning
+series: Regression Algorithms
+published: true
+---
+
+## What is Logistic Regression?
+
+Logistic Regression is one of many supervised machine learning algorithms, just like Linear Regression.
+Instead of predicting a continuous value, it predicts the probability of an event happening, or something is true or false.
+So, this algorithms is mostly used for binary classification problems. Here are the use cases of Logistic Regression:
+
+1. Predict if an email is spam or not.
+2. Predict if a credit card transaction is fraudulent or not.
+3. Predict if a customer will churn or not.
+4. Predict if a patient has cancer or not.
+
+However, it also has the same limitations as Linear Regression, such as:
+
+1. It is a linear model, so it cannot capture complex non-linear relationships. In other words, it assumes that the data is linearly separable.
+2. It assumes that the data is independent of each other. In other words, it assumes that the data is not correlated with each other.
+3. It is sensitive to outliers.
+
+## Mathematics Behind Logistic Regression
+
+First, Logistic Regression still uses Linear Equation used in Linear Regression, and it's expressed as:
+
+$$
+\hat{y} = \theta_0 + \theta_1x
+$$
+
+Second, we are going to need Sigmoid function.
+This funciton's sole job is to predict by converting the output of the linear equation into a probability value between $0$ and $1$.
+
+$$
+\sigma(z) = \frac{1}{1 + e^{-z}}
+$$
+
+where $z = \theta_0 + \theta_1 \times x$. Then the sigmoid function can be rewritten as:
+
+$$
+\sigma(\theta_0 + \theta_1x) = P(y | x) = \frac{1}{1 + e^{-(\theta_0 + \theta_1x)}}
+$$
+
+After acquiring the probability value from the Sigmoid function, we can use a threshold value to classify into one or another.
+To generalize, we can use the following equation to predict the probability of an event occurring:
+
+Once we have the probability of an event occuring, we then use a threshold value to round up the probability value to either $0$ or $1$.
+If $P(y | x) \geq 0.5$, then the data is classified as $1$, otherwise it is classified as $0$.
+
+Similar to what we did in [the Linear Regression post](/posts/linear-regression), we need to estimate the best $\theta_0$ and $\theta_1$ using the Gradient Descent algorithm.
+What the Gradient Descent algorithm does is to update the $\theta_0$ and $\theta_1$ values based on the cost function and the learning rate.
+
+This example is just a simple linear model, we are going to use the following equations to update `intercept` and `coefficient`:
+
+$$
+\begin{gather*}
+\theta_0 = \theta_0 - \alpha \frac{\partial}{\partial \theta_0} J(\theta_0, \theta_1, \dots, \theta_p) \\
+\theta_1 = \theta_1 - \alpha \frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1, \dots, \theta_p)x_1 \\
+\cdots \\
+\theta_p = \theta_p - \alpha \frac{\partial}{\partial \theta_n} J(\theta_0, \theta_1, \dots, \theta_p)x_p \\
+\end{gather*}
+$$
+
+where $\alpha$ is the learning rate, $\theta_p$ is the $p$-th parameter, $J$ is the cost function, and $x_p$ is the $p$-th feature.
+
+Since we only have $\theta_0$ and $\theta_1$, we can simplify the equation above to:
+
+$$
+\begin{gather*}
+\theta_0 = \theta_0 - \alpha \frac{\partial}{\partial \theta_0} J(\theta_0, \theta_1) \\
+\theta_1 = \theta_1 - \alpha \frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1)x_1 \\
+\end{gather*}
+$$
+
+## Implementation
+
+First things first, we need to import the necessary libraries.
+
+```python
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+```
+
+Say that we only have a feature $x$, the sepal length, and we want to determine the instance is a Virginica or not.
+Let's prepare the data.
+
+```python
+iris = load_iris()
+sepal_length = iris.data[:, 0]
+target = iris.target
+
+is_virginica_dict = {0: 0, 1: 0, 2: 1}
+is_virginica = np.array([is_virginica_dict[i] for i in target])
+
+species_dict = {0: 'setosa', 1: 'versicolor', 2: 'virginica'}
+species_name = np.array([species_dict[i] for i in target])
+```
+
+You might be wondering why we have `is_virginica_dict`.
+I need that variable to separate the data so that some data sit at the bottom of the plot and some sit at the top of the plot.
+
+![Data points are either sitting at 0 or 1](/assets/posts/logistic-regression/data.png)
+
+So let's add a line like we did in [the Linear Regression post](/posts/linear-regression) with $-1.2$ as the intercept and $0.28$ as the coefficient.
+
+![A graph with a Linear Regression line](/assets/posts/logistic-regression/non-linear.png)
+
+It's clear that our data do not follow the pattern that the straight line is showing in the graph.
+Thus, we need to use Sigmoid function to bend the line, so that the line would look like this:
+
+![A graph with a Logistic Regression line](/assets/posts/logistic-regression/logreg.png)
+
+```python
+def accuracy(y_pred, y):
+  return np.sum(y_pred == y) / len(y)
+
+def sigmoid(x):
+  return 1 / (1 + np.exp(-x))
+
+def linear_function(intercept, coefficient, x):
+  return intercept + coefficient * x
+
+def threshold(x):
+  return np.where(x > 0.5, 1, 0)
+
+def gradient_descent(x, y, epochs, alpha = 0.01):
+  intercept, coefficient = -1.2, 0.28 # initial guess
+
+  for _ in range(epochs):
+    y_pred = np.array(
+      [
+        sigmoid(
+          linear_function(intercept, coefficient, i)
+        ) for i in x
+      ]
+    )
+    intercept = intercept - alpha * np.sum(y_pred - y) / len(y)
+    coefficient = coefficient - alpha * np.sum((y_pred - y) * x) / len(y)
+
+  return intercept, coefficient
+```
+
+Let's train our model for $100,000$ times.
+
+```python
+intercept, coefficient = gradient_descent(sepal_length, is_virginica, 100000)
+predicted_value = np.array([sigmoid(linear_function(intercept, coefficient, i)) for i in sepal_length])
+corrected_prediction = threshold(predicted_value)
+pred_acc = aaccuracy(corrected_prediction, is_virginica)
+
+print(f'accuracy: {pred_acc:.4f}') # 0.8
+print(f'intercept: {intercept:.4f}') # -13.004847396222699
+print(f'coefficient: {coefficient:.4f}') # 2.0547824850027654
+```
+
+Not bad, the accuracy is $80\%$, with $-13.00$ as the intercept and $2.05$ as the coefficient.
+
+You can find the full code in [this repository](https://github.com/bsraya/machine-learning-algorithms/blob/main/logistic-regression.ipynb)
+
+## Conclusion
+
+1. Logistic Regression is a supervised machine learning algorithm that is used for binary classification problems.
+2. It uses the Sigmoid function to calculate the probability of an event occurring.
+3. It uses a threshold value to roundup the probability value to either $0$ or $1$. If $\delta(x) > 0.5$, then the data is classified as $1$, otherwise it is classified as $0$.
+
+## References
+
+1. Vieira, Tim. _Exp-Normalize Trick_. [https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/](https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/)
+2. IBM. _Logistic Regression_. [https://developer.ibm.com/articles/implementing-logistic-regression-from-scratch-in-python/](https://developer.ibm.com/articles/implementing-logistic-regression-from-scratch-in-python/)
