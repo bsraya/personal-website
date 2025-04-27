@@ -1,0 +1,273 @@
+---
+title: Schedulearn
+description: A lightweight scheduling system for deep learning models
+publishedDate: 2022-02-01
+tag: System Architecture
+published: true
+---
+
+## Introduction
+
+Schedulearn, stands for **Schedule** + **Learn**, is a lightweight scheduling system for deep learning models.
+It is designed to be a simple and easy-to-use system for scheduling deep learning models so that users can focus on developing their models without constantly worrying about resources.
+
+## Motivation
+
+This project was a thesis project made by someone else and initially made with Kubernetes as the orchestrator, Go as the backend language, and MongoDB as the database.
+Looking at the codebase, it occurred to me that the system was made in hurry, too complex for a prototype scheduling system, and resource hungry.
+Running the MongoDB itself would require 200+ MB of RAM. Overall, the entire system required 500+ MB of RAM.
+Even though the backend system was written in Go, there were too many redundancy and unnecessary code, leading to poor code quality, maintainability, and performance.
+
+At the end, I decided to rewrite the entire project using Docker, Python, and SQLite.
+Even though the project was written in Python, the entire system only requires 100+ MB of RAM.
+The SQLite DB file containing all training metadata only requires 100kb of storage.
+The project resulted in a dramatically smaller codebase, reduced to just 25% of its original size. 
+I also achieved a 80% reduction in resource requirements.
+
+The following is the list of requirements that the system should meet. The system should be able to:
+
+1. run deep learning models with multiple GPUs.
+2. schedule jobs based on the number of GPUs available in the cluster.
+3. scale out jobs that are running too long.
+4. move jobs from one server to another on the fly.
+5. change the scheduling algorithm on the fly.
+
+## Keywords
+
+1. **Makespan** is the time taken from the start of the first job until the end of the last job.
+2. **Turnaround Time** is the time taken from the start of a job until the end of the job.
+3. **First-In-First-Out (FIFO)** is a scheduling algorithm that schedules jobs based on the order of their arrival time.
+4. **Round-Robin (RR)** is a scheduling algorithm that schedules jobs based on the order of their arrival time and the number of GPUs available.
+5. **Elastic First-In-First-Out (EFIFO)** is a scheduling algorithm that schedules jobs based on the order of their arrival time and the number of GPUs available.
+6. **Horovod** is a distributed deep learning framework, meaning a deep learning model can be trained with multiple GPUs at the same time. It supports TensorFlow, Keras, PyTorch, and Apache MXNet.
+
+## Tech Stacks
+
+The system is built using the following technologies:
+
+1. [FastAPI](https://fastapi.tiangolo.com/)
+2. [SQLModel](https://sqlmodel.tiangolo.com/)
+3. [Pydantic](https://docs.pydantic.dev/latest/)
+4. [SQLite](https://www.sqlite.org/index.html)
+5. [Docker](https://www.docker.com/)
+6. [Horovod](https://github.com/horovod/horovod)
+
+![Schedulearn consists of 3 components: UI, API, and the server](/assets/works/schedulearn/schedulearn-architecture.png)
+
+## Overall Architecture
+
+In the figure above, you can see that there are three main components in the system: the **API**, the **servers**, the **user interface**.
+Those API endpoints are responsible for handling users requests from the user interface, such as creating, updating, and deleting models.
+The database is responsible for storing the models' metadata.
+The scheduler, which is built in the same place as the API, is the core of the system and is responsible for scheduling the models depending on the resources available in the cluster.
+Meaning, the system will tell where each model should be trained at and how much resources each model should use.
+
+![Job Submission Procedures](/assets/works/schedulearn/submission-procedure.png "Job Submission Procedures")
+
+When a job is submitted, that particular job will undergo several steps before its results are being sent back to the user.
+
+1. The job is sent to the API
+2. The API will save the job's metadata in the database, schedule the job, and send the job to its corresponding server.
+3. The server will then pull the job from the API and start training the model.
+4. The server sends the result back to the API and save the result in the database
+5. The API sends back the result to the user
+
+## Experiment Setup
+
+The system consists of three servers, and each server consists of 4 GPUs. The following of the specifications of the entire system:
+
+1. 3 x 4 Nvidia GTX 1080 Ti graphical processing units, each equipped with 11GB Video Random Access Memory (VRAM)
+2. Intel Xeon E5-2678 v3 with 48 cores running at 2.50GHz
+3. 128 GB Random Access Memory (RAM)
+4. 10G PCIe NIC network card
+
+## Algorithms
+
+There are three scheduling algorithms exist within the system:
+
+1. First-In-First-Out (FIFO)
+2. Round-Robin (RR)
+3. Elastic First-In-First-Out (EFIFO)
+
+These algorithms are not available to use out of the box, so that I have to customize them to fit the system's requirements.
+I can't find a way to express the pseudocode in Markdown, so I will use Python instead.
+Basically, the algorithms you will see in the following sections are much simpler than the actual implementation.
+
+### FIFO
+
+```python
+def fifo(required_gpus: int) -> dict | None:
+    for server in ['gpu3', 'gpu4', 'gpu5']:
+        gpus = get_gpus() # get all available GPUs in the cluster
+        available_gpus = ... # include only GPUs with less 90% VRAM usage
+        if len(available) >= required_gpus:
+            result = {'server': server, 'gpus': []}
+            for gpu in available[:required_gpus]:
+                result['gpus'].append(gpu.id)
+            return result
+    return None
+```
+
+What the algorithm does is that it will check each server's availability
+by cheking through each GPU in the server.
+If the GPU has less 90% VRAM usage, then it will be included in the list of available GPUs.
+
+Once the list of available GPUs is ready, the algorithm will check if the number of available GPUs is
+equal or greater than the number of GPUs required by the job. If yes, then the algorithm will return
+the server and the available GPUs in that server. Else, continue.
+
+### Elastic FIFO
+
+To implement Elastic FIFO, I still have to use the same FIFO algorithm that you saw above.
+To make it possible, my system should be able to scale out jobs, as well as move jobs from one server to another on the fly.
+
+Whenever a job completes in the system, the scheduler will determine which the slowest job that is still running.
+If there is, then the system will verify how long the job has been running. Knowing that it's running too long, the system
+will scale out the job by adding more GPUs to the job, or possible migrate the job to another server with more GPUs.
+
+However, there are some drawbacks from killing, looking for available resources, migrating, and restarting the job.
+The drawbacks are:
+
+1. The job will be restarted from the beginning, meaning previously trained weights will be lost.
+2. Restarted jobs would have higher turnaround time, that would also lead to increase in the makespan of the system.
+
+Ideally, it's better to scale out only important jobs with most weights with least resources.
+However, it's not possible to know which jobs are important since the system does not know the model's architecture, and I did not implement any metrics to measure the importance of a job.
+Therefore, I decided to scale out all jobs that are running too long.
+Jobs running too long are more likely to be failed or stuck jobs in my case.
+
+## Usage
+
+### Job Submission
+
+![
+    A form to submit a job to the system
+](/assets/works/schedulearn/job-form.png "A form to submit a job to the system")
+
+Job submission can be done on the user interface, or by sending a POST request to the API.
+The following is an example of a job submission request:
+
+```python
+import requests
+
+r = requests.post(
+    'http://localhost:5000/jobs',
+    json = {
+        "name": "Pytorch Mnist",
+        "type": "Pytorch",
+        "container_image": "nathansetyawan96/horovod",
+        "command": "python pytorch/pytorch_mnist.py",
+        "required_gpus": 4,
+    }
+)
+```
+
+Once the job is accepted, then you would see a response like the following.
+
+```bash
+HTTP/1.1 201 Created
+content-length: 38
+content-type: application/json
+date: Wed, 09 Nov 2022 15:03:41 GMT
+server: uvicorn
+
+{
+    "message": "Job created successfully"
+}
+```
+
+### Job Table
+
+I also made a user interface to show all jobs in the system, as well as their status.
+Knowing the status of each job, whether the job is running, completed, or failed,
+would make debugging much easier.
+
+![
+    A table to show all jobs in the system
+](/assets/works/schedulearn/job-table.png "A table to show all jobs in the system")
+
+### Job Output
+
+The job output running in the system can be streamed to the user interface.
+If a job was stuck, and it would easier to just check the output of the job on the UI
+rather than SSH-ing to the server and checking the output of the job's docker.
+
+![
+    The output streamed from the job's docker
+](/assets/works/schedulearn/job-output.png "The output streamed from the job's docker")
+
+### Changing Scheduling Algorithm
+
+Changing the scheduling algorithm can be done by sending a PUT request to the API.
+
+```bash
+http PUT localhost:5000/algorithm/elasticfifo
+```
+
+![
+    Changing to Elastic FIFO on the fly
+](/assets/works/schedulearn/to-elasticfifo.png "Changing to Elastic FIFO on the fly")
+
+Changing it back to FIFO can be done by sending another PUT request to the API.
+
+```bash
+http PUT localhost:5000/algorithm/fifo
+```
+
+![
+    Changing to FIFO on the fly
+](/assets/works/schedulearn/to-fifo.png "Changing to FIFO on the fly")
+
+## Challenges
+
+Due security measures imposed by the lab that I worked for, I am unable to train models with multiple GPUs from different servers e.g. 4 GPUs in server A and 2 GPUs in server B.
+However, assigning more GPUs does not translate to 1 to 1 performance increase. Meaning that training a model with 4 GPUs does not mean that the model will be trained 4 times faster, assuming that 1 GPU is 1x speed.
+
+![Scability across different Deep Learning libraries](/assets/works/schedulearn/scalability.png "Scability across different Deep Learning libraries")
+
+To overcome this issue, each job will only be assigned to GPUs from the same server.
+At that moment, I saw that is the feasible way to reduce communication costs.
+
+![Optimal GPU assignment](/assets/works/schedulearn/gpu-assignment.png "Optimal GPU assignment")
+
+Having multiple GPUs requires the data to travel more, which already imposes a significant overhead.
+The further the data travels, the more overhead it will impose. Therefore, it's better to asssign multiple GPUs from the same server for a certain job.
+
+![How Horovod passes data across multiple GPUs](/assets/works/schedulearn/how-horovod-passes-data.png "How Horovod passes data across multiple GPUs")
+
+## Observations
+
+![TensorFlow Makespan and Turnaround Time](/assets/works/schedulearn/tf.png "TensorFlow Makespan and Turnaround Time")
+
+From the figure above, you would notice that the makespan of TensorFlow jobs was reduced by almost 10% with Elastic FIFO.
+The turnaround time of TensorFlow jobs was also reduced by about 50% with Elastic FIFO.
+
+![PyTorch Makespan and Turnaround Time](/assets/works/schedulearn/py.png "PyTorch Makespan and Turnaround Time")
+
+Unlike TensorFlow, PyTorch jobs did not benefit from Elastic FIFO. The makespan was reduced by about 5% with Elastic FIFO,
+while the turnaround time was reduced by about 10%.
+
+
+![Makespan and Turnaround Time of multiple scheduling algorithms](/assets/works/schedulearn/algo-comparison.png "Makespan and Turnaround Time of multiple scheduling algorithms")
+
+## Conclusion
+
+This project was no easy task. To be able to make one, one should be familiar with the basics of Docker, system design of a backend, and the internals of Horovod.
+I had to learn all of them from scratch, and I am glad that I did it.
+
+Before you go, here are some takeaways from this project:
+
+1. The number of GPUs does not translate to 1 to 1 performance increase.
+2. It's better to assign multiple GPUs from the same server for a certain job to reduce communication costs. Otherwise, data would have to travel more, which imposes a significant overhead.
+3. Elastic FIFO can reduce the makespan and turnaround time of TensorFlow jobs by 10% and 50% respectively.
+4. Elastic FIFO can reduce the makespan and turnaround time of PyTorch jobs by 5% and 10% respectively.
+5. Simplicity is the key. Using Docker, Python, and SQLite instead of Kubernetes, Go, and MongoDB reduces the required resources and development complexity significantly.
+6. I saved a lot of development time just by spending more time on system requirements and design.
+
+## Future Works
+
+1. Create a dashboard to monitor the system.
+2. Implement a metric to measure the importance of a job.
+3. Implement a way to scale out only important jobs with most weights with least resources.
+4. Getting more scheduling algorithms on board.
+5. Strenghten the security of the system, while allowing users to train models with multiple GPUs from different servers.
