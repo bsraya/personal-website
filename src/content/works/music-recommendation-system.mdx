@@ -1,0 +1,401 @@
+---
+title: Music Recommendation System
+description: A recommendation system using NMF
+publishedDate: 2024-01-05
+tag: Machine Learning
+published: true
+---
+
+In this post, I will be documenting my journey in creating a recommendation system from scratch using my music that I have collected from Spotify.
+This post will be divided into two parts:
+
+1. Data Collection
+2. Model Training
+3. Evaluation
+4. Conclusion
+
+Before we go further, I think it's important to know what is NMF, how NMF works, and why I chose this algorithm to create a recommendation system.
+
+## What is Non-negative Matrix Factorization (NMF)?
+
+Non-negative Matrix Factorization (NMF) is a matrix factorization method that factorizes a non-negative matrix into two non-negative matrices.
+NMF equation can be expressed as follows:
+
+$$
+\underset{n \times m}{V} \approx \underset{n \times p}{W} \times \underset{p \times m}{H}
+$$
+
+where:
+
+* $V$ is a matrix of song attributes.
+* $W$ is a matrix of the latent space.
+* $H$ is a matrix of the latent features.
+* $n$ is the number of songs.
+* $m$ is the number of features.
+* $p$ is the number of latent features.
+
+The goal of NMF is to find the latent features and the coefficients of the latent features that can reconstruct the original matrix.
+Note that the latent topics in $p$ are not directly observable in the data but are inferred from the relationships between songs and their attributes.
+
+How do we determine if a song is similar to other songs?
+First, we are going to feed matrix $V_{n \times m}$ into the NMF algorithm from _scikit-learn_ with $p$ latent features that produces $W_{n \times p}$.
+Assuming that we have a song with $p$ features, let's call it $S = [s_1, ..., s_p]$.
+Once we have matrix $W$, we can multiplicate it with $S^T$. Thus, $W \times S^T$ will give us a vector $R$ containing values representing how similar the song is to other songs, ranging from 0 to 1.
+$0$ represents that the song is not similar to a particular song.
+Conversely, $1$ represents that the song is very similar to a particular song.
+
+$$
+\begin{aligned}
+\underset{n \times p}{W} \times \underset{p \times 1}{S^T} &= \underset{n \times 1}{R} \\
+\begin{bmatrix}w_{11} & \cdots & w_{1p} \\ \vdots & \ddots & \vdots \\ w_{n1} & \cdots & w_{np}\end{bmatrix}_{n \times p} \times \begin{bmatrix}s_1 \\ \vdots \\ s_p\end{bmatrix}_{p \times 1} &= \begin{bmatrix}r_1 \\ \vdots \\ r_n\end{bmatrix}_{n \times 1}
+\end{aligned}
+$$
+
+Now we know what NMF is and how it works in mathematical perspective.
+Here are the reasons why I chose NMF as the algorithm behind my music recommendation system:
+
+1. NMF can be scaled to large datasets, which is essential for music services that have vast amounts of tracks and user data.
+2. NMF models can be updated incrementally with new data (new users or new songs), which is crucial for dynamic systems like music recommendation services where the database is constantly growing
+3. Just like other matrix factorization techniques, NMF reduces the dimensionality of the feature space.
+   This is beneficial because it helps in handling the curse of dimensionality and noise in the data.
+   In the reduced space, similar songs are closer to each other, making it easier to find and recommend similar items.
+
+## Data Collection
+
+![My Spotify homepage](/assets/works/music-recommendation-system/thumbnail.png "My Spotify homepage")
+
+Since I am a Spotify subscriber, I use their public APIs to collect approximately 2000 songs both from my own playlists and other playlists that I have never listened to.
+If you're interested on how I collected the data, you check the script [here](https://github.com/bsraya/data-science-portfolio/blob/main/fetch-random-songs.py) on GitHub.
+
+There are endpoints that I used to collect the metadata of songs in my own playlist and also songs in the playlists that I never listened to:
+
+1. `https://accounts.spotify.com/authorize` to get the access token
+2. `https://accounts.spotify.com/api/token` to get the refresh token
+3. `https://api.spotify.com/v1/me/playlists` to get all of my playlists
+4. `https://api.spotify.com/v1/browse/categories/{category_id}/playlists` to get all of the playlists in a category
+5. `https://api.spotify.com/v1/playlists/{playlist['id']}/tracks` to get all of the tracks in a playlist
+6. `https://api.spotify.com/v1/tracks?ids={track_ids}` to get the tracks' metadata in a bulk
+7. `https://api.spotify.com/v1/audio-features?ids={track_ids}` to get the tracks' audio features in a bulk
+
+While gathering the data, make sure that you send a request and get the response in a bulk.
+This way, you can reduce the number of requests that you send to the API.
+Spotify API has a rate limit of 10 requests per second, so you have to be careful when sending requests to the API.
+
+Here is one of the songs's metadata that the API returns:
+
+```json
+{
+  "id": "2i2gDpKKWjvnRTOZRhaPh2",
+  "title": "Moonlight",
+  "artist(s)": "Kali Uchis",
+  "popularity": 88,
+  "danceability": 0.639,
+  "energy": 0.723,
+  "key": 7,
+  "loudness": -6.462,
+  "mode": 0,
+  "speechiness": 0.0532,
+  "acousticness": 0.511,
+  "instrumentalness": 0.0,
+  "liveness": 0.167,
+  "valence": 0.878,
+  "tempo": 136.872,
+  "type": "audio_features",
+  "uri": "...",
+  "track_href": "...",
+  "analysis_url": "...",
+  "duration_ms": 187558,
+  "time_signature": 4
+}
+```
+
+To understand the meaning of each feature, you can read the documentation [here](https://developer.spotify.com/documentation/web-api/reference/get-audio-features).
+While writing this post halfway, I stumbled upon a library called [Spotipy](https://spotipy.readthedocs.io/en/2.18.0/) that can be used to interact with Spotify API.
+I could have used this library to collect the data, but I decided to stick with my own script.
+
+## Data Exploration
+
+![My playlist heatmap](/assets/works/music-recommendation-system/heatmap.png "My playlist heatmap")
+
+Looking at the heatmap above, we can see `danceability`, `energy`, and `loudness` are highly correlated.
+Let's see how the distribution of each feature looks like.
+
+![Distribution of each feature](/assets/works/music-recommendation-system/data-distribution.png "Distribution of each feature")
+
+From the distribution above, we can see that most of the songs in my playlists are popular, danceable, and loud.
+I assume that's the reason why the heatmap above shows that those three features are highly correlated.
+
+![Scatter plots of danceability against other features](/assets/works/music-recommendation-system/danceability.png "Scatter plots of danceability against other features")
+
+Things we can notice from the scatter plots above:
+
+1. Most danceable songs are popular.
+2. Danceability is positively correlated with energy and loudness.
+3. Danceable songs are low in speechiness.
+4. Danceability is negative correlated with acousticness and instrumentalness.
+5. Danceable songs have quite high tempo.
+
+![Scatter plots of popularity against other features](/assets/works/music-recommendation-system/popularity.png "Scatter plots of popularity against other features")
+
+The observations from the scatter plots above:
+
+1. Popular songs are danceable
+2. Popular songs are energetic and loud.
+3. Popular songs are low in acousticness, instrumentalness, and speechiness.
+4. Popular songs are high in valence, meaning that they are happy and cheerful.
+5. Popular songs have quite high tempo.
+
+Now let's see how the data values look like real close.
+Here is the first 5 rows of the dataset that I converted to a Pandas dataframe:
+
+|     | popularity | danceability | energy | key | loudness | mode | speechiness | acousticness | instrumentalness | liveness | valence | tempo   | duration_ms | time_signature |
+| --- | ---------- | ------------ | ------ | --- | -------- | ---- | ----------- | ------------ | ---------------- | -------- | ------- | ------- | ----------- | -------------- |
+| 0   | 88         | 0.639        | 0.723  | 7   | -6.462   | 0    | 0.0532      | 0.511        | 0.0000           | 0.167    | 0.878   | 136.872 | 187558      | 4              |
+| 1   | 83         | 0.472        | 0.518  | 8   | -7.379   | 1    | 0.0510      | 0.383        | 0.1270           | 0.289    | 0.154   | 147.805 | 211667      | 4              |
+| 2   | 68         | 0.848        | 0.364  | 11  | -10.058  | 1    | 0.0637      | 0.697        | 0.0053           | 0.140    | 0.569   | 137.541 | 214160      | 4              |
+| 3   | 61         | 0.361        | 0.020  | 11  | -25.064  | 1    | 0.0555      | 0.925        | 0.0022           | 0.114    | 0.351   | 76.621  | 123320      | 4              |
+| 4   | 82         | 0.440        | 0.317  | 8   | -9.258   | 1    | 0.0531      | 0.891        | 0.0000           | 0.141    | 0.268   | 169.914 | 233456      | 3              |
+
+Let's see how much each feature contributes to the cumulative variance of the dataset.
+First we create two lists, one to store the reconstructed errors and the other to store the number of dimensions, starting from 2 to the number of columns in the dataset.
+
+```python
+reconstruction_errors = []
+dimensions = range(2, df.columns.size + 1)
+```
+
+After that, we create a pipeline that will scale the data, perform NMF, and normalize the data.
+Then we fit the pipeline to the dataset and append the reconstruction error to the list so that we can plot it.
+
+```python
+# create an elbow plot to determine the optimal number of dimensions
+for dimension in dimensions:
+  pipeline = make_pipeline(
+    MinMaxScaler(),
+    NMF(
+      n_components=dimension,
+      max_iter=10000,
+    ),
+    Normalizer()
+  )
+
+  pipeline.fit(df)
+  
+  reconstruction_errors.append(
+    pipeline.named_steps['nmf'].reconstruction_err_
+  )
+```
+
+![Reconstruction error graph using the Elbow method](/assets/works/music-recommendation-system/elbow.png "Reconstruction error graph using the Elbow method")
+
+The general rule of thumb is to choose the number of components where the elbow starts to flatten out.
+However, the reconstruction error above has a step decline and only flattens out at 14 dimensions.
+Now, two questions emerged:
+
+1. Should I use all of the features to create a better recommendation system? That's where the reconstruction error flattens out.
+2. Should I just use half the number of the features to create a so-so recommendation system?
+
+Looking at the graph, I was tempted to use all of the features to create the "perfect" recommendation system.
+However, there is a catch. If I use all of the features, meaning that the recommendation system will be so good that it will recommend me songs that I have already listened to.
+
+Therefore, if I want to create a recommendation system that will recommend me songs that I have never listened to, I have to use half the number of the features to allow some mistakes to happen.
+Those mistakes will expose me to new songs or new genres that I have never listened to.
+
+## Model Training
+
+This time, let's use 7 dimensions to create a recommendation system, and get the names of those 7 features.
+
+```python
+pipeline = make_pipeline(
+  MinMaxScaler(),
+  NMF(
+    n_components=dimension,
+    max_iter=10000,
+  ),
+  Normalizer()
+)
+transformed_songs = pipeline.fit(df)
+
+components = pipeline.named_steps['nmf'].components_
+
+categories = pd.DataFrame(components, columns=df.columns.values)
+```
+
+There are two variables that we need to pay attention to, which are `transformed_songs` and `categories`.
+First, let's look how `categories` looks like:
+
+|     | popularity | danceability | energy   | key      | loudness | mode     | speechiness | acousticness | instrumentalness | liveness | valence  | tempo    | duration_ms | time_signature |
+| --- | ---------- | ------------ | -------- | -------- | -------- | -------- | ----------- | ------------ | ---------------- | -------- | -------- | -------- | ----------- | -------------- |
+| 0   | 0.534903   | 0.298442     | 0.270266 | 0.000000 | 0.408649 | 0.000000 | 0.000000    | 0.000000     | 0.000000         | 0.018999 | 0.000000 | 0.229539 | 0.217800    | 0.248214       |
+| 1   | 0.000000   | 0.106725     | 0.068626 | 0.000000 | 0.189821 | 1.637913 | 0.000000    | 0.000000     | 0.000000         | 0.000000 | 0.000000 | 0.104684 | 0.097882    | 0.090924       |
+| 2   | 0.001453   | 0.000000     | 0.093944 | 0.023366 | 0.000000 | 0.000000 | 0.000000    | 0.043522     | 1.249295         | 0.000000 | 0.000000 | 0.246392 | 0.000000    | 0.000000       |
+| 3   | 0.000000   | 0.104355     | 0.006865 | 1.335583 | 0.023123 | 0.000000 | 0.000000    | 0.000000     | 0.000000         | 0.000000 | 0.000000 | 0.009809 | 0.000000    | 0.000000       |
+| 4   | 0.000000   | 0.509518     | 0.388543 | 0.000000 | 0.358000 | 0.000000 | 1.472285    | 0.000000     | 0.000000         | 0.187331 | 0.000000 | 0.656888 | 0.622994    | 0.116734       |
+| 5   | 0.337989   | 0.788880     | 0.924321 | 0.000000 | 0.821795 | 0.000000 | 0.000000    | 0.000000     | 0.000000         | 0.475844 | 1.264722 | 0.061846 | 0.000000    | 0.535879       |
+| 6   | 0.654970   | 0.116540     | 0.000000 | 0.000000 | 0.274794 | 0.000000 | 0.000000    | 1.401693     | 0.000000         | 0.136065 | 0.232226 | 0.342329 | 0.316328    | 0.246019       |
+
+Each row represents a feature. For example, the 1st feature is `popularity` since 
+the first colums has the maximum value. This applies to the other rows, meaning other feature.
+
+The discovered categories are:
+
+1. Popularity
+2. Mode
+3. Instrumentalness
+4. Key
+5. Speechiness
+6. Valence
+7. Acousticness
+
+## Evaluation
+
+If we print out the first element of `transformed_songs`, we will get something like this:
+
+```python
+array([0.68781855, 0.        , 0.02267717, 0.42057155, 0.03739232,
+       0.46179948, 0.36722474])
+```
+
+Let's present those values in a dataframe:
+
+```python
+column_names = ["popularity", "mode", "instrumentalness", "key", "speechiness", "valence", "acousticness"]
+
+transformed_songs_df = pd.DataFrame(
+  transformed_songs,
+  index=no_dup_songs['title'],
+  columns=column_names
+)
+```
+
+`transformed_songs_df` would look nicer like this:
+
+| title         | popularity | mode     | instrumentalness | key      | speechiness | valence  | acousticness |
+| ------------- | ---------- | -------- | ---------------- | -------- | ----------- | -------- | ------------ |
+| Moonlight     | 0.687819   | 0.000000 | 0.022677         | 0.420572 | 0.037392    | 0.461799 | 0.367225     |
+| Die For You   | 0.795659   | 0.419812 | 0.084564         | 0.367031 | 0.034901    | 0.063033 | 0.208879     |
+| Traingazing   | 0.421927   | 0.482856 | 0.007271         | 0.598761 | 0.072504    | 0.241463 | 0.408288     |
+| See You Later | 0.000000   | 0.502542 | 0.000000         | 0.633809 | 0.000000    | 0.061599 | 0.584759     |
+| Glimpse of Us | 0.544596   | 0.482510 | 0.030081         | 0.428721 | 0.071149    | 0.001509 | 0.529932     |
+
+We can make it even nicer by categorizing each song based on the most dominant feature.
+First we gotta get the index of the dominant category.
+
+```python
+dominant_categories = [np.argmax(processed_songs.iloc[i]) for i in range(len(processed_songs))]
+```
+
+Then we create a new dataframe using the `dominant_categories` and get the name of the category using the index.
+
+```python
+categorized_songs = pd.DataFrame(
+  [categories.iloc[i].sort_values(ascending=False).index.values[0] for i in dominant_categories],
+  index=no_dup_songs.title,
+  columns=["categories"]
+)
+```
+
+Here is the first 20 rows of the categorized songs:
+
+| title                             | categories       |
+| --------------------------------- | ---------------- |
+| Moonlight                         | popularity       |
+| Die For You                       | popularity       |
+| Traingazing                       | key              |
+| See You Later                     | key              |
+| Glimpse of Us                     | popularity       |
+| La La Lost You - Acoustic Version | acousticness     |
+| blue                              | key              |
+| Surf                              | popularity       |
+| Good News                         | popularity       |
+| Jocelyn Flores                    | popularity       |
+| Come Back to Earth                | acousticness     |
+| Habits (Stay High)                | popularity       |
+| Best Part (feat. H.E.R.)          | popularity       |
+| Here With Me                      | popularity       |
+| Until I Found You - Piano Version | acousticness     |
+| i love you                        | acousticness     |
+| Idea 10                           | acousticness     |
+| Idea 1                            | instrumentalness |
+| Solas                             | instrumentalness |
+| Idea 22                           | instrumentalness |
+
+Just by looking at the first 20 rows, I can say that the model does a pretty good job at categorizing the songs.
+Counting the number of songs in each category, I noticed most songs I like and listen to are popular songs.
+
+```python
+categories
+popularity          113
+mode                 33
+instrumentalness     23
+key                  17
+acousticness         14
+valence               7
+speechiness           1
+```
+
+Take a music called "Idea 1" for example. It is an piano instrumental music that I often listen to.
+Let's see what the model would recommend me based on that song.
+
+```python
+wanted_song = processed_songs.loc['Idea 1']
+recommended_songs = processed_songs.dot(wanted_song)
+```
+
+Looking at the recommended songs below, I think the model did an impressive job
+since most of the songs are instrumental songs that in the same genre as "Idea 1".
+
+| title                                 | score    |
+| ------------------------------------- | -------- |
+| Cornfield Chase                       | 0.988377 |
+| Cornfield Chase - Piano-Cello Version | 0.985630 |
+| Cornfield Chase (Slowed + Reverb)     | 0.985341 |
+| Idea 22 (Slowed + Reverb)             | 0.982635 |
+| Interstellar- Main Theme              | 0.979361 |
+| Solas                                 | 0.966634 |
+| Day One (Interstellar Theme)          | 0.961549 |
+| dream river.                          | 0.960631 |
+| Idea 22 (Sped Up)                     | 0.956474 |
+
+To test the model, let's use the music that I have never listened to before.
+
+| title                                           | artist(s)             | category         |
+| ----------------------------------------------- | --------------------- | ---------------- |
+| As It Was                                       | Harry Styles          | pop              |
+| WHERE SHE GOES                                  | Bad Bunny             | pop              |
+| See The Light (feat. Fridayy)                   | Swedish House Mafia   | pop              |
+| METAMORPHOSIS                                   | INTERWORLD            | dance/electronic |
+| Flare                                           | Hensonn               | dance/electronic |
+| Over You                                        | Dillistone            | dance/electronic |
+| Sonthee                                         | LAR                   | dance/electronic |
+| Hiraeth (feat. Kim Van Loo)                     | Fejká                 | dance/electronic |
+| Indulgence                                      | Nora En Pure          | dance/electronic |
+| All Night Long                                  | Marsh                 | dance/electronic |
+| Just Over                                       | Yotto                 | dance/electronic |
+| Voodoo                                          | Tinlicker             | dance/electronic |
+| Hopeful                                         | ODESZA                | dance/electronic |
+| Salta                                           | Sultan + Shepard      | dance/electronic |
+| Believer - Marsh's Guatape Remix                | Above & Beyond, Marsh | dance/electronic |
+| Breathing                                       | Ben Böhmer            | dance/electronic |
+| Tell Me Why - MEDUZA Remix                      | Supermode, MEDUZA     | dance/electronic |
+| Lost In The Rhythm                              | David Guetta, MORTEN  | dance            |
+| Exhale                                          | Patrick Bradley       | jazz             |
+| As It Was                                       | The Piano Guys        | classical        |
+| Adagio in G Minor (Arr. for Harp and Orchestra) | Xavier De Maistre     | classical        |
+
+Just by listening to these twenty songs, I notice that mose of them have a lot of instrumental elements, pretty much similar to "Idea 1".
+
+## Conclusion
+
+In this project, I have successfully created a decent recommendation system that can recommend me songs using Non-negative Matrix Factorization (NMF).
+Other than this technique, there are other algorithms that can be used to create a recommendation system,
+such as Singular Value Decomposition (SVD), Alternating Least Squares (ALS), and Collaborative Filtering (CF).
+However, I chose NMF because it was the algorithm that I have never heard about until I was reading my old notes from my Linear Algebra class.
+
+Am I satisfied with the result? Yes, I am, and it really help me discovered new songs that I have no idea about,
+and a lot of them ended up in my own playlists.
+
+## References
+
+1. D. Lee, Daniel. Seung, H. Sebastian. (1999). Learning the parts of objects by non-negative matrix factorization. Nature. 401. 788-791. [https://www.nature.com/articles/44565](https://www.nature.com/articles/44565).
+2. Wikipedia. Non-negative matrix factorization. [https://en.wikipedia.org/wiki/Non-negative_matrix_factorization](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization).
