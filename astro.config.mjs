@@ -9,7 +9,6 @@ import sitemap from "@astrojs/sitemap"
 import metaTags from "astro-meta-tags";
 import robotsTxt from "astro-robots-txt";
 import vercel from "@astrojs/vercel";
-import AstroPWA from "@vite-pwa/astro";
 
 // Markdown plugins
 import rehypeKatex from "rehype-katex";
@@ -67,8 +66,7 @@ export default defineConfig({
     robotsTxt(),
     opengraphImages({
       render: presets.tailwind
-    }),
-    pwa()
+    })
   ],
   vite: {
     plugins: [tailwindcss()],
