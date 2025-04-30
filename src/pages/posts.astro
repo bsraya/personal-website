@@ -5,10 +5,11 @@ import Heading from "../components/Heading.astro";
 import { getSortedPosts } from "../utils/content.ts";
 
 const pageTitle = "Posts";
+const pageDescription = "A collection of posts written by Bijon Setyawan Raya.";
 const posts = getSortedPosts();
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {

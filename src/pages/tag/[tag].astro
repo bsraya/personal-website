@@ -22,12 +22,13 @@ export function getStaticPaths() {
     params: { tag: tag },
   }));
 }
-
 const { tag } = Astro.params;
+const pageTitle = `${slugify(tag)} posts`
+const pageDescription = `${slugify(tag)} posts written by ${import.meta.env.AUTHOR}.`
 const allPosts = getPostsByTag(tag);
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>All posts</a>
   <div class="flex flex-row gap-2 my-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{deslugify(tag)}</Heading></div>
   <div class="grid grid-col gap-5">

@@ -53,7 +53,7 @@ if (!work.data.published) {
 const { Content, headings } = await render(work);
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={work.data.title} pageDescription={`${work.data.title}: ${work.data.description}`}>
     <a href="/works" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {

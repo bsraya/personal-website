@@ -6,10 +6,11 @@ import ContentCard from "../components/ContentCard.astro"
 import Heading from "../components/Heading.astro";
 
 const pageTitle = "Works";
+const pageDescription = "A collection of works written by Bijon Setyawan Raya."
 const works = getSortedWorks();
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {

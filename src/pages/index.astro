@@ -5,16 +5,17 @@ import ExternalLink from "../components/ExternalLink.astro";
 import Heading from "../components/Heading.astro"
 import { getSortedPosts, getSortedWorks } from "../utils/content.ts";
 
-const pageTitle = "Home";
+const pageTitle = null;
+const pageDescription = "I make machines learn, and I write about it"
 const posts = getSortedPosts().slice(0, 3);
 const works = getSortedWorks().slice(0, 3);
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="grid grid-col gap-10">
     <div class="grid grid-col">
       <Heading as="h1" size="2xl" weight="bold">Bijon Setyawan Raya</Heading>
-      <div class="text-slate-600 text-lg">I make machines learn, and I write about it</div>
+      <div class="text-slate-600 text-lg">{ pageDescription }</div>
       <div>Get my resume <ExternalLink text="here" url="/resume.pdf" /></div>
     </div>
 

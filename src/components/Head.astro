@@ -1,0 +1,52 @@
+---
+import { SEO } from "astro-seo";
+import { getImagePath } from "astro-opengraph-images";
+import { pwaInfo } from 'virtual:pwa-info';
+
+const {
+	pageTitle,
+	pageDescription,
+	keywords,
+	publishedDate,
+	ogImageUrlRelative,
+} = Astro.props;
+const { url, site } = Astro;
+
+const author = import.meta.env.AUTHOR;
+const modifiedPageTitle = pageTitle ? `${pageTitle} | ${author}` : author;
+const openGraphImageUrl = getImagePath({ url, site });
+---
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content={ import.meta.env.AUTHOR }>
+	<meta name="generator" content={Astro.generator}>
+	<link href="https://github.com/bsraya" rel="me">
+	<title>{ modifiedPageTitle }</title>
+	<link rel="canonical" href={url.href}>
+	<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+		integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+		crossorigin="anonymous"
+	>
+
+	<SEO
+		openGraph={
+			{
+				basic: {
+					title: modifiedPageTitle,
+					type: "website",
+					image: openGraphImageUrl,
+					url: url.href,
+				},
+				optional: {
+					description: pageDescription
+				}
+			}
+		}
+	/>
+	<script src="/src/pwa.ts"></script>
+    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
+</head>
