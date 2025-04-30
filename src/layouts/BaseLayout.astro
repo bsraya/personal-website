@@ -5,8 +5,6 @@ import Footer from "../components/Footer.astro";
 import BackToTop from "../components/BackToTop";
 import Navigation from "../components/Navigation.astro";
 
-import { getImagePath } from "astro-opengraph-images";
-
 const { 
   pageTitle,
   pageDescription,
@@ -15,8 +13,6 @@ const {
   publishedDate,
   ogImageUrlRelative,
 } = Astro.props;
-const { url, site } = Astro;
-const openGraphImageUrl = getImagePath({ url, site });
 ---
 
 <html lang="en" data-theme="lofi">
