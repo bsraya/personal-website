@@ -1,6 +1,7 @@
 ---
 import { SEO } from "astro-seo";
 import { getImagePath } from "astro-opengraph-images";
+import { pwaInfo } from 'virtual:pwa-info';
 
 const {
 	pageTitle,
@@ -22,6 +23,11 @@ const openGraphImageUrl = getImagePath({ url, site });
 	<meta name="author" content={ import.meta.env.AUTHOR }>
 	<meta name="generator" content={Astro.generator}>
 	<link href="https://github.com/bsraya" rel="me">
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml" >
+    <link rel="apple-touch-icon" href="/icon-192x192.png" >
+    <link rel="mask-icon" href="/favicon.svg" color="#FFFFFF" >
+	<meta name="msapplication-TileColor" content="#FFFFFF" >
+    <meta name="theme-color" content="#ffffff" >
 	<title>{ modifiedPageTitle }</title>
 	<link rel="canonical" href={url.href}>
 	<link
@@ -46,4 +52,6 @@ const openGraphImageUrl = getImagePath({ url, site });
 			}
 		}
 	/>
+	{ pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
+    <script src="/src/pwa.ts"></script>
 </head>

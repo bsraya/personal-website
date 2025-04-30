@@ -9,6 +9,7 @@ import sitemap from "@astrojs/sitemap"
 import metaTags from "astro-meta-tags";
 import robotsTxt from "astro-robots-txt";
 import vercel from "@astrojs/vercel";
+import AstroPWA from "@vite-pwa/astro";
 
 // Markdown plugins
 import rehypeKatex from "rehype-katex";
@@ -66,6 +67,42 @@ export default defineConfig({
     robotsTxt(),
     opengraphImages({
       render: presets.tailwind
+    }),
+    AstroPWA({
+      manifest: {
+        name: "Bijon Setyawan Raya",
+        short_name: "BSR",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        includeAssets: ['favicon.svg'],
+        registerType: 'autoUpdate',
+        display: "standalone",
+        scope: "/",
+        base: "/?from=pwa",
+        icons: [
+          {
+            "src": "/static/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "/static/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+          }
+        ]
+      },
+      workbox: {
+        navigateFallback: '/',
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
+      },
+      devOptions: {
+        enabled: true,
+        navigateFallbackAllowlist: [/^\/$/],
+      },
+      experimental: {
+        directoryAndTrailingSlashHandler: true,
+      },
     })
   ],
   vite: {
