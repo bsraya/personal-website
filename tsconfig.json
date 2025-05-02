@@ -21,7 +21,7 @@
       "@chart/*": ["src/components/chart/*"],
       "@mdxComponents/*": ["src/components/mdx/*"],
       "@utils/*": ["src/utils/*"],
-      "@layout/*": ["src/layouts/*"],
+      "@layouts/*": ["src/layouts/*"],
     },
     "types": [
       "astro/client",
