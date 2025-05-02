@@ -74,22 +74,48 @@ export default defineConfig({
         display: "standalone",
         scope: "/",
         base: "/?from=pwa",
+        description: "Personal website of Bijon Setyawan Raya",
         icons: [
           {
-            "src": "/static/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
+            src: '/static/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           },
           {
-            "src": "/static/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-          }
+              src: '/static/icon-384x384.png',
+              sizes: '384x384',
+              type: 'image/png'
+          },
+          {
+              src: '/static/icon-256x256.png',
+              sizes: '256x256',
+              type: 'image/png'
+          },
+          {
+              src: '/static/icon-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+          },
+          {
+              src: '/static/icon-144x144.png',
+              sizes: '144x144',
+              type: 'image/png'
+          },
+          {
+              src: '/static/icon-128x128.png',
+              sizes: '128x128',
+              type: 'image/png'
+          },
+          {
+              src: '/static/icon-96x96.png',
+              sizes: '96x96',
+              type: 'image/png'
+          },
         ]
       },
       workbox: {
         navigateFallback: '/',
-        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],      
       },
       devOptions: {
         enabled: true,
