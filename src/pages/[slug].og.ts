@@ -44,7 +44,10 @@ export async function GET({ params }: APIContext) {
         png,
         {
             status: 200,
-            headers: { "Content-Type": "image/png" }
+            headers: {
+                "Content-Type": "image/png",
+                "Cache-Control": "s-maxage=1, stale-while-revalidate=59",
+            }
         }
     )
 };
