@@ -8,8 +8,7 @@ import Navigation from "../components/Navigation.astro";
 const { 
   pageTitle,
   pageDescription,
-  keywords,
-  publishedDate
+  keywords
 } = Astro.props;
 ---
 
@@ -18,7 +17,6 @@ const {
 		pageTitle={pageTitle}
 		pageDescription={pageDescription}
 		keywords={keywords}
-		publishedDate={publishedDate}
 	/>
 	<body class="h-full mx-auto max-w-2xl p-5">
     <Navigation />

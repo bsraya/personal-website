@@ -1,16 +1,15 @@
 ---
-import { pwaInfo } from 'virtual:pwa-info';
+import { SEO } from "astro-seo";
 
 const {
 	pageTitle,
 	pageDescription,
-	keywords,
-	publishedDate,
+	keywords
 } = Astro.props;
 
 const { url, site } = Astro;
+const page = url.pathname === "/" ? "index" : url.pathname.slice(1);
 const author = import.meta.env.AUTHOR;
-const modifiedPageTitle = pageTitle ? `${pageTitle} | ${author}` : author;
 const keywordsString = keywords ? keywords.join(", ") : "";
 ---
 
@@ -27,8 +26,7 @@ const keywordsString = keywords ? keywords.join(", ") : "";
     <meta name="theme-color" content="#FFFFFF" >
 	<link rel="manifest" href="/manifest.webmanifest">
 	<meta name="keywords" content={keywordsString}>
-	<title>{ modifiedPageTitle }</title>
-	<link rel="canonical" href={url.href}>
+	<title>{ pageTitle }</title>
 	<link
 		rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
@@ -36,6 +34,16 @@ const keywordsString = keywords ? keywords.join(", ") : "";
 		crossorigin="anonymous"
 	>
 
-	{ pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
-    <script src="/src/pwa.ts"></script>
+	<SEO
+		title={pageTitle}
+		description={pageDescription}
+		openGraph={{
+			basic: {
+				type: "website",
+				url: url.href,
+				title: pageTitle,
+				image: `${url.origin}/${page}.og`
+			},
+		}}
+	/>
 </head>
