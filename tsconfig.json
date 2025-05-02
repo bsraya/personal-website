@@ -15,12 +15,16 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@chart/*": ["src/components/chart/*"],
+      "@mdxComponents/*": ["src/components/mdx/*"],
+      "@utils/*": ["src/utils/*"],
+      "@layout/*": ["src/layouts/*"],
+    },
     "types": [
       "astro/client",
-      "vite-plugin-pwa/vanillajs",
-      "vite-plugin-pwa/client",
-      "vite-plugin-pwa/solid",
-      "vite-plugin-pwa/info",
     ]
   }
 }
