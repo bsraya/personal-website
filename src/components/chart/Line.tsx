@@ -1,7 +1,7 @@
 import { onMount } from 'solid-js';
 import { Chart, Title, Tooltip, Legend, Colors } from 'chart.js';
 import { Line } from 'solid-chartjs';
-import type { LineChartData } from '../../types/chart';
+import type { LineChartData } from '@type/chart';
 
 
 export default function LineChart(

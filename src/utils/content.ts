@@ -1,6 +1,6 @@
 import type { MarkdownInstance } from "astro";
-import type { Frontmatter } from "../types/frontmatter.ts";
-import { slugify } from "./string.ts";
+import type { Frontmatter } from "@type/frontmatter";
+import { slugify } from "@util/string.ts";
 
 enum SortOrder {
     Ascending = "ascending",

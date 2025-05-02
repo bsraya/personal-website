@@ -1,7 +1,7 @@
 import { onMount } from 'solid-js';
 import { Chart, Title, Tooltip, Legend, Colors } from 'chart.js';
 import { Bar } from 'solid-chartjs';
-import type { BarChartData } from '../../types/chart';
+import type { BarChartData } from '@type/chart';
 
 
 export default function BarChart(

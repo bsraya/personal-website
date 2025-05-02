@@ -3,7 +3,7 @@ import { html } from "satori-html";
 import satori from "satori";
 import { readFileSync } from "fs";
 import sharp from "sharp";
-import { deslugify } from "../../utils/string";
+import { deslugify } from "@util/string";
 
 export async function GET({ params }: APIContext) {
     const { slug } = params;

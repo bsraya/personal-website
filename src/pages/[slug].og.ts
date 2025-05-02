@@ -2,7 +2,7 @@ import type { APIContext } from "astro";
 import { html } from "satori-html";
 import satori from "satori";
 import { readFileSync } from "fs";
-import { deslugify } from "../utils/string";
+import { deslugify } from "@util/string";
 import sharp from "sharp";
 
 export async function GET({ params }: APIContext) {
@@ -24,7 +24,7 @@ export async function GET({ params }: APIContext) {
     </div>`);
 
     const svg: string = await satori(
-        markup, 
+        markup,
         {
             width: 1200,
             height: 630,

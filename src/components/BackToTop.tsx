@@ -1,4 +1,4 @@
-import scrollToTop from '../utils/scroll-to-top.ts';
+import scrollToTop from '@util/scroll-to-top';
 import { BsTriangleFill } from 'solid-icons/bs';
 
 export default function BackToTop() {

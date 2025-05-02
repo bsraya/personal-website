@@ -3,7 +3,7 @@ import { html } from "satori-html";
 import satori from "satori";
 import { readFileSync } from "fs";
 import sharp from "sharp";
-import { deslugify } from "../../utils/string";
+import { deslugify } from "@util/string";
 
 export async function GET({ params }: APIContext) {
     const { slug } = params;
@@ -23,7 +23,7 @@ export async function GET({ params }: APIContext) {
     </div>`);
 
     const svg: string = await satori(
-        markup, 
+        markup,
         {
             width: 1200,
             height: 630,
@@ -46,7 +46,7 @@ export async function GET({ params }: APIContext) {
             headers: {
                 "Content-Type": "image/png",
                 "Cache-Control": "s-maxage=1, stale-while-revalidate=59"
-}
+            }
         }
     )
 };

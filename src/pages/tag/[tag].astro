@@ -1,13 +1,13 @@
 ---
 export const prerender = true;
-import ContentCard from "../../components/ContentCard.astro"
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Heading from "../../components/Heading.astro";
+import ContentCard from "@component/ContentCard.astro"
+import BaseLayout from "@layout/BaseLayout.astro";
+import Heading from "@component/Heading.astro";
 
 import { AiOutlineArrowLeft } from 'solid-icons/ai';
 
-import { slugify, deslugify } from "../../utils/string.ts"
-import { getAllPosts, getPostsByTag } from "../../utils/content.ts";
+import { slugify, deslugify } from "@util/string"
+import { getAllPosts, getPostsByTag } from "@util/content";
 
 export function getStaticPaths() {
   const tags = new Set<string>();

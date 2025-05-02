@@ -1,7 +1,7 @@
 import { onMount } from 'solid-js';
 import { Chart, Title, Tooltip, Legend, Colors } from 'chart.js';
 import { Scatter } from 'solid-chartjs';
-import type { ScatterChartData } from '../../types/chart';
+import type { ScatterChartData } from '@type/chart';
 
 export default function ScatterChart(
   { data, height, width, options }:

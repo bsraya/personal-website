@@ -1,6 +1,6 @@
 import { FiMenu } from 'solid-icons/fi';
 import { Show, createSignal } from "solid-js";
-import clickOutside from "../utils/click-outside.ts";
+import clickOutside from "@util/click-outside";
 
 export default function BurgerMenuSolid() {
   const [show, setShow] = createSignal(false);

@@ -1,7 +1,7 @@
 import { createSignal, Show, For } from "solid-js";
 import type { Heading } from "../types/heading";
 import { VsTriangleUp, VsTriangleDown } from "solid-icons/vs";
-import clickOutside from "../utils/click-outside.ts";
+import clickOutside from "@util/click-outside";
 
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
