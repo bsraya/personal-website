@@ -13,7 +13,7 @@ export async function GET({ params }: APIContext) {
         style="height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; background-color: rgb(45,26,84); color: white; padding: 50px; font-family: 'Inter'; "
     >
         <div style="display: flex; align-items: center;">
-            <img src="${import.meta.env.BASE_URL}/static/icon-96x96.png" alt="icon" style="width: 50px; height: 50px; margin-right: 20px;" />
+            <img src="https://bsraya.com/static/icon-96x96.png" alt="icon" style="width: 50px; height: 50px; margin-right: 20px;" />
             <span style="font-size: 30px; font-weight: 600;">bsraya</span>
         </div>
 
