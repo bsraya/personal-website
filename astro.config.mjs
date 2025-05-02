@@ -24,8 +24,6 @@ import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
 
-import opengraphImages, { presets } from "astro-opengraph-images";
-
 export default defineConfig({
   site: "https://bsraya.com",
   output: 'server',
@@ -65,9 +63,6 @@ export default defineConfig({
     sitemap(),
     metaTags(),
     robotsTxt(),
-    opengraphImages({
-      render: presets.tailwind
-    }),
     AstroPWA({
       manifest: {
         name: "Bijon Setyawan Raya",
