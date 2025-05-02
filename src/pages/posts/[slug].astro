@@ -55,7 +55,12 @@ if (!post.data.published) {
 const { Content, headings } = await render(post);
 ---
 
-<BaseLayout pageTitle={post.data.title} pageDescription={`${post.data.title}: ${post.data.description}`}>
+<BaseLayout
+    pageTitle={post.data.title}
+    pageDescription={`${post.data.title}: ${post.data.description}`}
+    keywords={post.data.keywords}
+    publishedDate={post.data.publishedDate}
+>
     <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {

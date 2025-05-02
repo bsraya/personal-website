@@ -14,7 +14,7 @@ const { url, site } = Astro;
 
 const author = import.meta.env.AUTHOR;
 const modifiedPageTitle = pageTitle ? `${pageTitle} | ${author}` : author;
-const openGraphImageUrl = getImagePath({ url, site });
+const keywordsString = keywords ? keywords.join(", ") : "";
 ---
 
 <head>
@@ -25,9 +25,7 @@ const openGraphImageUrl = getImagePath({ url, site });
 	<link href="https://github.com/bsraya" rel="me">
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml" >
     <link rel="apple-touch-icon" href="/icon-192x192.png" >
-    <link rel="mask-icon" href="/favicon.svg" color="#FFFFFF" >
-	<meta name="msapplication-TileColor" content="#FFFFFF" >
-    <meta name="theme-color" content="#ffffff" >
+	<meta name="keywords" content={keywordsString}>
 	<title>{ modifiedPageTitle }</title>
 	<link rel="canonical" href={url.href}>
 	<link
