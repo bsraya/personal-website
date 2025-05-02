@@ -9,9 +9,7 @@ const {
   pageTitle,
   pageDescription,
   keywords,
-  author,
-  publishedDate,
-  ogImageUrlRelative,
+  publishedDate
 } = Astro.props;
 ---
 
@@ -20,9 +18,7 @@ const {
 		pageTitle={pageTitle}
 		pageDescription={pageDescription}
 		keywords={keywords}
-		author={author}
 		publishedDate={publishedDate}
-		ogImageUrlRelative={ogImageUrlRelative}
 	/>
 	<body class="h-full mx-auto max-w-2xl p-5">
     <Navigation />
