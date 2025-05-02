@@ -17,11 +17,12 @@
     "jsxImportSource": "solid-js",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
+      "@component/*": ["src/components/*"],
       "@chart/*": ["src/components/chart/*"],
-      "@mdxComponents/*": ["src/components/mdx/*"],
-      "@utils/*": ["src/utils/*"],
-      "@layouts/*": ["src/layouts/*"],
+      "@mdxComponent/*": ["src/components/mdx/*"],
+      "@util/*": ["src/utils/*"],
+      "@layout/*": ["src/layouts/*"],
+      "@type/*": ["src/types/*"],
     },
     "types": [
       "astro/client",
