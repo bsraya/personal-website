@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import Head from "../components/Head.astro";
 import Footer from "../components/Footer.astro";
-import BackToTop from "../components/BackToTop.astro";
+import BackToTop from "../components/BackToTop";
 import Navigation from "../components/Navigation.astro";
 
 const { 
@@ -27,7 +27,7 @@ const {
 	<body class="h-full mx-auto max-w-2xl p-5">
     <Navigation />
     <slot />
-    <BackToTop />
+    <BackToTop client:only="solid" />
     <Footer />
   </body>
 </html>
