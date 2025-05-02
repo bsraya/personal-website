@@ -7,6 +7,7 @@ const {
 	keywords,
 	publishedDate,
 } = Astro.props;
+
 const { url, site } = Astro;
 const author = import.meta.env.AUTHOR;
 const modifiedPageTitle = pageTitle ? `${pageTitle} | ${author}` : author;
@@ -19,8 +20,11 @@ const keywordsString = keywords ? keywords.join(", ") : "";
 	<meta name="author" content={ import.meta.env.AUTHOR }>
 	<meta name="generator" content={Astro.generator}>
 	<link href="https://github.com/bsraya" rel="me">
-	<link rel="icon" href="/favicon.svg" type="image/svg+xml" >
+	<link rel="icon" type="image/png" href="/favicon.png" >
     <link rel="apple-touch-icon" href="/icon-192x192.png" >
+	<link rel="mask-icon" href="/favicon.png" color="#FFFFFF">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="theme-color" content="#FFFFFF" >
 	<meta name="keywords" content={keywordsString}>
 	<title>{ modifiedPageTitle }</title>
 	<link rel="canonical" href={url.href}>
