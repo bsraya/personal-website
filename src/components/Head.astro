@@ -6,7 +6,7 @@ const {
 } = Astro.props;
 
 const { url, site } = Astro;
-const page = url.pathname === "/" ? "home" : url.pathname.slice(1);
+const page = url.pathname === "/" ? "home" : url.pathname.split("/").filter(Boolean).pop();
 const ogImagePath = `${url.origin}/${page}.og`
 const author = import.meta.env.AUTHOR;
 const keywordsString = keywords ? keywords.join(", ") : "";
