@@ -98,3 +98,7 @@ table tr:last-child td:last-child {
 .toc {
   font-family: var(--font-heading);
 }
+
+span.katex-display {
+  overflow-x: scroll;
+}
