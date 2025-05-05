@@ -2,11 +2,15 @@
 title: Web Development in Containers
 description: Efficient way to containerize and develop web apps 
 publishedDate: 2024-06-28
-keywords: []
+keywords: ["web development", "container", "docker", "podman", "astro.js"]
 tag: Containerization
 series:
 published: true
 ---
+
+> ### Updates
+> 1. Changed **Next.js** to **Astro.js**.
+> 2. Modified `compose.yaml` file to support both Docker and Podman.
 
 I have been using `asdf`, a version manager for every tool (e.g. Node,js, Ruby, MySQL, you name it) for years.
 It was great since I could manage multiple versions of the same tool.
@@ -22,31 +26,26 @@ would reflect in the container.
 By serving the web app with a container, I do not have to go to the working directory, run and stop the server.
 As soon as I turn on my computer, the server is already running.
 
-To do this, go to your working directory and create `docker-compose.yaml` and `Dockerfile`. 
-
-## Dockerfile
+To do this, go to your working directory and create `compose.yaml` and `Dockerfile`. 
 
 ```dockerfile title="Dockerfile"
-FROM node:current-alpine3.19
+FROM oven/bun:alpine
 
 WORKDIR /app
+
 COPY . /app
 
-RUN npm install
-CMD ["npm", "run", "dev"]
+RUN bun install
 ```
 
-1. `FROM node:current-alpine3.19` - This line sets the `node` image with the tag `current-alpine3.19` as the base image for this container.
+1. `FROM oven/bun:alpine` - This line sets the `node` image with the tag `current-alpine3.19` as the base image for this container.
 2. `WORKDIR /app` - This line sets the working directory to `/app`.
 3. `COPY . /app` - This line copies everything in the working directory to `/app`.
-4. `RUN npm install` - This line installs the required dependencies in the container.
-5. `CMD ["npm", "run", "dev"]` - This line serve the service.
+4. `RUN bun install` - This line installs the required dependencies in the container.
 
-By default, Next.js web applications are served on port 3000.
+By default, Astro.js web applications are served on port 4321.
 
-## Docker Compose
-
-```yaml title="docker-compose.yaml"
+```yaml title="compose.yaml"
 services:
   webapp:
     build:
@@ -57,7 +56,7 @@ services:
       - /path/to/your/webapp:/app
     restart: always
     ports:
-      - 3000:3000
+      - 4321:4321
 ```
 
 1. `webapp:` - This is the name of the service.
@@ -67,18 +66,20 @@ services:
 5. `container_name: webapp` - This is the name of the container, you could name whatever you like.
 6. `volumes:` - This tells Docker to mount the working directory to the container. (Use `pwd` on your terminal if you are sure about the path you're currently on).
 7. `restart: always` - This tells Docker to restart the container if it crashes.
-8. `ports:` - This tells maps the port 3000 in the container to the port 3000 on your computer.
+8. `ports:` - This tells maps the port 4321 in the container to the port 4321 on your computer.
 
 To start the server, run `docker compose up -d` in your terminal. `-d` means *detached* mode, meaning the container will run in the background.
 
-To make sure, go to your browser and access `http://localhost:3000`.
+If you are using `podman`, run `podman compose up -d`.
+
+To make sure, go to your browser and access `http://localhost:4321`.
 
 If there are some files that you do not wish to be copied into the container,
 do add `.dockerignore` into your codebase.
 
 ```text title=".dockerignore"
-.astro
-.next
+.astro/
+node_modules/
 ...
 ```
 
@@ -87,7 +88,7 @@ you could consider.
 
 1. Raw-dogging the environment values in the compose file like a real man.
 
-```yaml title="docker-compose.yaml"
+```yaml title="compose.yaml"
 services:
   webapp:
     build:
@@ -101,12 +102,12 @@ services:
       - /path/to/your/webapp:/app
     restart: always
     ports:
-      - 3000:3000
+      - 4321:4321
 ```
 
 2. Import `.env` file inside the compose file.
 
-```yaml title="docker-compose.yaml"
+```yaml title="compose.yaml"
 services:
   webapp:
     build:
@@ -119,7 +120,7 @@ services:
       - /path/to/your/webapp:/app
     restart: always
     ports:
-      - 3000:3000
+      - 4321:4321
 ```
 
 That way would import the `.env` file in the current working directory into the container.
