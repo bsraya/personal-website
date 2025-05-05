@@ -60,7 +60,7 @@ const { Content, headings } = await render(post);
     pageDescription={`${post.data.title}: ${post.data.description}`}
     keywords={post.data.keywords}
 >
-    <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
+    <a href="/posts" class="w-fit flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {
             post.data.tag && (
