@@ -38,8 +38,17 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-monospace);
 }
 
+div.expressive-code code::before,
+div.expressive-code code::after {
+  content: none;
+}
+
 code {
   font-family: var(--font-monospace);
+}
+
+code::before, code::after {
+  content: "`";
 }
 
 .table-wrapper {	
