@@ -1,0 +1,108 @@
+---
+title: Python Development in Containers
+description: How to set up a coding environment using Docker or Podman
+publishedDate: 2024-06-28
+keywords: [container, docker, podman, python development]
+tag: Containerization
+series:
+published: true
+---
+
+Before we go further, read [my previous post](/posts/web-development-in-containers)
+about how to setup our web development environtment in docker.
+Perhaps that post would make you a little familiar 
+the goal of this entire post.
+
+# Introduction
+
+Say that you want to develop a prototype in Python without 
+desacrate your local environment with packages that we
+are not sure capable of removing. Let's create
+a docker environment so that you can install any required dependencies.
+
+By the end of this post, you would be able to:
+1. Create a container image
+2. Deploy the development environment as a container
+3. Remove deployment
+
+Let `uv` be our Python package manager and let's
+make a docker image with `uv` in it.
+
+# Image Creation
+
+To keep the image size small, choose images
+with tags that have `slim-bookworm` or `alpine`.
+In this case, we are going to use `3.12-slim-bookworm`.
+
+```yaml title=Dockerfile
+FROM python:3.12-slim-bookworm
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+```
+
+For more options, please visit the python docker hub [repo](https://hub.docker.com/_/python).
+
+Then run `docker build -t python-uv:latest .`.
+If you are using `podman`, then run `podman build -t python-uv:latest .`.
+
+# Deployment
+
+Once we have our own image, let create a compose file to deploy it.
+
+## Compose Version 1
+
+```yaml title=compose.yaml
+services:
+  uv-dev:
+    container_name: uv-dev
+    image: python-uv:latest
+    tty: true
+    volumes:
+      - ./src:/app/src
+      - ./.python-version:/app/.python-version
+      - ./pyproject.toml:/app/pyproject.toml
+    restart: always
+```
+
+If you chose to build the image in the `compose.yaml` file,
+let's modify compose file a little bit.
+
+## Compose Version 2
+
+```yaml title=compose.yaml
+services:
+  uv-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uv-dev
+    tty: true
+    volumes:
+      - ./src:/app/src
+      - ./.python-version:/app/.python-version
+      - ./pyproject.toml:/app/pyproject.toml
+    restart: always
+```
+
+Choose one out of those versions above, and run `docker compose -f compose.yaml up -d`
+to deploy this environment. If not, run `podman compose -f compose.yaml up -d`
+
+# Development
+
+Before doing some development, we need to install
+an extension called **Dev Containers** on VS Code.
+
+![Dev Containers on VS Code](/assets/posts/python-development-in-containers/dev-containers.png "Dev Containers on VS Code")
+
+Once it's installed, press <kbd class="kbd">ctrl</kbd> + <kbd class="kbd">p</kbd>
+to toggle a search bar and type "dev containers attach to" into it.
+Press <kbd class="kbd">enter</kbd> and find the name of your development container.
+
+![VS Code search bar](/assets/posts/python-development-in-containers/vscode-search-bar.png "VS Code search bar")
+
+# Conclusion
+
+Once you're done with the development, you could just
+run `docker compose down` or `podman compose down`, and the environment would be removed.
