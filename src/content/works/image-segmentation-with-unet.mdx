@@ -1,0 +1,83 @@
+---
+title: Image Segmentation with UNet
+description: Identify objects on car and satelitte images
+publishedDate: 2024-10-11
+keywords: [unet, deep learning, image segmentation, aerial imagery]
+tag: Computer Vision
+series:
+published: true
+---
+
+In this project, I managed to a **UNet** model using PyTorch and
+use this model to detect objects on images from the
+[Carvana Image Masking Challenges](https://www.kaggle.com/c/carvana-image-masking-challenge) and the [Dubai Aerial Imagery](https://www.kaggle.com/datasets/humansintheloop/semantic-segmentation-of-aerial-imagery) datasets.
+
+## Introduction
+
+### Image Segmentation
+
+Image segmentation is a process of partitioning,
+or dividing, an image into multiple segments, thus called
+"image segmentation". The goal of image segmentation
+is to identify objects by assigning different colors to
+different objects.
+
+![Image segmentation (Kaggle)](https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F801251%2F51112bdaab44ce2ee83a108f94f0635b%2FCARLA_Simulator_Example.png?generation=1603055030682616&alt=media "Image segmentation (Kaggle)")
+
+### UNet
+
+UNet is a CNN-derived Deep Learning architecture that consists 
+of multiple encoders and decoders that are connecte
+by skip connections. As result, the entire architecture looks
+like a "U" shape.
+
+![U-Net Architecture (Arxiv)](https://ar5iv.labs.arxiv.org/html/2011.05490/assets/DenseARC.png "U-Net Architecture (Arxiv)")
+
+## Observations
+
+I made two separates model, one model is used to segment car images, and the other one satellite images.
+With only 50 iterations, these models are capable of producing these results.
+
+### Carvana Image Masking
+
+<figure class="diff aspect-16/9 mb-10" tabindex="0">
+  <div class="diff-item-1" role="img" tabindex="0">
+    <img alt="Car image 1" src="/assets/works/image-segmentation-with-unet/car1-true.png" />
+  </div>
+  <div class="diff-item-2" role="img">
+    <img alt="Car image 1 predicted mask" src="/assets/works/image-segmentation-with-unet/car1-pred.png" />
+  </div>
+  <div class="diff-resizer"></div>
+</figure>
+
+<figure class="diff aspect-16/9 mb-10" tabindex="0">
+  <div class="diff-item-1" role="img" tabindex="0">
+    <img alt="Car image 2 image" src="/assets/works/image-segmentation-with-unet/car2-true.png" />
+  </div>
+  <div class="diff-item-2" role="img">
+    <img alt="Car image 2 pedicted mask" src="/assets/works/image-segmentation-with-unet/car2-pred.png" />
+  </div>
+  <div class="diff-resizer"></div>
+</figure>
+
+### Dubai Aerial Imagery
+
+<figure class="diff aspect-square mb-10" tabindex="0">
+  <div class="diff-item-1" role="img" tabindex="0">
+    <img alt="Satellite image 1" src="/assets/works/image-segmentation-with-unet/sat1-true.png" />
+  </div>
+  <div class="diff-item-2" role="img">
+    <img alt="Satellite image 1 predicted mask" src="/assets/works/image-segmentation-with-unet/sat1-pred.png" />
+  </div>
+  <div class="diff-resizer"></div>
+</figure>
+
+<figure class="diff aspect-square mb-10" tabindex="0">
+  <div class="diff-item-1" role="img" tabindex="0">
+    <img alt="Satellite image 2" src="/assets/works/image-segmentation-with-unet/sat2-true.png" />
+  </div>
+  <div class="diff-item-2" role="img">
+    <img alt="Satellite image 2 predicted mask" src="/assets/works/image-segmentation-with-unet/sat2-pred.png" />
+  </div>
+  <div class="diff-resizer"></div>
+</figure>
