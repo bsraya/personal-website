@@ -50,6 +50,7 @@ if (!work.data.published) {
 } 
 
 const { Content, headings } = await render(work);
+console.log(headings)
 ---
 
 <BaseLayout pageTitle={work.data.title} pageDescription={`${work.data.title}: ${work.data.description}`}>
@@ -92,7 +93,7 @@ const { Content, headings } = await render(work);
         }}
     />
     {
-        headings &&
+        headings.length > 1 &&
             <TableOfContent url={`/works/${slug}`} headings={headings} client:load />
     }
 </BaseLayout>

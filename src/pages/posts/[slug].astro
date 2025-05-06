@@ -107,7 +107,7 @@ const { Content, headings } = await render(post);
         }}
     />
     {
-        headings &&
+        headings.length > 1 &&
             <TableOfContent url={`/posts/${slug}`} headings={headings} client:load />
     }
 </BaseLayout>
