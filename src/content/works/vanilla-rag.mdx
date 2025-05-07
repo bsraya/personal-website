@@ -30,7 +30,7 @@ and it's considered computationally expensive.
 This project is a local Retrieval Augmented Generation (RAG) system that retrieves and summarizes books.
 Since I have over 200 books in my library, I often find it difficult to discover interesting readings.
 
-![What Llama Index and Langchain focus on (Source: https://superwise.ai/blog/lets-talk-about-llamaindex-and-langchain/)](/assets/works/retrieval-augmented-generation-system-for-books/langchain-llama-index.png "What Llama Index and Langchain focus on (https://superwise.ai/blog/lets-talk-about-llamaindex-and-langchain/)")
+![What Llama Index and Langchain focus on (Source: https://superwise.ai/blog/lets-talk-about-llamaindex-and-langchain/)](/assets/works/vanilla-rag/langchain-llama-index.png "What Llama Index and Langchain focus on (https://superwise.ai/blog/lets-talk-about-llamaindex-and-langchain/)")
 
 Why Llama Index? From the figure above, Llama Index focuses on the indexing, storing, and
 retrieving data. While Langchain focuses on prompting and the output of the query.
@@ -50,7 +50,7 @@ If documents are too long, the model may be slow to find relevant or, worse, not
 due to memory constraints.
 If too short, the model would generate irrelevant responses, or halluciante, due to lack of context.
 
-![1024 chunk size, and 100 chunk overlap](/assets/works/retrieval-augmented-generation-system-for-books/chunk-visualization.png "A document is being chunked into a 1024 size and 100 chunk overlap.")
+![1024 chunk size, and 100 chunk overlap](/assets/works/vanilla-rag/chunk-visualization.png "A document is being chunked into a 1024 size and 100 chunk overlap.")
 
 [https://chunkviz.up.railway.app/](https://chunkviz.up.railway.app/ ) can help visualize the chunking process.
 
@@ -110,7 +110,7 @@ So, it's better to have a separate database that stores each book's summary in a
 
 To improve the user experience, I created a web interface for the RAG system using Gradio.
 
-![Initial RAG UI](/assets/works/retrieval-augmented-generation-system-for-books/prompt.png)
+![Initial RAG UI](/assets/works/vanilla-rag/prompt.png)
 
 ### Vector Database
 
@@ -131,7 +131,7 @@ If the alpha parameter is 1, the model will retrieve data using the vector appro
 meaning the model will retrieve data based on the similarity of the query and the vector embeddings.
 By default, the alpha parameter is set to $0.75$.
 
-![RAG UI with search settings](/assets/works/retrieval-augmented-generation-system-for-books/prompt-similarity-alpha.png)
+![RAG UI with search settings](/assets/works/vanilla-rag/prompt-similarity-alpha.png)
 
 ### Precise Retrieval
 
@@ -139,7 +139,7 @@ Since each document has metadata, users can search documents accurately based on
 Thus, the retrieval model can retrieve corrent details from the correct documents
 so that the language model provides accurate facts or summarizations in its responses.
 
-![RAG UI with metadata search and search settings](/assets/works/retrieval-augmented-generation-system-for-books/thumbnail.png)
+![RAG UI with metadata search and search settings](/assets/works/vanilla-rag/thumbnail.png)
 
 ### Better Responses
 
