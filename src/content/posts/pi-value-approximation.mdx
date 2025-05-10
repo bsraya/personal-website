@@ -1,0 +1,165 @@
+---
+title: Pi Value Approximation
+description: Determine the value of pi with n number of samples 
+publishedDate: 2024-06-21
+keywords: [monte carlo, simulation]
+tag: Approximation
+series: Monte Carlo Experiments
+published: true
+---
+
+import ScatterChart from "@component/chart/Scatter";
+
+## A Quarter of A Circle
+
+![A quarter of a circle with random data points](/assets/posts/pi-value-approximation/quarter_circle.png "A quarter of a circle with random data points")
+
+```julia
+using Random, LinearAlgebra, Plots
+Random.seed!()
+
+N = 10^4
+data = [[rand(), rand()] for _ in 1:N]
+indata = filter((x)-> (norm(x) <= 1), data)
+outdata = filter((x)-> (norm(x) > 1), data)
+piApprox = 4 * length(indata)/N
+println("Pi estimate: ", piApprox)
+
+scatter!(first.(indata), last.(indata), c=:blue, ms=1, msw=0,
+  xlims = (-1, 1), ylims=(-1, 1))
+scatter!(first.(outdata), last.(outdata), c=:red, ms=1, msw=0,
+  xlims=(0, 1), ylims=(0, 1), legend=:none, ratio=:equal)
+
+# savefig("quarter_circle.png")
+```
+
+## A Whole Circle
+
+![A whole circle with random data points](/assets/posts/pi-value-approximation/whole_circle.png "A whole circle with random data points")
+
+```julia
+using Random, LinearAlgebra, Plots
+Random.seed!()
+
+N = 10^4
+data = [[2 * rand() - 1, 2 * rand() - 1] for _ in 1:N]
+indata = filter((x) -> norm(x) <= 1, data)
+outdata = filter((x) -> norm(x) > 1, data)
+piApprox = 4 * length(indata) / N
+println("Pi estimate: ", piApprox)
+
+scatter(first.(indata), last.(indata), c=:blue, ms=1, msw=0,
+  xlims=(-1, 1), ylims=(-1, 1), legend=:none, ratio=:equal)
+scatter!(first.(outdata), last.(outdata), c=:red, ms=1, msw=0,
+  xlims=(-1, 1), ylims=(-1, 1), legend=:none, ratio=:equal)
+plot!(x -> sqrt(1 - x^2), -1, 1, c=:black, lw=2)
+plot!(x -> -sqrt(1 - x^2), -1, 1, c=:black, lw=2)
+
+# savefig("whole_circle.png")
+```
+
+## Pi Value Precision
+
+<ScatterChart
+  client:visible
+  height={500}
+  width={500}
+  options={{
+    plugins: {
+    title: {
+      display: true,
+      text: 'Pi Precision Over Iteration',
+      color: 'black',
+      font: {
+        size: 20
+      }
+    }
+  },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Iteration',
+          color: 'black'
+        },
+        ticks: {
+          color: 'black',
+          padding: 10
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'pi value',
+          color: 'black'
+        },
+        ticks: {
+          color: 'black',
+          padding: 10
+        },
+        min: 2.9,
+        max: 3.3
+      }
+    }
+  }}
+  data={{
+      datasets: [
+        {
+          type: 'line',
+          label: 'pi value',
+          data: [
+            {'x': 0, 'y': 3.14},
+            {'x': 1000000, 'y': 3.14}
+          ],
+        },
+        {
+          type: 'scatter',
+          label: 'pi approximations',
+          data: [
+            {'x': 10, 'y': 3.2},
+            {'x': 20, 'y': 3.6},
+            {'x': 50, 'y': 2.96},
+            {'x': 100, 'y': 2.92},
+            {'x': 200, 'y': 3.26},
+            {'x': 500, 'y': 3.208},
+            {'x': 1000, 'y': 3.128},
+            {'x': 2000, 'y': 3.16},
+            {'x': 5000, 'y': 3.1224},
+            {'x': 10000, 'y': 3.124},
+            {'x': 20000, 'y': 3.1336},
+            {'x': 50000, 'y': 3.15224},
+            {'x': 70000, 'y': 3.1414857142857144},
+            {'x': 100000, 'y': 3.1408},
+            {'x': 200000, 'y': 3.14},
+            {'x': 500000, 'y': 3.142152},
+            {'x': 700000, 'y': 3.1442342857142855},
+            {'x': 1000000, 'y': 3.140408}
+          ],
+          borderColor: 'rgb(42, 65, 177)',
+          backgroundColor: 'rgba(42, 65, 177, 0.5)',
+        }
+      ],
+      pointRadius: 10,
+  }}
+/>
+
+```julia
+function approximate_pi(n)
+  data = [[2 * rand() - 1, 2 * rand() - 1] for _ in 1:n]
+  indata = filter((x) -> norm(x) <= 1, data)
+  piApprox = 4 * length(indata) / n
+  return piApprox
+end
+
+values = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 70000, 100000, 200000, 500000, 700000, 1000000]
+
+pi_values = [approximate_pi(i) for i in values]
+
+print(pi_values)
+
+# create a scatter plot where xlims is 2.0 to 4.0
+scatter(pi_values, c=:blue, lw=2, ylims=(2.0, 4.0), label="π approximation")
+
+# plot a red horizontal line at 3.14159, and set the label
+plot!([3.14159 for i in 0:length(values)], c=:red, lw=2, label="π")
+```
