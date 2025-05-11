@@ -20,13 +20,13 @@ const works = getSortedWorks().slice(0, 3);
     </div>
 
     <div class="grid grid-col gap-3">
-      <Heading as="h2" size="lg">Selected Works</Heading>
+      <Heading as="h2" size="lg" weight="bold">Selected Works</Heading>
       { works.map((work) => <ContentCard frontmatter={work.frontmatter} type="works" />) }
       <a href="/works" class="w-fit underline">See more</a>
     </div>
     
     <div class="grid grid-col gap-3">
-      <Heading as="h2" size="lg">Latest Posts</Heading>
+      <Heading as="h2" size="lg" weight="bold">Latest Posts</Heading>
       { posts.map((post) => <ContentCard frontmatter={post.frontmatter} type="posts" />) }
       <a href="/posts" class="w-fit underline">See more</a>
     </div>
