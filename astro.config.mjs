@@ -66,8 +66,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      allowedHosts: import.meta.env.ALLOWED_HOSTS ? import.meta.env.ALLOWED_HOSTS.split(',') : [],
-    }
+    server: { }
   }
 });
