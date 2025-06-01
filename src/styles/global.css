@@ -110,4 +110,5 @@ table tr:last-child td:last-child {
 
 span.katex-display {
   overflow-x: scroll;
+  overflow-y: hidden;
 }
