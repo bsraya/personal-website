@@ -14,7 +14,7 @@ const posts = getSortedPosts();
   <div class="grid grid-col gap-5">
     {
       posts.map((post) =>
-        <ContentCard frontmatter={post.frontmatter} type="posts" />        
+        <ContentCard path={post.url} frontmatter={post.frontmatter} type="posts" />        
       )
     }
   </div>

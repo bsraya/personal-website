@@ -15,7 +15,7 @@ const works = getSortedWorks();
   <div class="grid grid-col gap-5">
     {
       works.map((work) =>
-        <ContentCard frontmatter={work.frontmatter} type="works" />
+        <ContentCard path={work.url} frontmatter={work.frontmatter} type="works" />
       )
     }
   </div>

@@ -1,5 +1,6 @@
 ---
 import Heading from "@component/Heading.astro";
+import { getSlugFromPath } from "@util/string";
 
 const dateObject: object = {
     year: "numeric",
@@ -7,8 +8,8 @@ const dateObject: object = {
     day: "numeric"
 }
 
-const { frontmatter, type } = Astro.props;
-const slug = frontmatter.title.toLowerCase().replace(/ /g, '-');
+const { path, frontmatter, type } = Astro.props;
+const slug = getSlugFromPath(path);
 ---
 
 <div>
