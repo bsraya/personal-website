@@ -1,15 +1,32 @@
 ---
 const props = Astro.props;
+import { Image } from "astro:assets";
 ---
 
 {
     props.title ?
         <figure class="w-full my-5">
-            <img {...props} class="w-full mb-1" decoding="async" loading="lazy"/>
+            <Image
+                src={props.src}
+                alt={props.alt}
+                title={props.title}
+                width={700}
+                height={500}
+                class="w-full mb-1"
+                loading="lazy"
+            />
             <figcaption class="image-caption text-center text-slate-400">Figure: {props.title}</figcaption>
         </figure>
     :
-        <img {...props} class="w-full my-5" />
+        <Image
+            src={props.src}
+            alt={props.alt}
+            title={props.title}
+            width={700}
+            height={500}
+            class="w-full my-5"
+            loading="lazy"
+        />
 }
 
 
