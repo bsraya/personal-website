@@ -1,7 +1,9 @@
 export function slugify(input: string): string {
   return input
     // remove leading & trailing whitespace
-    .trim()  
+    .trim()
+    // replace '++' to 'pp' in case of 'C++'
+    .replace(/\+\+/g, 'pp')
     // remove special characters
     .replace(/[^A-Za-z0-9 ]/g, '')
     // replace spaces
