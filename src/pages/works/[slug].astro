@@ -14,6 +14,7 @@ import H1 from "@mdxComponent/H1.astro";
 import H2 from "@mdxComponent/H2.astro";
 import H3 from "@mdxComponent/H3.astro";
 import H4 from "@mdxComponent/H4.astro";
+import Li from "@component/mdx/Li.astro";
 import OrderedList from "@mdxComponent/OrderedList.astro";
 import UnorderedList from "@mdxComponent/UnorderedList.astro";
 import HorizontalRule from "@mdxComponent/HorizontalRule.astro";
@@ -80,6 +81,7 @@ const { Content, headings } = await render(work);
             h4: H4,
             ol: OrderedList,
             ul: UnorderedList,
+            li: Li,
             hr: HorizontalRule,
             a: Anchor,
             table: Table,

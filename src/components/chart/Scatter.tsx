@@ -13,12 +13,12 @@ export default function ScatterChart(
 
   const chartOptions = {
     response: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     ...options
   }
 
   return (
-    <div class="my-10">
+    <div class="my-10 w-inherit">
       <Scatter data={data} options={chartOptions} width={width} height={height} />
     </div>
   )
