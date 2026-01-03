@@ -9,3 +9,12 @@ bun install
 ```bash
 bunx -- bun astro dev
 ```
+
+3. Rebuild the Docker image
+
+```bash
+docker compose down && \
+    docker image rm johnbjohn/personal-website:latest && \
+    docker build -t johnbjohn/personal-website:latest . && \
+    docker compose up -d
+```
