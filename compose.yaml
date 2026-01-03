@@ -1,19 +1,18 @@
 services:
   personal-website:
     container_name: personal-website
-    image: personal-website:latest
+    image: johnbjohn/personal-website:latest
     restart: always
     volumes:
       - ./src:/app/src
       - ./astro.config.mjs:/app/astro.config.mjs
       - ./public:/app/public
       - ./tsconfig.json:/app/tsconfig.json
-      - ./node_modules:/app/node_modules
     ports:
       - 4321:4321
     deploy:
       resources:
         limits:
           cpus: "1.0"
-          memory: 512m
-    command: ["bun", "dev", "--", "--host"]
+          memory: 1G
+    command: bunx -- bun run dev --host 0.0.0.0 --port 4321

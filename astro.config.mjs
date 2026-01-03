@@ -18,6 +18,7 @@ import rehypeSlug from 'rehype-slug';
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
+import mermaid from "astro-mermaid";
 
 // Expressive code plugins
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
@@ -33,7 +34,10 @@ export default defineConfig({
     },
   }),
   markdown: {
-    syntaxHighlight: "shiki",
+    syntaxHighlight: {
+      type: "shiki",
+      excludeLangs: ["mermaid", 'math'],
+    },
     shikiConfig: {
       theme: "github-light",
     },
@@ -52,6 +56,10 @@ export default defineConfig({
     gfm: true
   },
   integrations: [
+    mermaid({
+      theme: 'forest',
+      autoTheme: true
+    }),
     solid({ devtools: true }),
     expressiveCode({
       themes: ['github-light'],
@@ -66,6 +74,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: { }
+    server: { allowedHosts: ["pc", "portfolio.bsraya.com"] }
   }
 });
