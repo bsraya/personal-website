@@ -72,6 +72,14 @@ flowchart LR
 
 ## Engineering Challenges
 
+### No Code Solution
+
+In order to prevent users to write suboptimal code that slows down the training process,
+the system needs to be a no-code solution. This means that users can only upload
+their cleaned datasets and a set of hyperparameters to train their models.
+These hyperparameters would be passed into predefined training scripts
+to improve make span and throughput.
+
 ### The "Blocking" Problem
 
 After users submit their data and their model hyperparameters to the system,
@@ -176,3 +184,5 @@ by reducing the time spent on model training and hyperparameter tuning.
 1. Enable data drifts monitoring between the training data and the new data.
 2. Improve resource allocation strategy using more advanced scheduling algorithms.
 3. Improve queue management system to improve make span and throughput.
+4. Allow users to input hyperparameter configuration on the dashboard directly
+   instead of uploading a TOML file.
