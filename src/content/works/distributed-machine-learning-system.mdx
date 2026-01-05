@@ -70,6 +70,42 @@ flowchart LR
     Client -.->|Poll Status| API
 ```
 
+## Engineering Challenges
+
+### The "Blocking" Problem
+
+After users submit their data and their model hyperparameters to the system,
+the system needs to make sure that training processes would not block the entire system.
+Thus, to solve this, a background task queue is needed to orchestrate the training jobs asynchronously.
+
+### Resource Assignment for Training
+
+Determining which GPU worker to assign a training job is a trivial task at the beginning.
+Meaning, we can just assign jobs to any GPUs with utilization under 50%.
+A problem arises when two trainig models are assigned into the same GPU worker.
+Training two models at the same would lengthen the training time significantly of one another.
+
+### Model Deployment
+
+We can't just take the best set of hyperparameters after training, create a
+new object of the model for deployment using those hyperparameters,
+and expect the model is ready for inference.
+That best model needs to be serialized and stored in an object storage first.
+When a deployment request is made, the model needs to be deserialized
+and loaded into memory in a specific container.
+
+### Model Degradation
+
+Model performance degrades over time if not retrained with new data.
+This issue is known as data drift. To solve this, a retraining mechanism
+needs to be in place to retrain models with new data periodically.
+
+### Exclusive Environment
+
+`cuML` only enterprise dedicated GPUs with specific CUDA and driver versions.
+This means that the entire system needs to run in enterprise grade environments,
+not consumer level ones.
+
 ## Usage
 
 On the dashboard, users can upload two kinds of files: a CSV file containing the cleaned dataset,
@@ -121,8 +157,22 @@ hyperparameters and the trained model into MinIO (an S3-compatible object storag
 
 Users then can click the "Deploy job" button to deploy the trained model to a model serving endpoint.
 
-## Conclusion
-
 ![Deployment](/assets/works/distributed-machine-learning-system/deployment.png)
 
 ![Inference](/assets/works/distributed-machine-learning-system/inference.png)
+
+## Conclusion
+
+This proof-of-concept system successfully demonstrates how to speed up
+traditional machine learning model training using GPU acceleration.
+
+To make this system running, enterprise-grade hardware and software environments are required
+due to the limitations of `cuML`. However, with the right resources, this system can
+greatly improve the productivity of data scientists and machine learning engineers
+by reducing the time spent on model training and hyperparameter tuning.
+
+## Future Works
+
+1. Enable data drifts monitoring between the training data and the new data.
+2. Improve resource allocation strategy using more advanced scheduling algorithms.
+3. Improve queue management system to improve make span and throughput.
