@@ -50,6 +50,10 @@ with just one click. The deployed models can be accessed via REST API for infere
 In simple terms, this system allows users to submit, monitor, and deploy
 machine learning models without blocking one another.
 
+## Similar Work
+
+Currently, DMLS uses a simple algorithm for resource asignment, targeting CPUs and GPUs with under 50% utilization. This is a deliberate simplification to my previous work, [Schedulearn](/works/schedulearn). In Schedulearn, I implemented resource allocation algorithm like Elastic FIFO to dynamically scale and migrate jobs based on available resources to reduce make span and increase throughput. While DMLS focuses on throughtput for traditional ML, adopting dynamic elastic scheduling mechanism is a key candidate for future optimization.
+
 ## System Design
 
 ```mermaid
@@ -184,5 +188,4 @@ by reducing the time spent on model training and hyperparameter tuning.
 1. Enable data drifts monitoring between the training data and the new data.
 2. Improve resource allocation strategy using more advanced scheduling algorithms.
 3. Improve queue management system to improve make span and throughput.
-4. Allow users to input hyperparameter configuration on the dashboard directly
-   instead of uploading a TOML file.
+4. Allow users to input hyperparameter configuration on the dashboard directly instead of uploading a TOML file.
