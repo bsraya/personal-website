@@ -9,10 +9,10 @@ services:
       - ./public:/app/public
       - ./tsconfig.json:/app/tsconfig.json
     ports:
-      - 4321:4321
+      - 2389:2389
     deploy:
       resources:
         limits:
           cpus: "1.0"
           memory: 2G
-    command: bunx -- bun run dev --host 0.0.0.0 --port 4321
+    command: bunx -- bun run dev --host 0.0.0.0 --port 2389
