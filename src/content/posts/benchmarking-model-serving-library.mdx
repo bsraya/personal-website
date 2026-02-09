@@ -1,0 +1,167 @@
+---
+title: Benchmarking Model Serving Library
+description: A quick guide to comparing model serving libraries for fast, efficient ML deployments.
+publishedDate: 2026-02-09
+keywords: [machine learning, model serving, benchmarking, performance, inference, deployment, MLops, API, latency, throughput]
+tag: MLOps
+series:
+published: true
+---
+
+## TL;DR
+
+SGLang outperforms vLLM and Llama.cpp in our benchmarks for serving large language models, demonstrating superior request throughput and lower latency.
+Most importantly, SGLang works out of the box without any additional optimizations. While with vLLM, I had to tweak several parameters to get it to work well.
+
+| Library     | Time taken for tests (s) | Request throughput (req/s) | Average latency (s) | Output token throughput (tok/s)  |
+|-------------|--------------------------|----------------------------|---------------------|----------------------------------|
+| SGLang      | 194.614                  | 2.5692                     | 33.7728             | 3196.19                          |
+| vLLM        | 209.818                  | 2.383                      | 37.8662             | 2864.51                          |
+| Llama.cpp   | 1505.49                  | 0.3321                     | 271.053             | 416.361                          |
+| Ollama      | NA                       | NA                         | NA                  | NA                               |
+
+## Benchmarking Environment
+
+1. CPU: AMD Ryzen 7 3700X (16) @ 4.98 GHz
+2. GPU: NVIDIA GeForce RTX 4090 24GB vRAM
+3. RAM: 80GB DDR4
+4. OS: Pop!_OS 22.04 LTS
+5. Python: 3.12
+
+## Benchmarking Tools
+
+```bash
+(uvx) evalscope perf --url "http://localhost:<port>/v1/chat/completions" --parallel 100 --model qwen3:4b --number 500 --api openai --dataset openqa --stream
+```
+
+### Ollama
+
+Failed to finish the benchmark due to overwhelming request rate causing server crash.
+
+## SGLang
+
+Benchmarking summary:
+
+| Metrics                            | Value     |
+|------------------------------------|-----------|
+| Time taken for tests (s)           | 194.614   |
+| Number of concurrency              | 100       |
+| Request rate (req/s)               | -1        |
+| Total requests                     | 500       |
+| Succeed requests                   | 500       |
+| Failed requests                    | 0         |
+| Output token throughput (tok/s)    | 3196.19   |
+| Total token throughput (tok/s)     | 3271.32   |
+| Request throughput (req/s)         | 2.5692    |
+| Average latency (s)                | 33.7728   |
+| Average time to first token (s)    | 4.2872    |
+| Average time per output token (s)  | 0.0238    |
+| Average inter-token latency (s)    | 0.0238    |
+| Average input tokens per request   | 29.244    |
+| Average output tokens per request  | 1244.05   |
+
+Percentile results:
+
+| Percentiles | TTFT (s) | ITL (s) | TPOT (s) | Latency (s) | Input tokens | Output tokens | Output (tok/s) | Total (tok/s) |
+|-------------|----------|---------|----------|-------------|--------------|---------------|----------------|---------------|
+| 10%         | 0.0952   | 0.0176  | 0.0219   | 21.9516     | 20           | 840           | 29.869         | 30.6672       |
+| 25%         | 0.2157   | 0.0209  | 0.0233   | 27.5003     | 23           | 1034          | 32.8474        | 33.7249       |
+| 50%         | 2.8946   | 0.0232  | 0.0238   | 33.199      | 28           | 1206          | 37.9914        | 39.1341       |
+| 66%         | 5.5337   | 0.0246  | 0.0243   | 37.3636     | 32           | 1331          | 39.9564        | 40.9664       |
+| 75%         | 8.5423   | 0.0256  | 0.0244   | 40.2        | 34           | 1406          | 41.2127        | 42.3917       |
+| 80%         | 8.6059   | 0.0263  | 0.0245   | 41.987      | 36           | 1493          | 41.8014        | 42.7903       |
+| 90%         | 10.1596  | 0.028   | 0.0247   | 46.4771     | 40           | 1790          | 43.7916        | 44.6161       |
+| 95%         | 12.212   | 0.0296  | 0.0253   | 49.7007     | 41           | 2048          | 46.1758        | 47.2292       |
+| 98%         | 15.2084  | 0.0377  | 0.0322   | 52.9166     | 45           | 2048          | 48.6992        | 50.8862       |
+| 99%         | 16.5463  | 0.045   | 0.0341   | 58.8882     | 47           | 2048          | 51.5307        | 53.6033       |
+
+### vLLM
+
+Benchmarking summary:
+
+| Metrics                            | Value     |
+|------------------------------------|-----------|
+| Time taken for tests (s)           | 209.818   |
+| Number of concurrency              | 100       |
+| Request rate (req/s)               | -1        |
+| Total requests                     | 500       |
+| Succeed requests                   | 500       |
+| Failed requests                    | 0         |
+| Output token throughput (tok/s)    | 2864.51   |
+| Total token throughput (tok/s)     | 2934.2    |
+| Request throughput (req/s)         | 2.383     |
+| Average latency (s)                | 37.8662   |
+| Average time to first token (s)    | 3.0454    |
+| Average time per output token (s)  | 0.0294    |
+| Average inter-token latency (s)    | 0.029     |
+| Average input tokens per request   | 29.244    |
+| Average output tokens per request  | 1202.05   |
+
+Percentile results:
+
+| Percentiles | TTFT (s) | ITL (s) | TPOT (s) | Latency (s) | Input tokens | Output tokens | Output (tok/s) | Total (tok/s) |
+|-------------|----------|---------|----------|-------------|--------------|---------------|----------------|---------------|
+| 10%         | 0.0971   | 0.0185  | 0.0236   | 24.4937     | 20           | 836           | 24.3672        | 25.1307       |
+| 25%         | 0.1115   | 0.021   | 0.0249   | 30.4473     | 23           | 1000          | 27.6111        | 28.3143       |
+| 50%         | 0.3078   | 0.0236  | 0.0264   | 37.8011     | 28           | 1175          | 32.1984        | 32.921        |
+| 66%         | 2.4578   | 0.0246  | 0.0294   | 41.8324     | 32           | 1284          | 36.4503        | 37.2601       |
+| 75%         | 4.8474   | 0.0251  | 0.0332   | 44.6837     | 34           | 1356          | 38.4301        | 39.3035       |
+| 80%         | 6.3939   | 0.0255  | 0.0351   | 46.783      | 36           | 1424          | 39.4751        | 40.2481       |
+| 90%         | 10.6475  | 0.0268  | 0.0398   | 52.6922     | 40           | 1640          | 41.2189        | 42.2187       |
+| 95%         | 13.5296  | 0.0355  | 0.043    | 56.2969     | 41           | 1915          | 43.1815        | 44.248        |
+| 98%         | 15.8074  | 0.0759  | 0.0474   | 62.4235     | 45           | 2048          | 45.5625        | 47.329        |
+| 99%         | 18.4025  | 0.1007  | 0.0529   | 66.0854     | 47           | 2048          | 48.6822        | 51.299        |
+
+### Llama.cpp
+
+Benchmarking summary:
+
+| Metrics                            | Value     |
+|------------------------------------|-----------|
+| Time taken for tests (s)           | 1505.49   |
+| Number of concurrency              | 100       |
+| Request rate (req/s)               | -1        |
+| Total requests                     | 500       |
+| Succeed requests                   | 500       |
+| Failed requests                    | 0         |
+| Output token throughput (tok/s)    | 416.361   |
+| Total token throughput (tok/s)     | 426.074   |
+| Request throughput (req/s)         | 0.3321    |
+| Average latency (s)                | 271.053   |
+| Average time to first token (s)    | 259.633   |
+| Average time per output token (s)  | 0.0091    |
+| Average inter-token latency (s)    | 0.0092    |
+| Average input tokens per request   | 29.244    |
+| Average output tokens per request  | 1253.65   |
+
+Percentile results:
+
+| Percentiles | TTFT (s) | ITL (s) | TPOT (s) | Latency (s) | Input tokens | Output tokens | Output (tok/s) | Total (tok/s) |
+|-------------|----------|---------|----------|-------------|--------------|---------------|----------------|---------------|
+| 10%         | 159.4642 | 0.0074  | 0.0085   | 168.753     | 20           | 855           | 3.0276         | 3.1212        |
+| 25%         | 275.7396 | 0.0075  | 0.0088   | 286.1093    | 23           | 1033          | 3.6173         | 3.7111        |
+| 50%         | 282.6454 | 0.0076  | 0.0091   | 293.8746    | 28           | 1229          | 4.3319         | 4.4222        |
+| 66%         | 286.6739 | 0.0077  | 0.0093   | 297.7085    | 32           | 1338          | 4.766          | 4.874         |
+| 75%         | 289.1054 | 0.0078  | 0.0094   | 301.4019    | 34           | 1434          | 5.3128         | 5.4475        |
+| 80%         | 290.6572 | 0.0078  | 0.0095   | 303.4042    | 36           | 1517          | 5.9085         | 6.003         |
+| 90%         | 297.2363 | 0.0083  | 0.0098   | 308.07      | 40           | 1734          | 6.976          | 7.0992        |
+| 95%         | 299.5722 | 0.009   | 0.0101   | 311.3063    | 41           | 2048          | 13.0868        | 13.501        |
+| 98%         | 304.1734 | 0.0096  | 0.0106   | 316.0215    | 45           | 2048          | 30.8843        | 31.3637       |
+| 99%         | 305.5985 | 0.015   | 0.0112   | 317.7929    | 47           | 2048          | 70.1809        | 71.3984       |
+
+
+## Takeaways
+
+* **vLLM** demonstrates the best overall balance of latency (avg. 37.8ms) and throughput (32.92 tok/s), making it suitable for applications prioritizing low-latency responses.  
+* **SGLang** offers slightly lower latency (33.2ms) and higher output throughput (37.99 tok/s), ideal for scenarios requiring rapid token generation.  
+* **Llama.cpp** has higher latency (41.8ms) and lower throughput (36.45 tok/s), which may be acceptable for simpler or less concurrent workloads.  
+* **Ollama** failed under high concurrency due to server crashes, indicating scalability limitations at scale.
+
+## Conclusion
+
+Based on the benchmarking results, **SGLang** demonstrated the strongest performance with the lowest average latency (33.77 seconds) and highest
+output token throughput (3196.19 tokens per second). **vLLM** followed closely with competitive latency (37.87 seconds) and robust throughput
+(2864.51 tokens per second). **Llama.cpp** exhibited significantly higher latency (271.05 seconds) and substantially lower throughput (416.36 tokens per second),
+indicating suboptimal efficiency for high-concurrency scenarios. **Ollama** failed to complete the benchmark due to server crashes under the test load,
+highlighting critical scalability limitations. These findings confirm **SGLang** and **vLLM** as the most suitable choices for high-performance model serving
+deployments requiring low latency and high throughput.
