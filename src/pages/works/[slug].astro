@@ -3,28 +3,13 @@ export const prerender = true;
 import { render } from "astro:content";
 import { getEntry } from "astro:content";
 
-import { AiOutlineArrowLeft } from 'solid-icons/ai';
+import { AiOutlineArrowLeft } from "solid-icons/ai";
 
 import Heading from "@component/Heading.astro";
 import BaseLayout from "@layout/BaseLayout.astro";
 import TableOfContent from "@component/TableOfContent";
 
-import Blockquote from "@mdxComponent/Blockquote.astro";
-import H1 from "@mdxComponent/H1.astro";
-import H2 from "@mdxComponent/H2.astro";
-import H3 from "@mdxComponent/H3.astro";
-import H4 from "@mdxComponent/H4.astro";
-import Li from "@component/mdx/Li.astro";
-import OrderedList from "@mdxComponent/OrderedList.astro";
-import UnorderedList from "@mdxComponent/UnorderedList.astro";
-import HorizontalRule from "@mdxComponent/HorizontalRule.astro";
-import Table from "@mdxComponent/Table.astro";
-import TableRow from "@mdxComponent/TableRow.astro";
-import TableHeader from "@mdxComponent/TableHeader.astro";
-import TableData from "@mdxComponent/TableData.astro";
-import Anchor from "@mdxComponent/Anchor.astro";
-import Img from "@mdxComponent/Img.astro";
-import Paragraph from "@mdxComponent/Paragraph.astro";
+import { MdxComponents } from "@component/MdxComponents";
 
 import { getSortedWorks } from "@util/content";
 import { slugify } from "@util/string";
@@ -40,61 +25,54 @@ export function getStaticPaths() {
 const dateObject: object = {
     year: "numeric",
     month: "long",
-    day: "numeric"
-}
+    day: "numeric",
+};
 
 const { slug } = Astro.params;
-const work = await getEntry('works', slug);
+const work = await getEntry("works", slug);
 
 if (!work.data.published) {
     return Astro.redirect("/404");
-} 
+}
 
 const { Content, headings } = await render(work);
 ---
 
-<BaseLayout pageTitle={work.data.title} pageDescription={`${work.data.title}: ${work.data.description}`}>
-    <a href="/works" class="w-fit flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>Back</a>
+<BaseLayout
+    pageTitle={work.data.title}
+    pageDescription={`${work.data.title}: ${work.data.description}`}
+>
+    <a href="/works" class="w-fit flex font-semibold hover:underline"
+        ><AiOutlineArrowLeft class="my-auto mr-1" />Back</a
+    >
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
-        {
-            work.data.tag && (
-                <p>{work.data.tag}</p>
-            )
-        }
+        {work.data.tag && <p>{work.data.tag}</p>}
         <p>•</p>
         {
             work.data.publishedDate && (
-                <div>{new Date(work.data.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
+                <div>
+                    {new Date(work.data.publishedDate).toLocaleDateString(
+                        "en-US",
+                        dateObject,
+                    )}
+                </div>
             )
         }
     </div>
     <div class="mb-10">
-        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl">{work.data.title}</Heading>
+        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl"
+            >{work.data.title}</Heading
+        >
         <p class="text-slate-600">{work.data.description}</p>
     </div>
-    <Content
-        class="w-fit"
-        components={{
-            h1: H1,
-            h2: H2,
-            h3: H3,
-            h4: H4,
-            ol: OrderedList,
-            ul: UnorderedList,
-            li: Li,
-            hr: HorizontalRule,
-            a: Anchor,
-            table: Table,
-            th: TableHeader,
-            tr: TableRow,
-            td: TableData,
-            blockquote: Blockquote,
-            img: Img,
-            p: Paragraph,
-        }}
-    />
+    <Content components={MdxComponents} />
     {
-        headings.length > 1 &&
-            <TableOfContent url={`/works/${slug}`} headings={headings} client:load />
+        headings.length > 1 && (
+            <TableOfContent
+                url={`/works/${slug}`}
+                headings={headings}
+                client:load
+            />
+        )
     }
 </BaseLayout>
