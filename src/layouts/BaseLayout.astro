@@ -21,7 +21,9 @@ const {
 	/>
 	<body class="h-full mx-auto max-w-2xl p-5">
     <Navigation />
-    <slot />
+    <main>
+      <slot />
+    </main>
     <BackToTop client:only="solid" />
     <Footer />
   </body>
