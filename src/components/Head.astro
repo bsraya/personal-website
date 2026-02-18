@@ -2,7 +2,8 @@
 const {
 	pageTitle,
 	pageDescription,
-	keywords
+	keywords,
+	hasMath=false
 } = Astro.props;
 
 const { url, site } = Astro;
@@ -28,12 +29,26 @@ const keywordsString = keywords ? keywords.join(", ") : "";
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" >
     <link rel="apple-touch-icon" href="/static/icon-192x192.png" >
 	<link rel="mask-icon" href="/favicon.svg" color="#FFFFFF">
-	<link
-		rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-		integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
-		crossorigin="anonymous"
-	>
+
+	{hasMath && (
+		<>
+			<link
+				rel="preload"
+				href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+				as="style"
+				integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+				crossorigin="anonymous"
+			/>
+			<link
+				rel="stylesheet"
+				href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+				integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+				crossorigin="anonymous"
+				media="print"
+				onload="this.media='all'"
+			/>
+		</>
+	)}
 
 	<link rel="canonical" href={Astro.url.href}>
 	<meta property="og:locale" content="en" />

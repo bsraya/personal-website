@@ -41,6 +41,7 @@ const { Content, headings } = await render(post);
 ---
 
 <BaseLayout
+    hasMath={true}
     pageTitle={post.data.title}
     pageDescription={`${post.data.title}: ${post.data.description}`}
     keywords={post.data.keywords}
