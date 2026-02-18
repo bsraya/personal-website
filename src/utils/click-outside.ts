@@ -1,6 +1,14 @@
 import { onCleanup } from "solid-js";
 
-export default function clickOutside(el: HTMLElement, accessor: () => (() => void)) {
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      clickOutside: () => void;
+    }
+  }
+}
+
+export default function clickOutside(el: HTMLElement, accessor: () => () => void) {
   const handler = (e: MouseEvent) => {
     if (!el.contains(e.target as Node)) {
       const cb = accessor();

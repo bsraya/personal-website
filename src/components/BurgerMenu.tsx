@@ -2,6 +2,10 @@ import { FiMenu } from 'solid-icons/fi';
 import { Show, createSignal } from "solid-js";
 import clickOutside from "@util/click-outside";
 
+// This import is necessary for the directive to work
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _clickOutside = clickOutside;
+
 export default function BurgerMenuSolid() {
   const optionClass = "block px-4 py-2 hover:bg-gray-100"
   const [show, setShow] = createSignal(false);
@@ -9,9 +13,13 @@ export default function BurgerMenuSolid() {
   const onClick = () => setShow(!show());
 
   return (
-    <Show when={show()} fallback={<button onClick={onClick} class="w-fit ml-auto cursor-pointer"><FiMenu size={24} /></button>}>
+    <Show when={show()} fallback={<button aria-label="Open menu" onClick={onClick} class="w-fit ml-auto cursor-pointer"><FiMenu size={24} /></button>}>
       <div class="relative grid grid-col z-40" use:clickOutside={onClick}>
-        <button onClick={onClick} class="w-fit ml-auto cursor-pointer">
+        <button 
+          aria-label="Close menu"
+          onClick={onClick}
+          class="w-fit ml-auto cursor-pointer"
+        >
           <FiMenu size={24} />
         </button>
         <ul class="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200 transform -translate-x-0">
