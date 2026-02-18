@@ -1,5 +1,13 @@
 import { onCleanup } from "solid-js";
 
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      scrollToTop: number;
+    }
+  }
+}
+
 export default function scrollToTop(el: HTMLElement, accessor: () => number) {
   const threshold = typeof accessor() === "number" ? accessor() : 50;
 
