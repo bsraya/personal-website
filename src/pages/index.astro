@@ -22,13 +22,25 @@ const works = getSortedWorks().slice(0, 3);
     <div class="grid grid-col gap-3">
       <Heading as="h2" size="lg" weight="bold">Selected Works</Heading>
       { works.map((work) => <ContentCard path={work.url} frontmatter={work.frontmatter} type="works" />) }
-      <a href="/works" class="w-fit underline">See more</a>
+      <a
+        aria-label="See more works"
+        href="/works"
+        class="w-fit underline"
+      >
+        See more
+      </a>
     </div>
     
     <div class="grid grid-col gap-3">
       <Heading as="h2" size="lg" weight="bold">Latest Posts</Heading>
       { posts.map((post) => <ContentCard path={post.url} frontmatter={post.frontmatter} type="posts" />) }
-      <a href="/posts" class="w-fit underline">See more</a>
+      <a
+        aria-label="See more posts"
+        href="/posts"
+        class="w-fit underline"
+      >
+        See more
+      </a>
     </div>
   </div>
 </BaseLayout>
