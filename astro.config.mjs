@@ -25,7 +25,7 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
 
 export default defineConfig({
-  site: "https://bsraya.com",
+  site: "https://www.bijonsetyawan.com",
   output: 'server',
   adapter: vercel({
     includeFiles: ["node_modules/@fontsource/share-tech-mono/files/share-tech-mono-latin-400-normal.woff"],
@@ -74,6 +74,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: { allowedHosts: ["pc", "portfolio.bsraya.com"] }
+    server: { allowedHosts: ["pc", "portfolio.raven-byzantine.ts.net"] }
   }
 });
