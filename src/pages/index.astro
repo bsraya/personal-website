@@ -16,18 +16,18 @@ const works = getSortedWorks().slice(0, 3);
     <div class="grid grid-col">
       <Heading as="h1" size="2xl" weight="bold">Bijon Setyawan Raya</Heading>
       <div class="text-slate-600 text-lg">{ pageDescription }</div>
-      <div>Get my resume <ExternalLink text="here" url="/resume.pdf" /></div>
+      <div>Get my resume <ExternalLink text="here" url="/resume.pdf" ariaLabel="Download Bijon Setyawan Raya's resume (PDF)" /></div>
     </div>
 
     <div class="grid grid-col gap-3">
       <Heading as="h2" size="lg" weight="bold">Selected Works</Heading>
       { works.map((work) => <ContentCard path={work.url} frontmatter={work.frontmatter} type="works" />) }
       <a
-        aria-label="See more works"
+        aria-label="View all works"
         href="/works"
         class="w-fit underline"
       >
-        See more
+        See more works
       </a>
     </div>
     
@@ -35,11 +35,11 @@ const works = getSortedWorks().slice(0, 3);
       <Heading as="h2" size="lg" weight="bold">Latest Posts</Heading>
       { posts.map((post) => <ContentCard path={post.url} frontmatter={post.frontmatter} type="posts" />) }
       <a
-        aria-label="See more posts"
+        aria-label="View all blog posts"
         href="/posts"
         class="w-fit underline"
       >
-        See more
+        See more posts
       </a>
     </div>
   </div>

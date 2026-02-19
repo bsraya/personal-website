@@ -1,8 +1,16 @@
 ---
 import ExternalLinkIcon from "@component/ExternalLinkIcon.astro";
-const { url, text } = Astro.props;
+const { url, text, ariaLabel } = Astro.props;
+
+const label = ariaLabel ? `External link: ${ariaLabel}` : `External link to ${text}`;
 ---
 
-<a href={url} target="_blank" rel="noopener noreferrer" class="cursor-pointer">
+<a
+    href={url}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="cursor-pointer"
+    aria-label={label}
+>
     <span class="underline">{text}</span><ExternalLinkIcon />
 </a>
