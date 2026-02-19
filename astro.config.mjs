@@ -74,6 +74,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: { allowedHosts: ["pc", "portfolio.raven-byzantine.ts.net"] }
+    server: { }
   }
 });
