@@ -1,7 +1,9 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
   themes: light --default, lofi;
 }
+
 @import "@fontsource/share-tech-mono";
 @import "@fontsource-variable/dm-sans";
 @import '@fontsource-variable/newsreader';
@@ -12,7 +14,7 @@
   --font-monospace: 'Share Tech Mono', monospace;
 }
 
-html { 
+html {
   scroll-behavior: smooth;
 }
 
@@ -20,7 +22,12 @@ body {
   font-family: var(--font-body);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   scroll-margin-top: 80px;
 }
@@ -47,14 +54,15 @@ code {
   font-family: var(--font-monospace);
 }
 
-code::before, code::after {
+code::before,
+code::after {
   content: "`";
 }
 
-.table-wrapper {	
+.table-wrapper {
   display: inline-block;
   overflow-y: auto;
-} 
+}
 
 table {
   border-collapse: separate;
