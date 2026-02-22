@@ -2,7 +2,7 @@
 import ExternalLinkIcon from "@component/ExternalLinkIcon.astro";
 const { url, text, ariaLabel } = Astro.props;
 
-const label = ariaLabel ? `External link: ${ariaLabel}` : `External link to ${text}`;
+const label = ariaLabel ? `External link to ${ariaLabel}` : `External link to ${text}`;
 ---
 
 <a
