@@ -1,6 +1,6 @@
 import { createSignal, Show, For } from "solid-js";
 import type { Heading } from "../types/heading";
-import { List, ChevronUp, ChevronDown } from "lucide-solid";
+import { ChevronUp, ChevronDown, List } from "lucide-solid";
 import clickOutside from "@lib/click-outside";
 
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
@@ -19,16 +19,16 @@ export default function TableOfContent({ url, headings }: { url: string, heading
       use:clickOutside={() => setTocOpen(false)}
     >
       <button
-        class="flex w-full items-center gap-2 px-4 py-3 font-semibold text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
+        class="flex w-full items-center gap-2 px-4 py-2 font-semibold text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
         onClick={toggleToc}
         aria-expanded={tocOpen()}
         aria-controls="toc-list"
       >
-        <List size={15} class="text-slate-500 shrink-0" />
-        <span class="toc text-sm">Table of Contents</span>
-        <span class="ml-auto text-slate-400">
-          <Show when={tocOpen()} fallback={<ChevronUp size={14} />}>
-            <ChevronDown size={14} />
+        <List size={14} class="text-slate-500 shrink-0 block" />
+        <span class="text-sm">Table of Contents</span>
+        <span class="ml-auto flex items-center text-slate-400">
+          <Show when={tocOpen()} fallback={<ChevronUp size={14} class="block" />}>
+            <ChevronDown size={14} class="block" />
           </Show>
         </span>
       </button>

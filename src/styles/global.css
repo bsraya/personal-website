@@ -104,10 +104,6 @@ table tr:last-child td:last-child {
   border-bottom-right-radius: var(--radius-sm);
 }
 
-.toc {
-  font-family: var(--font-heading);
-}
-
 span.katex-display {
   overflow-x: scroll;
   overflow-y: hidden;
