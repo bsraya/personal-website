@@ -41,6 +41,7 @@
     "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "daisyui": "^5.5.19",
+    "lucide-solid": "^0.575.0",
     "mermaid": "^11.12.3",
     "rehype-accessible-emojis": "^0.3.2",
     "rehype-autolink-headings": "^7.1.0",
