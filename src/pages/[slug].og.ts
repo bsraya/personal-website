@@ -43,7 +43,7 @@ export async function GET({ params }: APIContext) {
     const png = await sharp(Buffer.from(svg)).png().toBuffer()
 
     return new Response(
-        png,
+        new Uint8Array(png),
         {
             status: 200,
             headers: {
