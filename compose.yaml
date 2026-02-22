@@ -2,6 +2,9 @@ services:
   personal-website:
     container_name: personal-website
     image: johnbjohn/personal-website:latest
+    labels:
+      - "tsdproxy.enable=true"
+      - "tsdproxy.name=portfolio"
     restart: always
     volumes:
       - ./src:/app/src
