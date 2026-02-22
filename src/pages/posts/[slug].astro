@@ -5,7 +5,7 @@ import { getEntry } from "astro:content";
 import { slugify } from "@lib/string";
 import { getAllPosts, getSeriesPosts } from "@lib/content";
 
-import { AiOutlineArrowLeft } from "solid-icons/ai";
+import { ArrowLeft } from "@lucide/astro";
 
 import Heading from "@component/Heading.astro";
 import BaseLayout from "@layout/BaseLayout.astro";
@@ -47,7 +47,7 @@ const { Content, headings } = await render(post);
     keywords={post.data.keywords}
 >
     <a href="/posts" class="w-fit flex font-semibold hover:underline"
-        ><AiOutlineArrowLeft class="my-auto mr-1" />Back</a
+        ><ArrowLeft class="my-auto mr-1" />Back</a
     >
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {

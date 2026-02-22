@@ -4,7 +4,7 @@ import ContentCard from "@component/ContentCard.astro";
 import BaseLayout from "@layout/BaseLayout.astro";
 import Heading from "@component/Heading.astro";
 
-import { AiOutlineArrowLeft } from "solid-icons/ai";
+import { ArrowLeft } from "@lucide/astro";
 
 import { slugify, deslugify } from "@lib/string";
 import { getAllPosts, getPostsByTag } from "@lib/content";
@@ -31,7 +31,7 @@ const allPosts = getPostsByTag(tag);
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <a href="/posts" class="flex font-semibold hover:underline"
-    ><AiOutlineArrowLeft class="my-auto mr-1" />All posts</a
+    ><ArrowLeft class="my-auto mr-1" />All posts</a
   >
   <div class="flex flex-row gap-2 my-5 2xl">
     <Heading as="h1">Posts tagged with</Heading><Heading

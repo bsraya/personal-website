@@ -30,6 +30,7 @@
     "@fontsource-variable/newsreader": "^5.2.10",
     "@fontsource/share-tech-mono": "^5.2.7",
     "@fujocoded/expressive-code-output": "^0.0.1",
+    "@lucide/astro": "^0.575.0",
     "@tailwindcss/vite": "^4.2.0",
     "astro": "5.16.6",
     "astro-expressive-code": "^0.40.2",
@@ -38,6 +39,7 @@
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
     "chart.js": "^4.5.1",
+    "class-variance-authority": "^0.7.1",
     "daisyui": "^5.5.19",
     "mermaid": "^11.12.3",
     "rehype-accessible-emojis": "^0.3.2",
@@ -55,8 +57,7 @@
     "solid-icons": "^1.2.0",
     "solid-js": "^1.9.11",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.0",
-    "class-variance-authority": "^0.7.1"
+    "tailwindcss": "^4.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",

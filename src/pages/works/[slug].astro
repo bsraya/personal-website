@@ -3,7 +3,7 @@ export const prerender = true;
 import { render } from "astro:content";
 import { getEntry } from "astro:content";
 
-import { AiOutlineArrowLeft } from "solid-icons/ai";
+import { ArrowLeft } from "@lucide/astro";
 
 import Heading from "@component/Heading.astro";
 import BaseLayout from "@layout/BaseLayout.astro";
@@ -44,7 +44,7 @@ const { Content, headings } = await render(work);
     pageDescription={`${work.data.title}: ${work.data.description}`}
 >
     <a href="/works" class="w-fit flex font-semibold hover:underline"
-        ><AiOutlineArrowLeft class="my-auto mr-1" />Back</a
+        ><ArrowLeft class="my-auto mr-1" />Back</a
     >
     <div class="flex gap-2 mt-5 mb-2 text-slate-700">
         {work.data.tag && <p>{work.data.tag}</p>}
