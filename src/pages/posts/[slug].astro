@@ -38,13 +38,48 @@ if (!post.data.published) {
 }
 
 const { Content, headings } = await render(post);
+
+const siteUrl = "https://www.bijonsetyawan.com";
+const postUrl = `${siteUrl}/posts/${slug}`;
+
+const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    url: postUrl,
+    datePublished: post.data.publishedDate?.toISOString(),
+    author: {
+        "@type": "Person",
+        name: "Bijon Setyawan Raya",
+        url: siteUrl,
+    },
+    publisher: {
+        "@type": "Person",
+        name: "Bijon Setyawan Raya",
+        url: siteUrl,
+    },
+    keywords: post.data.keywords?.join(", "),
+    articleSection: post.data.tag,
+    inLanguage: "en-US",
+    isPartOf: {
+        "@type": "Blog",
+        "@id": `${siteUrl}/posts`,
+        name: "Bijon Setyawan Raya — Posts",
+        url: `${siteUrl}/posts`,
+    },
+};
 ---
 
 <BaseLayout
     hasMath={true}
     pageTitle={post.data.title}
-    pageDescription={`${post.data.title}: ${post.data.description}`}
-    keywords={post.data.keywords}
+    pageDescription={post.data.description}
+    keywords={post.data.keywords ?? []}
+    ogType="article"
+    publishedDate={post.data.publishedDate}
+    articleTag={post.data.tag}
+    schema={blogPostingSchema}
 >
     <a href="/posts" class="w-fit flex font-semibold hover:underline"
         ><ArrowLeft class="my-auto mr-1" />Back</a

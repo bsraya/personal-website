@@ -36,12 +36,39 @@ if (!work.data.published) {
 }
 
 const { Content, headings } = await render(work);
+
+const siteUrl = "https://www.bijonsetyawan.com";
+const workUrl = `${siteUrl}/works/${slug}`;
+
+const creativeWorkSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: work.data.title,
+    description: work.data.description,
+    url: workUrl,
+    datePublished: work.data.publishedDate?.toISOString(),
+    author: {
+        "@type": "Person",
+        name: "Bijon Setyawan Raya",
+        url: siteUrl,
+    },
+    keywords: work.data.keywords?.join(", "),
+    inLanguage: "en-US",
+    isPartOf: {
+        "@type": "CollectionPage",
+        "@id": `${siteUrl}/works`,
+        name: "Bijon Setyawan Raya — Works",
+        url: `${siteUrl}/works`,
+    },
+};
 ---
 
 <BaseLayout
     hasMath={true}
     pageTitle={work.data.title}
-    pageDescription={`${work.data.title}: ${work.data.description}`}
+    pageDescription={work.data.description}
+    keywords={work.data.keywords ?? []}
+    schema={creativeWorkSchema}
 >
     <a href="/works" class="w-fit flex font-semibold hover:underline"
         ><ArrowLeft class="my-auto mr-1" />Back</a

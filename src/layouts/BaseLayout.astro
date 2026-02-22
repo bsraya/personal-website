@@ -5,23 +5,33 @@ import Footer from "@component/Footer.astro";
 import BackToTop from "@component/BackToTop";
 import Navigation from "@component/Navigation.astro";
 
-const { 
+const {
   pageTitle,
   pageDescription,
   keywords,
-  hasMath=false
+  hasMath = false,
+  ogType,
+  publishedDate,
+  modifiedDate,
+  articleTag,
+  schema,
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" data-theme="lofi">
   <Head
-		pageTitle={pageTitle}
-		pageDescription={pageDescription}
-		keywords={keywords}
-		hasMath={hasMath}
-	/>
-	<body class="h-full mx-auto max-w-2xl p-5">
+    pageTitle={pageTitle}
+    pageDescription={pageDescription}
+    keywords={keywords}
+    hasMath={hasMath}
+    ogType={ogType}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    articleTag={articleTag}
+    schema={schema}
+  />
+  <body class="h-full mx-auto max-w-2xl p-5">
     <Navigation />
     <main>
       <slot />

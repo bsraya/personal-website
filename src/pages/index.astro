@@ -5,13 +5,52 @@ import ExternalLink from "@component/ExternalLink.astro";
 import Heading from "@component/Heading.astro";
 import { getSortedPosts, getSortedWorks } from "@lib/content";
 
+const siteUrl = "https://www.bijonsetyawan.com";
 const pageTitle = "Home";
 const pageDescription = "I make machines learn, and I write about it";
+const keywords = [
+  "machine learning",
+  "deep learning",
+  "data science",
+  "software engineering",
+  "blog",
+  "personal website",
+];
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Bijon Setyawan Raya",
+  url: siteUrl,
+  sameAs: ["https://github.com/bsraya"],
+  jobTitle: "Software Engineer",
+  knowsAbout: [
+    "Machine Learning",
+    "Deep Learning",
+    "Data Science",
+    "Software Engineering",
+  ],
+};
+
+const webSiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Bijon Setyawan Raya",
+  url: siteUrl,
+  description: pageDescription,
+  author: { "@type": "Person", name: "Bijon Setyawan Raya", url: siteUrl },
+};
+
 const posts = getSortedPosts().slice(0, 3);
 const works = getSortedWorks().slice(0, 3);
 ---
 
-<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+<BaseLayout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  keywords={keywords}
+  schema={[personSchema, webSiteSchema]}
+>
   <div class="grid grid-col gap-10">
     <div class="grid grid-col">
       <Heading as="h1" size="2xl" weight="bold">Bijon Setyawan Raya</Heading>

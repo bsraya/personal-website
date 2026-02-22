@@ -28,7 +28,7 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
+Sitemap: https://www.bijonsetyawan.com/sitemap-index.xml
+
 User-agent: *
 Allow: /
-
-Sitemap: https://www.bijonsetyawan.com/sitemap-index.xml
