@@ -23,7 +23,7 @@ export default function TableOfContent({ url, headings }: { url: string, heading
             {
               (heading) => (
                 <li
-                  class={`${heading.depth === 2 ? 'ml-[1rem] font-semibold' : heading.depth === 3 ? 'ml-[2rem]': heading.depth === 4 ? 'ml-[3rem]': ''}`}
+                  class={`${heading.depth === 2 ? 'ml-[1rem] font-semibold' : heading.depth === 3 ? 'ml-[2rem]' : heading.depth === 4 ? 'ml-[3rem]' : ''}`}
                 >
                   <a href={`${url}#${heading.slug}`} class="hover:underline custor-pointer">
                     {heading.text}

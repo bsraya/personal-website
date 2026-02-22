@@ -9,7 +9,7 @@ const siteUrl = "https://www.bijonsetyawan.com";
 
 export async function GET({ params }: APIContext) {
     const { slug } = params;
-    
+
     const markup = html(`
     <div
         style="height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; background-color: rgb(201, 219, 255); color: rgb(42, 65, 177); padding: 50px; font-family: 'Share Tech Mono'; "
@@ -25,7 +25,7 @@ export async function GET({ params }: APIContext) {
     </div>`);
 
     const svg: string = await satori(
-        markup, 
+        markup,
         {
             width: 1200,
             height: 630,
@@ -40,7 +40,7 @@ export async function GET({ params }: APIContext) {
     )
 
     const png = await sharp(Buffer.from(svg)).png().toBuffer()
-    
+
     return new Response(
         png,
         {

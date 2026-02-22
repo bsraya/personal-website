@@ -2,11 +2,11 @@
 import { getSortedWorks } from "@lib/content";
 
 import BaseLayout from "@layout/BaseLayout.astro";
-import ContentCard from "@component/ContentCard.astro"
+import ContentCard from "@component/ContentCard.astro";
 import Heading from "@component/Heading.astro";
 
 const pageTitle = "Works";
-const pageDescription = "A collection of works written by Bijon Setyawan Raya."
+const pageDescription = "A collection of works written by Bijon Setyawan Raya.";
 const works = getSortedWorks();
 ---
 
@@ -14,9 +14,13 @@ const works = getSortedWorks();
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
-      works.map((work) =>
-        <ContentCard path={work.url} frontmatter={work.frontmatter} type="works" />
-      )
+      works.map((work) => (
+        <ContentCard
+          path={work.url}
+          frontmatter={work.frontmatter}
+          type="works"
+        />
+      ))
     }
   </div>
 </BaseLayout>

@@ -13,10 +13,13 @@ const posts = getSortedPosts();
   <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
   <div class="grid grid-col gap-5">
     {
-      posts.map((post) =>
-        <ContentCard path={post.url} frontmatter={post.frontmatter} type="posts" />        
-      )
+      posts.map((post) => (
+        <ContentCard
+          path={post.url}
+          frontmatter={post.frontmatter}
+          type="posts"
+        />
+      ))
     }
   </div>
 </BaseLayout>
-

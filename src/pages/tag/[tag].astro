@@ -1,10 +1,10 @@
 ---
 export const prerender = true;
-import ContentCard from "@component/ContentCard.astro"
+import ContentCard from "@component/ContentCard.astro";
 import BaseLayout from "@layout/BaseLayout.astro";
 import Heading from "@component/Heading.astro";
 
-import { AiOutlineArrowLeft } from 'solid-icons/ai';
+import { AiOutlineArrowLeft } from "solid-icons/ai";
 
 import { slugify, deslugify } from "@lib/string";
 import { getAllPosts, getPostsByTag } from "@lib/content";
@@ -24,15 +24,31 @@ export function getStaticPaths() {
   }));
 }
 const { tag } = Astro.params;
-const pageTitle = `${slugify(tag)} posts`
-const pageDescription = `${slugify(tag)} posts written by ${import.meta.env.AUTHOR}.`
+const pageTitle = `${slugify(tag)} posts`;
+const pageDescription = `${slugify(tag)} posts written by ${import.meta.env.AUTHOR}.`;
 const allPosts = getPostsByTag(tag);
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
-  <a href="/posts" class="flex font-semibold hover:underline"><AiOutlineArrowLeft class="my-auto mr-1"/>All posts</a>
-  <div class="flex flex-row gap-2 my-5 2xl"><Heading as="h1">Posts tagged with</Heading><Heading as="h1" weight="bold" class="underline">{deslugify(tag)}</Heading></div>
+  <a href="/posts" class="flex font-semibold hover:underline"
+    ><AiOutlineArrowLeft class="my-auto mr-1" />All posts</a
+  >
+  <div class="flex flex-row gap-2 my-5 2xl">
+    <Heading as="h1">Posts tagged with</Heading><Heading
+      as="h1"
+      weight="bold"
+      class="underline">{deslugify(tag)}</Heading
+    >
+  </div>
   <div class="grid grid-col gap-5">
-    { allPosts.map((post) => <ContentCard path={post.url} frontmatter={post.frontmatter} type="posts" /> ) }
+    {
+      allPosts.map((post) => (
+        <ContentCard
+          path={post.url}
+          frontmatter={post.frontmatter}
+          type="posts"
+        />
+      ))
+    }
   </div>
 </BaseLayout>

@@ -5,17 +5,26 @@ import { getSlugFromPath } from "@lib/string";
 const dateObject: object = {
     year: "numeric",
     month: "long",
-    day: "numeric"
-}
+    day: "numeric",
+};
 
 const { path, frontmatter, type } = Astro.props;
 const slug = getSlugFromPath(path);
 ---
 
 <div>
-    <div class="text-slate-500">{new Date(frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}</div>
+    <div class="text-slate-500">
+        {
+            new Date(frontmatter.publishedDate).toLocaleDateString(
+                "en-US",
+                dateObject,
+            )
+        }
+    </div>
     <Heading as="h1" size="2xl">
-        <a class="hover:underline" href=`/${type}/${slug}`>{frontmatter.title}</a>
+        <a class="hover:underline" href=`/${type}/${slug}`
+            >{frontmatter.title}</a
+        >
     </Heading>
     <p class="text-md mt-auto text-slate-600">{frontmatter.description}</p>
 </div>
