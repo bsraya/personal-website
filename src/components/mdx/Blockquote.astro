@@ -2,7 +2,9 @@
 const props = Astro.props;
 ---
 
-<blockquote {...props} class="bg-blue-50 p-4 border-xl rounded-lg my-5">
-  <span class="text-4xl text-blue-600 mb-2">“</span>
-  <slot /> <!-- Be sure to add a `<slot/>` for child content! -->
+<blockquote
+  {...props}
+  class="border-l-4 border-blue-400 bg-blue-50/60 pl-5 pr-4 py-3 my-8 rounded-r-lg italic text-slate-700"
+>
+  <slot />
 </blockquote>

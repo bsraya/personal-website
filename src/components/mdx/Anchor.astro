@@ -4,10 +4,11 @@ const props = Astro.props;
 const isExternal = props.href.includes("http");
 ---
 
-<a 
+<a
     {...props}
-    class="underline cursor-pointer"
+    class="text-blue-600 underline decoration-blue-400 underline-offset-2 hover:text-blue-800 hover:decoration-blue-600 transition-colors cursor-pointer"
     target="_blank"
     rel="noopener noreferrer"
     aria-label={props.label || "Link"}
-><slot />{isExternal && <ExternalLinkIcon />}</a>
+    ><slot />{isExternal && <ExternalLinkIcon />}</a
+>

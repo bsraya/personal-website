@@ -4,31 +4,33 @@ import { Image } from "astro:assets";
 ---
 
 {
-    props.title ?
-        <figure class="w-full my-5">
+    props.title ? (
+        <figure class="w-full my-8">
             <Image
                 src={props.src}
                 alt={props.alt}
                 title={props.title}
                 width={700}
                 height={500}
-                class="w-full mb-1"
+                class="w-full rounded-sm"
                 loading="lazy"
             />
-            <figcaption class="image-caption text-center text-slate-400">Figure: {props.title}</figcaption>
+            <figcaption class="image-caption text-center text-slate-400 text-sm mt-2">
+                Figure: {props.title}
+            </figcaption>
         </figure>
-    :
+    ) : (
         <Image
             src={props.src}
             alt={props.alt}
             title={props.title}
             width={700}
             height={500}
-            class="w-full my-5"
+            class="w-full my-8 rounded-sm"
             loading="lazy"
         />
+    )
 }
-
 
 <style>
     .image-caption {

@@ -3,6 +3,12 @@ import Heading from "@component/Heading.astro";
 const props = Astro.props;
 ---
 
-<Heading {...props} as="h3" size="lg" weight="bold" class="my-5">
+<Heading
+    {...props}
+    as="h3"
+    size="lg"
+    weight="bold"
+    class="mt-8 mb-2 leading-snug"
+>
     <slot />
 </Heading>
