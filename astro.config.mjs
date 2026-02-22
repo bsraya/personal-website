@@ -8,7 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap"
 import metaTags from "astro-meta-tags";
 import robotsTxt from "astro-robots-txt";
-import vercel from "@astrojs/vercel";
+import cloudflare from "@astrojs/cloudflare";
 
 // Markdown plugins
 import rehypeKatex from "rehype-katex";
@@ -27,9 +27,9 @@ import { pluginCodeOutput } from "@fujocoded/expressive-code-output";
 export default defineConfig({
   site: "https://www.bijonsetyawan.com",
   output: 'server',
-  adapter: vercel({
-    includeFiles: ["node_modules/@fontsource/share-tech-mono/files/share-tech-mono-latin-400-normal.woff"],
-    webAnalytics: {
+  adapter: cloudflare({
+    imageService: 'cloudflare',
+    platformProxy: {
       enabled: true,
     },
   }),
