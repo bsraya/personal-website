@@ -10,7 +10,7 @@ declare module "solid-js" {
 
 export default function clickOutside(el: HTMLElement, accessor: () => () => void) {
   const handler = (e: MouseEvent) => {
-    if (!el.contains(e.target as Node)) {
+    if (!e.composedPath().includes(el)) {
       const cb = accessor();
       if (typeof cb === 'function') cb();
     }
