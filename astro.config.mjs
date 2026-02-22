@@ -32,7 +32,6 @@ export default defineConfig({
     platformProxy: {
       enabled: true,
     },
-    sessionKVBindingName: false,
   }),
   markdown: {
     syntaxHighlight: {
