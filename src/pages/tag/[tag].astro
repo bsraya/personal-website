@@ -6,8 +6,8 @@ import Heading from "@component/Heading.astro";
 
 import { AiOutlineArrowLeft } from 'solid-icons/ai';
 
-import { slugify, deslugify } from "@util/string"
-import { getAllPosts, getPostsByTag } from "@util/content";
+import { slugify, deslugify } from "@lib/string";
+import { getAllPosts, getPostsByTag } from "@lib/content";
 
 export function getStaticPaths() {
   const tags = new Set<string>();

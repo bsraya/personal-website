@@ -1,6 +1,6 @@
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "@type/frontmatter";
-import { slugify } from "@util/string.ts";
+import { slugify } from "@lib/string";
 
 enum SortOrder {
     Ascending = "ascending",
@@ -21,7 +21,7 @@ export function getAllWorks() {
 
 
 export function sortContent(posts: MarkdownInstance<Frontmatter>[], sortOrder: SortOrder = SortOrder.Descending) {
-    return posts.sort((a, b) =>  {
+    return posts.sort((a, b) => {
         const dateA = new Date(a.frontmatter.publishedDate);
         const dateB = new Date(b.frontmatter.publishedDate);
         if (sortOrder === SortOrder.Ascending) {
@@ -36,9 +36,9 @@ export function sortContent(posts: MarkdownInstance<Frontmatter>[], sortOrder: S
 
 export function getSortedPosts(sortOrder: SortOrder = SortOrder.Descending) {
     const posts = getAllPosts();
-  
+
     const publishedPosts = posts.filter((item) => item.frontmatter.published === true);
-    return sortContent(publishedPosts, sortOrder=sortOrder);
+    return sortContent(publishedPosts, sortOrder = sortOrder);
 }
 
 

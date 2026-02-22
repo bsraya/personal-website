@@ -3,7 +3,7 @@ import { html } from "satori-html";
 import satori from "satori";
 import { readFileSync } from "fs";
 import sharp from "sharp";
-import { deslugify } from "@util/string";
+import { deslugify } from "@lib/string";
 
 const siteUrl = "https://www.bijonsetyawan.com";
 

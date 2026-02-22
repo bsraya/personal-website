@@ -1,4 +1,4 @@
-import scrollToTop from '@util/scroll-to-top';
+import scrollToTop from '@lib/scroll-to-top';
 import { BsTriangleFill } from 'solid-icons/bs';
 
 // This import is necessary for the directive to work

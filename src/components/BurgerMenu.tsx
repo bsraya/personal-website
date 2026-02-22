@@ -1,6 +1,6 @@
 import { FiMenu } from 'solid-icons/fi';
 import { Show, createSignal } from "solid-js";
-import clickOutside from "@util/click-outside";
+import clickOutside from "@lib/click-outside";
 
 // This import is necessary for the directive to work
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

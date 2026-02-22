@@ -11,8 +11,8 @@ import TableOfContent from "@component/TableOfContent";
 
 import { MdxComponents } from "@component/MdxComponents";
 
-import { getSortedWorks } from "@util/content";
-import { slugify } from "@util/string";
+import { getSortedWorks } from "@lib/content";
+import { slugify } from "@lib/string";
 
 export function getStaticPaths() {
     const allWorks = getSortedWorks();

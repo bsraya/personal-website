@@ -2,7 +2,7 @@ import type { APIContext } from "astro";
 import { html } from "satori-html";
 import satori from "satori";
 import { readFileSync } from "fs";
-import { deslugify } from "@util/string";
+import { deslugify } from "@lib/string";
 import sharp from "sharp";
 
 const siteUrl = "https://www.bijonsetyawan.com";
