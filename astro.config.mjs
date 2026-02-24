@@ -5,7 +5,7 @@ import expressiveCode from "astro-expressive-code";
 import mdx from "@astrojs/mdx";
 import solid from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
-import sitemap from "@astrojs/sitemap"
+import sitemap from "@astrojs/sitemap";
 import metaTags from "astro-meta-tags";
 import robotsTxt from "astro-robots-txt";
 import vercel from "@astrojs/vercel";
