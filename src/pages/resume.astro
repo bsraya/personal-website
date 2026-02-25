@@ -1,0 +1,133 @@
+---
+import BaseLayout from "@layout/BaseLayout.astro";
+import Heading from "@component/Heading.astro";
+import { effect } from "astro:schema";
+
+const pageTitle = "Resume";
+const pageDescription = "Bijon Setyawan Raya's professional resume.";
+
+const experience = [
+  {
+    title: "Senior Machine Learning Engineer",
+    company: "IKG Team Ltd.",
+    location: "Taipei, Taiwan",
+    period: "October 2025 - Present",
+    descriptions: [
+      "Engineered a content moderator in Go with sub-second latency and a 90% reduction in resource usage.",
+      "Provisioned a Medallion Architecture Data Lakehouse for business analytics.",
+      "Designed a financial observability platform with sub-second queries and granular revenue metrics.",
+    ],
+  },
+  {
+    title: "Machine Learning Engineer",
+    company: "Cathay United Bank",
+    location: "Taipei, Taiwan",
+    period: "November 2024 - October 2025",
+    descriptions: [
+      "Developed Guardrails on AWS that eliminates 99% of unsafe interactions while reducing latency by 90%.",
+      "Profiled bare-metal vs. virtualized GPU environments, identified bottlenecks in model serving frameworks.",
+    ],
+  },
+  {
+    title: "Intermediate Fullstack Developer",
+    company: "Faria Education Group",
+    location: "Taipei, Taiwan",
+    period: "October 2022 - March 2024",
+    descriptions: [],
+  },
+];
+
+const skills = [
+  {
+    category: "Programming Languages",
+    items: "C/C++, Golang, Python, SQL, Zig",
+  },
+  {
+    category: "Deep Learning & Machine Learning",
+    items: "CUDA, HIP/ROCm, MLflow, cuML, PyTorch, Scikit-learn",
+  },
+  {
+    category: "Data Engineering",
+    items: "Apache Airflow, Apache Iceberg, dbt, DuckDB, MongoDB, PostgreSQL, SQLite, Redis, Qdrant",
+  },
+  {
+    category: "Systems & Infrastructure",
+    items: "Docker, Git, Kubernetes, Terraform, Linux/Unix, Podman",
+  },
+  {
+    category: "Cloud Services",
+    items: "Amazon Web Services, Google Cloud Platform",
+  },
+];
+
+const education = [
+  {
+    degree: "Master of Science in Computer Science",
+    institution: "National Tsing Hua University",
+    year: "January 2023",
+  },
+  {
+    degree: "Bachelor of Science in Computer Science",
+    institution: "National Tsing Hua University",
+    year: "January 2021",
+  },
+];
+---
+
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+    <div class="grid divide-y divide-slate-200 dark:divide-slate-700">
+        <!-- Experience -->
+        <section class="gap-5 pb-6">
+            <Heading as="h2" size="xl" class="mb-5">Experience</Heading>
+            <div class="grid gap-5">
+                {experience.map((job) => (
+                    <div>
+                        <Heading as="h5" size="sm" class="text-slate-400">{job.period}</Heading>
+                        <Heading as="h3" size="xl" weight="bold">{job.title}</Heading>
+                        <Heading as="h4" size="md" class="italic">{job.company} - {job.location}</Heading>
+                        {
+                            job.descriptions.length > 0 && (
+                                <ul class="mt-1">
+                                    {
+                                        job.descriptions.map((d) => (
+                                            <li class="list-disc">{d}</li>
+                                        ))
+                                    }
+                                </ul>
+                            )
+                        }
+                    </div>
+                ))}
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section class="pt-6 pb-6">
+            <Heading as="h2" size="xl" class="mb-5">Education</Heading>
+            <div class="grid gap-5">
+                {education.map((edu) => (
+                <div class="">
+                    <Heading as="h5" size="sm" class="text-slate-400">{edu.year}</Heading>
+                    <Heading as="h3" size="md" weight="bold">{edu.institution}</Heading>
+                    <Heading as="h4" size="md" class="italic">{edu.degree}</Heading>
+                </div>
+                ))}
+            </div>
+        </section>
+
+        <!-- Technical Skills -->
+        <section class="gap-5 pt-6">
+            <Heading as="h2" size="xl" class="mb-5">Technical Skills</Heading>
+            <div class="grid gap-2">
+                {
+                    skills.map((skill) => (
+                        <div>
+                            <Heading as="h3" size="md" weight="bold">{skill.category}</Heading>
+                            <div>{skill.items}</div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+    </div>
+</BaseLayout>

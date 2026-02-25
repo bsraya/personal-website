@@ -6,6 +6,7 @@ const navLinks = [
   { href: "/", label: "Home", external: false },
   { href: "/posts", label: "Posts", external: false },
   { href: "/works", label: "Works", external: false },
+  { href: "/resume", label: "Resume", external: false },
   { href: "https://github.com/bsraya", label: "GitHub", external: true },
   { href: "https://www.linkedin.com/in/bijonsetyawan/", label: "LinkedIn", external: true },
 ];
