@@ -1,0 +1,113 @@
+---
+title: Introduction to Guardrails
+description: A prompt filtration system that ensures safe interactions
+publishedDate: 2026-02-28
+keywords: [guardrails, llm safety, prompt filtration, ai ethics]
+tag: Generative AI
+series:
+published: true
+---
+
+## Introduction
+
+Guardrails filter out ill-intentioned and malicious,
+ensuring safe interactions between users and
+language models.
+
+As organizations deploy language models for public use,
+implementing Guardrails is crucial to protect users
+and maintain trusts in AI systems.
+
+This technical will explain how Guardrails works and
+their real-world benefits.
+
+## Why Guardrails?
+
+**Safety**: Guardrails ensures user prompts and model responses
+are safe. There are some cases users abuse language models
+to spit out sensitive informations. Also, there are extreme
+cases where language models forced or coaxed underage
+children to do the unthinkable.
+
+**Cost Efficiency**: By filtering malicious prompts before
+they reach language models, we prevent wasted
+GPU cycles and reduce operation expenses.
+
+**Auditability**: Guardrails enable better system auditing and compliance
+tracking, making it easier to identify abuse patterns and enforce
+usage policies.
+
+## What are Guardrails?
+
+Guardrails are a set of rules, filters, or mechanisms
+that ensures content or prompts adhere to certain safety,
+ethical, or legal standards.
+
+What are Guardrails filtering out?
+
+1. Biased and harmful expressions
+2. Abusive and unethical behaviours
+3. Illegal and malicious activities
+
+Simply said, you can imagine Guardrails as a bouncer at
+a club, checking the guest list and only allowing in those
+who meet the criteria for entry. However, Guardrails do more
+than that. They are like a security team that anticipates
+risks, analyze contexts, and adapts to new threats.
+
+## How Guardrails work?
+
+Each Guardrails system could have many layers of filtration,
+the following are three common ones:
+
+1. Keyword filtering
+2. Regex filtering
+3. Semantic filtering
+
+### Keyword Filtering
+
+With this technique, one could keep a list of words
+that do not align with one's business or ethical standards.
+This is the easiest and most straightforward way to
+implement Guardrails.
+
+### Regex Filtering
+
+Regex filtering is a more advanced technique that allows
+for pattern matching. This can be useful for filtering out
+ID numbers, email addresses, phone numbers, or even
+credit card numbers.
+
+### Semantic Filtering
+
+Semantic filtering uses language models to understand
+the real meaning behind each prompt, both its context
+and intent. This is also one of the easiest technique
+to incorporate into Guardrails.
+
+## Challenges of Guardrails
+
+## Keywords filters
+
+This filtration is also the least effective
+since languages are considered "alive" as long
+as people are using them. People would try to use
+new keywords or misspell existing keywords to bypass
+the filters. Thus the keyword list needs to be
+updated frequently to keep up with the evolving language.
+
+## Regex filters
+
+A list of regex can be highly complex and difficult to
+maintain, especially as new patterns emerge. As the list
+of regex rules grows, it can also lead to CPU overhead and
+increased false positives, where legitimate prompts
+are mistakenly blocked.
+
+## Semantic filters
+
+With this filtration, one should be ready to face
+with the monthly bill from the language model provider.
+In addition to that, frequently accessing LLM APIs
+would hit the rate limit and cause latency issues.
+
