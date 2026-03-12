@@ -10,8 +10,8 @@ const posts = getSortedPosts();
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
-  <Heading as="h2" size="xl" class="mb-5">Latest {pageTitle}</Heading>
-  <div class="grid grid-col gap-5">
+  <Heading as="h2" size="lg" class="mb-2">Latest {pageTitle}</Heading>
+  <div class="grid grid-col gap-8">
     {
       posts.map((post) => (
         <ContentCard

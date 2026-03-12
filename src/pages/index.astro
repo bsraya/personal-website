@@ -4,6 +4,7 @@ import ContentCard from "@component/ContentCard.astro";
 import ExternalLink from "@component/ExternalLink.astro";
 import Heading from "@component/Heading.astro";
 import { getSortedPosts, getSortedWorks } from "@lib/content";
+import { ArrowRight } from "@lucide/astro";
 
 const siteUrl = "https://www.bijonsetyawan.com";
 const pageTitle = "Home";
@@ -51,7 +52,7 @@ const works = getSortedWorks().slice(0, 3);
   keywords={keywords}
   schema={[personSchema, webSiteSchema]}
 >
-  <div class="grid grid-col gap-10">
+  <div class="grid grid-col gap-20">
     <div class="grid grid-col">
       <Heading as="h2" size="2xl">Bijon Setyawan Raya</Heading>
       <div class="text-slate-600 text-lg">{pageDescription}</div>
@@ -64,35 +65,39 @@ const works = getSortedWorks().slice(0, 3);
       </div>
     </div>
 
-    <div class="grid grid-col gap-3">
-      <Heading as="h2" size="lg" weight="bold">Selected Works</Heading>
-      {
-        works.map((work) => (
-          <ContentCard
-            path={work.url}
-            frontmatter={work.frontmatter}
-            type="works"
-          />
-        ))
-      }
-      <a aria-label="View all works" href="/works" class="w-fit underline">
-        See more works
+    <div>
+      <Heading as="h2" size="lg" class="mb-2">Selected Works</Heading>
+      <div class="grid grid-col gap-8 mb-5">
+        {
+          works.map((work) => (
+            <ContentCard
+              path={work.url}
+              frontmatter={work.frontmatter}
+              type="works"
+            />
+          ))
+        }
+      </div>
+      <a aria-label="View all works" href="/works" class="w-fit flex items-center gap-1 hover:gap-2 transition-gap duration-150">
+        <span>See more</span><ArrowRight size={14} />
       </a>
     </div>
 
-    <div class="grid grid-col gap-3">
-      <Heading as="h2" size="lg" weight="bold">Latest Posts</Heading>
-      {
-        posts.map((post) => (
-          <ContentCard
-            path={post.url}
-            frontmatter={post.frontmatter}
-            type="posts"
-          />
-        ))
-      }
-      <a aria-label="View all blog posts" href="/posts" class="w-fit underline">
-        See more posts
+    <div>
+      <Heading as="h2" size="lg" class="mb-2">Latest Posts</Heading>
+      <div class="grid grid-col gap-8 mb-5">
+        {
+          posts.map((post) => (
+            <ContentCard
+              path={post.url}
+              frontmatter={post.frontmatter}
+              type="posts"
+            />
+          ))
+        }
+      </div>
+      <a aria-label="View all blog posts" href="/posts" class="w-fit flex items-center gap-1 hover:gap-2 transition-gap duration-150">
+        <span>See more</span><ArrowRight size={14} />
       </a>
     </div>
   </div>

@@ -81,10 +81,10 @@ const blogPostingSchema = {
     articleTag={post.data.tag}
     schema={blogPostingSchema}
 >
-    <a href="/posts" class="w-fit flex font-semibold hover:underline"
-        ><ArrowLeft class="my-auto mr-1" />Back</a
-    >
-    <div class="flex gap-2 mt-5 mb-2 text-slate-700">
+    <a href="/posts" class="w-fit flex items-center gap-1 hover:gap-2 transition-gap duration-150" aria-label="Back to posts">
+        <ArrowLeft size={14} />Back
+    </a>
+    <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-slate-700">
         {
             post.data.tag && (
                 <a
@@ -106,7 +106,7 @@ const blogPostingSchema = {
                 </div>
             )
         }
-    </div>
+    </Heading>
     <div class="mb-10">
         <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl"
             >{post.data.title}</Heading
