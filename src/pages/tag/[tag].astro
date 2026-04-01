@@ -34,14 +34,15 @@ const allPosts = getPostsByTag(tag);
       <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
       <span>All posts</span>
   </a>
-  <div class="flex flex-row gap-2 my-5 2xl">
-    <Heading as="h1">Posts tagged with</Heading><Heading
+  <div class="flex flex-row gap-2 xl">
+    <Heading as="h1">Posts tagged with</Heading>
+    <Heading
       as="h1"
       weight="bold"
       class="underline">{deslugify(tag)}</Heading
     >
   </div>
-  <div class="grid grid-col gap-5">
+  <div class="grid grid-col gap-8 mb-5">
     {
       allPosts.map((post) => (
         <ContentCard
