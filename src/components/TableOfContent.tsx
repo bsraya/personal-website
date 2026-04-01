@@ -1,11 +1,40 @@
-import { createSignal, Show, For } from "solid-js";
+import { createSignal, For, onMount, onCleanup } from "solid-js";
 import type { Heading } from "../types/heading";
 import { ChevronUp, ChevronDown, List } from "lucide-solid";
 import clickOutside from "@lib/click-outside";
 
+// This import is necessary for the directive to work
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _clickOutside = clickOutside;
+
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
+  const [visible, setVisible] = createSignal(false);
   const toggleToc = () => setTocOpen(!tocOpen());
+
+  onMount(() => {
+    let lastScrollY = window.scrollY;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const scrollingDown = currentY > lastScrollY;
+
+      // Close dropdown on any scroll
+      setTocOpen(false);
+
+      // Show when scrolled past threshold and scrolling up; hide otherwise
+      if (currentY <= 100) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+
+      lastScrollY = currentY;
+    };
+
+    window.addEventListener("scroll", onScroll);
+    onCleanup(() => window.removeEventListener("scroll", onScroll));
+  });
 
   const depthStyles: Record<number, string> = {
     2: "pl-0 font-semibold text-slate-800",
@@ -15,7 +44,7 @@ export default function TableOfContent({ url, headings }: { url: string, heading
 
   return (
     <div
-      class="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 w-[280px] rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-200/60 overflow-hidden"
+      class={`fixed top-0 left-1/2 -translate-x-1/2 z-20 w-[250px] rounded-xl border border-slate-200 bg-white overflow-hidden transition-transform duration-250 ease-in-out ${visible() ? "translate-y-4" : "-translate-y-full"}`}
       use:clickOutside={() => setTocOpen(false)}
     >
       <button
@@ -27,21 +56,21 @@ export default function TableOfContent({ url, headings }: { url: string, heading
         <List size={14} class="text-slate-500 shrink-0 block" />
         <span class="text-sm">Table of Contents</span>
         <span class="ml-auto flex items-center text-slate-400">
-          <Show when={tocOpen()} fallback={<ChevronUp size={14} class="block" />}>
-            <ChevronDown size={14} class="block" />
-          </Show>
+          {tocOpen() ? <ChevronUp size={14} class="block" /> : <ChevronDown size={14} class="block" />}
         </span>
       </button>
-      <Show when={tocOpen()}>
-        <ul
-          id="toc-list"
-          class="toc border-t border-slate-100 flex flex-col py-2 px-4 max-h-64 overflow-y-auto"
-        >
+      <div
+        id="toc-list"
+        class={`grid transition-all duration-250 ease-in-out ${tocOpen() ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+      >
+        <div class="min-h-0 overflow-hidden">
+        <ul class="toc border-t border-slate-100 flex flex-col py-4 px-4">
           <For each={headings}>
             {(heading) => (
               <li class={`${depthStyles[heading.depth] ?? "pl-0"} py-1`}>
                 <a
                   href={`${url}#${heading.slug}`}
+                  onClick={() => setTocOpen(false)}
                   class="block leading-snug hover:text-blue-600 transition-colors"
                 >
                   {heading.text}
@@ -50,7 +79,8 @@ export default function TableOfContent({ url, headings }: { url: string, heading
             )}
           </For>
         </ul>
-      </Show>
+        </div>
+      </div>
     </div>
   );
 }
