@@ -1,6 +1,10 @@
 import { Menu, X } from "lucide-solid";
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, onMount, onCleanup } from "solid-js";
 import clickOutside from "@lib/click-outside";
+
+// This import is necessary for the directive to work
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _clickOutside = clickOutside;
 
 const navLinks = [
   { href: "/", label: "Home", external: false },
@@ -13,11 +17,22 @@ const navLinks = [
 
 export default function BurgerMenuSolid() {
   const [show, setShow] = createSignal(false);
+  const [sticky, setSticky] = createSignal(false);
   const toggle = () => setShow((s) => !s);
   const close = () => setShow(false);
 
+  onMount(() => {
+    const onScroll = () => setSticky(window.scrollY > 100);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    onCleanup(() => window.removeEventListener("scroll", onScroll));
+  });
+
   return (
-    <div class="relative z-40" use:clickOutside={close}>
+    <div
+      class="z-40 fixed top-4 right-4 rounded-xl border border-transparent bg-white burger-sticky-border md:relative md:top-auto md:right-auto md:rounded-none md:border-0 md:bg-transparent md:[animation:none]"
+      use:clickOutside={close}
+    >
       <button
         aria-label={show() ? "Close menu" : "Open menu"}
         aria-expanded={show()}
@@ -29,7 +44,7 @@ export default function BurgerMenuSolid() {
         </Show>
       </button>
       <Show when={show()}>
-        <ul class="absolute top-[calc(100%+0.5rem)] right-0 w-52 bg-white rounded-xl border border-slate-200 shadow-lg shadow-slate-200/60 py-1 overflow-hidden">
+        <ul class="absolute top-[calc(100%+0.5rem)] right-0 w-52 bg-white rounded-xl border border-slate-200 py-1 overflow-hidden">
           {navLinks.map(({ href, label, external }) => (
             <li>
               <a

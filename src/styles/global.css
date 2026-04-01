@@ -59,6 +59,23 @@ code::after {
   content: "`";
 }
 
+@layer utilities {
+  .burger-sticky-border {
+    animation: burger-sticky-border both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+
+  @keyframes burger-sticky-border {
+    from {
+      border-color: transparent;
+    }
+    to {
+      border-color: var(--color-slate-200);
+    }
+  }
+}
+
 .table-wrapper {
   display: inline-block;
   overflow-y: auto;
