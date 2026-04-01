@@ -81,8 +81,9 @@ const blogPostingSchema = {
     articleTag={post.data.tag}
     schema={blogPostingSchema}
 >
-    <a href="/posts" class="w-fit flex items-center gap-1 hover:gap-2 transition-gap duration-150" aria-label="Back to posts">
-        <ArrowLeft size={14} />Back
+    <a href="/posts" class="w-fit flex items-center gap-1 group" aria-label="Back to posts">
+        <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
+        <span>Back</span>
     </a>
     <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-slate-700">
         {

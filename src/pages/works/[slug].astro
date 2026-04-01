@@ -70,8 +70,9 @@ const creativeWorkSchema = {
     keywords={work.data.keywords ?? []}
     schema={creativeWorkSchema}
 >
-    <a href="/works" class="w-fit flex items-center gap-1 hover:gap-2 transition-gap duration-150" aria-label="Back to works">
-        <ArrowLeft size={14} />Back
+    <a href="/works" class="w-fit flex items-center gap-1 group" aria-label="Back to works">
+        <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
+        <span>Back</span>
     </a>
     <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-slate-700">
         {work.data.tag && <p>{work.data.tag}</p>}
