@@ -1,10 +1,5 @@
 import { Menu, X } from "lucide-solid";
 import { Show, createSignal, onMount, onCleanup } from "solid-js";
-import clickOutside from "@lib/click-outside";
-
-// This import is necessary for the directive to work
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _clickOutside = clickOutside;
 
 const navLinks = [
   { href: "/", label: "Home", external: false },
@@ -20,18 +15,27 @@ export default function BurgerMenuSolid() {
   const [sticky, setSticky] = createSignal(false);
   const toggle = () => setShow((s) => !s);
   const close = () => setShow(false);
+  let containerRef: HTMLDivElement | undefined;
 
   onMount(() => {
     const onScroll = () => setSticky(window.scrollY > 100);
     onScroll();
     window.addEventListener("scroll", onScroll);
     onCleanup(() => window.removeEventListener("scroll", onScroll));
+
+    const onClickOutside = (e: MouseEvent) => {
+      if (containerRef && !e.composedPath().includes(containerRef)) {
+        close();
+      }
+    };
+    document.addEventListener("click", onClickOutside);
+    onCleanup(() => document.removeEventListener("click", onClickOutside));
   });
 
   return (
     <div
+      ref={containerRef}
       class="z-40 fixed top-4 right-4 rounded-xl border border-transparent bg-white burger-sticky-border md:relative md:top-auto md:right-auto md:rounded-none md:border-0 md:bg-transparent md:[animation:none]"
-      use:clickOutside={close}
     >
       <button
         aria-label={show() ? "Close menu" : "Open menu"}

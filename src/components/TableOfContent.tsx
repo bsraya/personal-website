@@ -1,16 +1,12 @@
 import { createSignal, For, onMount, onCleanup } from "solid-js";
 import type { Heading } from "../types/heading";
 import { ChevronUp, ChevronDown, List } from "lucide-solid";
-import clickOutside from "@lib/click-outside";
-
-// This import is necessary for the directive to work
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _clickOutside = clickOutside;
 
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
   const [visible, setVisible] = createSignal(false);
   const toggleToc = () => setTocOpen(!tocOpen());
+  let containerRef: HTMLDivElement | undefined;
 
   onMount(() => {
     let lastScrollY = window.scrollY;
@@ -34,6 +30,14 @@ export default function TableOfContent({ url, headings }: { url: string, heading
 
     window.addEventListener("scroll", onScroll);
     onCleanup(() => window.removeEventListener("scroll", onScroll));
+
+    const onClickOutside = (e: MouseEvent) => {
+      if (containerRef && !e.composedPath().includes(containerRef)) {
+        setTocOpen(false);
+      }
+    };
+    document.addEventListener("click", onClickOutside);
+    onCleanup(() => document.removeEventListener("click", onClickOutside));
   });
 
   const depthStyles: Record<number, string> = {
@@ -44,8 +48,8 @@ export default function TableOfContent({ url, headings }: { url: string, heading
 
   return (
     <div
+      ref={containerRef}
       class={`fixed top-0 left-1/2 -translate-x-1/2 z-20 w-[250px] rounded-xl border border-slate-200 bg-white overflow-hidden transition-transform duration-250 ease-in-out ${visible() ? "translate-y-4" : "-translate-y-full"}`}
-      use:clickOutside={() => setTocOpen(false)}
     >
       <button
         class="flex w-full items-center gap-2 px-4 py-2 font-semibold text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
