@@ -1,0 +1,36 @@
+---
+interface Props {
+  src: string;
+  title?: string;
+}
+
+const { src, title } = Astro.props;
+---
+
+<figure class="w-full my-8">
+  <video-player>
+    <video-skin>
+      <video src={src} playsinline controls></video>
+    </video-skin>
+  </video-player>
+  {
+    title && (
+      <figcaption class="video-caption text-center text-slate-400 text-sm mt-2">
+        {title}
+      </figcaption>
+    )
+  }
+</figure>
+
+<script>
+  // @ts-ignore
+  import "@videojs/html/video/player";
+  // @ts-ignore
+  import "@videojs/html/video/skin";
+</script>
+
+<style>
+  .video-caption {
+    font-family: var(--font-heading);
+  }
+</style>
