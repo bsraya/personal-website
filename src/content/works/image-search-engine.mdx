@@ -95,43 +95,34 @@ to provide more accurate results.
 With Principal Component Analysis (PCA), the dimensionality of the image features can reduced from $2048$ to $200$.
 Consequently, the cosine similarity calculation is sped up and the memory usage is reduced.
 
-import LineChart from "../../components/chart/Line";
-
-<LineChart
-  client:visible
-  data={{
-    labels: [256, 512, 1024, 2048],
-    datasets: [
+```chart
+{
+  "type": "line",
+  "data": {
+    "labels": [256, 512, 1024, 2048],
+    "datasets": [
       {
-        label: "Vector Size",
-        data: [2104, 4152, 8248, 16440],
-        borderColor: "blue",
-        fill: true,
-      },
-    ],
-  }}
-  options={{
-    plugins: {
-      title: {
-        display: true,
-        text: "Vector Size vs. Dimensionality",
-      },
-      legend: {
-        display: true,
-        position: "bottom",
-      },
+        "label": "Vector Size",
+        "data": [2104, 4152, 8248, 16440],
+        "borderColor": "blue",
+        "fill": true
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "title": { "display": true, "text": "Vector Size vs. Dimensionality" },
+      "legend": { "display": true, "position": "bottom" }
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: "Bytes",
-        },
-      },
-    },
-  }}
-/>
+    "scales": {
+      "y": {
+        "beginAtZero": true,
+        "title": { "display": true, "text": "Bytes" }
+      }
+    }
+  }
+}
+```
 
 With $200$ dimensions, they can explain $99\%$ of the variance
 in the original $2048$ dimensions, and the space required is

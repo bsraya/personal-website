@@ -7,23 +7,22 @@ tag: First Work
 published: false
 ---
 
-import LineChart from "../../components/chart/Line";
-
-<LineChart
-  client:visible
-  fallback={<span class="loading loading-spinner loading-xl"></span>}
-  height={500}
-  width={500}
-  data={{
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    datasets: [
+```chart
+{
+  "type": "line",
+  "height": 500,
+  "width": 500,
+  "data": {
+    "labels": ["January", "February", "March", "April", "May"],
+    "datasets": [
       {
-        label: 'Sales',
-        data: [50, 60, 70, 80, 90],
-      },
-    ],
-  }}
-/>
+        "label": "Sales",
+        "data": [50, 60, 70, 80, 90]
+      }
+    ]
+  }
+}
+```
 
 # Introduction
 

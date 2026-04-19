@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { remarkChart } from './src/lib/rehype-chart.mjs';
 
 // Astro Intregrations
 import expressiveCode from "astro-expressive-code";
@@ -43,14 +44,15 @@ export default defineConfig({
     },
     remarkPlugins: [
       remarkMath,
-      [remarkToc, { heading: 'toc', maxDepth: 3 }]
+      [remarkToc, { heading: 'toc', maxDepth: 3 }],
+      remarkChart
     ],
     rehypePlugins: [
       rehypeKatex,
       rehypeHeadingIds,
       rehypeSlug,
       rehypeAccessibleEmojis,
-      [rehypeAutolinkHeadings, { behavior: 'append' }]
+      [rehypeAutolinkHeadings, { behavior: 'append' }],
     ],
     remarkRehype: { footnoteLabel: 'Footnotes' },
     gfm: true

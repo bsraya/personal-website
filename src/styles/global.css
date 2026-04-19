@@ -70,6 +70,7 @@ code::after {
     from {
       border-color: transparent;
     }
+
     to {
       border-color: var(--color-slate-200);
     }
@@ -132,4 +133,14 @@ table tr:last-child td:last-child {
 span.katex-display {
   overflow-x: scroll;
   overflow-y: hidden;
+}
+
+.chart-container {
+  display: block;
+  width: 100%;
+}
+
+.chart-container canvas {
+  display: block;
+  width: 100%;
 }

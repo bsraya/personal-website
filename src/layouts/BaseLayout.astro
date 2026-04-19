@@ -38,5 +38,17 @@ const {
     </main>
     <BackToTop client:load />
     <Footer />
+    <script>
+      import Chart from 'chart.js/auto';
+      document.querySelectorAll<HTMLDivElement>('.chart-container').forEach((container) => {
+        const config = JSON.parse(container.dataset.chart!);
+        config.options ??= {};
+        config.options.responsive ??= true;
+        config.options.maintainAspectRatio ??= false;
+        const canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+        new Chart(canvas, config);
+      });
+    </script>
   </body>
 </html>

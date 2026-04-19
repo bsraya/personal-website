@@ -8,8 +8,6 @@ series: Regression Algorithms
 published: true
 ---
 
-import LineChart from "../../components/chart/Line";
-
 ## What is Linear Regression?
 
 Linear Regression is one of many supervised machine learning algorithms, and it is mosly used to predict the value of a continuous variable, as well as to do forecasting.
@@ -25,37 +23,27 @@ However, Linear Regression also comes with some limitations, such as:
 3. It's sensitive to outliers. Meaning that the presence of outliers can affect the regression line.
 
 
-<LineChart
-    client:visible
-    fallback={<span class="loading loading-spinner loading-xl"></span>}
-    height={300}
-    width={316}
-    data={{
-        labels: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-        datasets: [
-            {
-                label: "y = b + ax",
-                data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-                borderColor: "blue",
-            },
-        ],
-    }}
-    options={{
-        plugins:{
-            title: {
-                display: true,
-                text: "Regression Line",
-                font: {
-                    size: 18
-                }
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-            },
-        }
-    }}
-/>
+```chart
+{
+  "type": "line",
+  "data": {
+    "labels": [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    "datasets": [
+      {
+        "label": "y = b + ax",
+        "data": [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+        "borderColor": "blue"
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "title": { "display": true, "text": "Regression Line", "font": { "size": 18 } },
+      "legend": { "display": true, "position": "bottom" }
+    }
+  }
+}
+```
 
 From the graph above, we can see that the relationship between $x$ and $y$ is linear since the blue line starts from the bottom left to the top right.
 That line is called a regression line, and it can be expressed using the following equation.
@@ -91,55 +79,49 @@ From the translation above can tell us the relationship between those two variab
 Now you will be wondering their correlations whether `sepal_length` and `petal_width` are correlated or inversely correlated.
 First, let's translate what the two graphs below are trying to tell us.
 
-<LineChart
-    client:visible
-    fallback={<span class="loading loading-spinner loading-xl"></span>}
-    height={300}
-    width={316}
-    data={{
-    labels: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-    datasets: [
-        {
-            label: "Positively Correlated Regression Line",
-            data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-            borderColor: "green",
-        },
-    ],
-    }}
-    options={{
-        plugins: {
-            legend: {
-            display: true,
-            position: "bottom",
-            },
-        },
-    }}
-    />
+```chart
+{
+  "type": "line",
+  "height": 300,
+  "data": {
+    "labels": [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    "datasets": [
+      {
+        "label": "Positively Correlated Regression Line",
+        "data": [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+        "borderColor": "green"
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "legend": { "display": true, "position": "bottom" }
+    }
+  }
+}
+```
 
-<LineChart
-    client:visible
-    fallback={<span class="loading loading-spinner loading-xl"></span>}
-    height={300}
-    width={316}
-    data={{
-    labels: [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0],
-    datasets: [
-        {
-            label: "Negatively Correlated Regression Line",
-            data: [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0],
-            borderColor: "red",
-        },
-    ],
-    }}
-    options={{
-        plugins: {
-            legend: {
-            display: true,
-            position: "bottom",
-            },
-        },
-    }}
-    />
+```chart
+{
+  "type": "line",
+  "height": 300,
+  "data": {
+    "labels": [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0],
+    "datasets": [
+      {
+        "label": "Negatively Correlated Regression Line",
+        "data": [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0],
+        "borderColor": "red"
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "legend": { "display": true, "position": "bottom" }
+    }
+  }
+}
+```
 
 `sepal_length` and `petal_width` are said to be correlated when `sepal_length` increases, the `petal_length` also increases.
 Conversely, `sepal_length` and `petal_width` are said to be inversely correlated when `sepal_length` increases, but the `petal_width` decreases.

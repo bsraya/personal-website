@@ -8,8 +8,6 @@ series: Monte Carlo Experiments
 published: true
 ---
 
-import ScatterChart from "@component/chart/Scatter";
-
 ## A Quarter of A Circle
 
 ![A quarter of a circle with random data points](/assets/posts/pi-value-approximation/quarter_circle.png "A quarter of a circle with random data points")
@@ -60,88 +58,71 @@ plot!(x -> -sqrt(1 - x^2), -1, 1, c=:black, lw=2)
 
 ## Pi Value Precision
 
-<ScatterChart
-  client:visible
-  height={500}
-  width={500}
-  options={{
-    plugins: {
-    title: {
-      display: true,
-      text: 'Pi Precision Over Iteration',
-      color: 'black',
-      font: {
-        size: 20
-      }
-    }
-  },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Iteration',
-          color: 'black'
-        },
-        ticks: {
-          color: 'black',
-          padding: 10
-        }
+```chart
+{
+  "type": "scatter",
+  "data": {
+    "datasets": [
+      {
+        "type": "line",
+        "label": "pi value",
+        "data": [
+          { "x": 0, "y": 3.14 },
+          { "x": 1000000, "y": 3.14 }
+        ]
       },
-      y: {
-        title: {
-          display: true,
-          text: 'pi value',
-          color: 'black'
-        },
-        ticks: {
-          color: 'black',
-          padding: 10
-        },
-        min: 2.9,
-        max: 3.3
+      {
+        "type": "scatter",
+        "label": "pi approximations",
+        "data": [
+          { "x": 10, "y": 3.2 },
+          { "x": 20, "y": 3.6 },
+          { "x": 50, "y": 2.96 },
+          { "x": 100, "y": 2.92 },
+          { "x": 200, "y": 3.26 },
+          { "x": 500, "y": 3.208 },
+          { "x": 1000, "y": 3.128 },
+          { "x": 2000, "y": 3.16 },
+          { "x": 5000, "y": 3.1224 },
+          { "x": 10000, "y": 3.124 },
+          { "x": 20000, "y": 3.1336 },
+          { "x": 50000, "y": 3.15224 },
+          { "x": 70000, "y": 3.1414857142857144 },
+          { "x": 100000, "y": 3.1408 },
+          { "x": 200000, "y": 3.14 },
+          { "x": 500000, "y": 3.142152 },
+          { "x": 700000, "y": 3.1442342857142855 },
+          { "x": 1000000, "y": 3.140408 }
+        ],
+        "borderColor": "rgb(42, 65, 177)",
+        "backgroundColor": "rgba(42, 65, 177, 0.5)"
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Pi Precision Over Iteration",
+        "color": "black",
+        "font": { "size": 20 }
+      }
+    },
+    "scales": {
+      "x": {
+        "title": { "display": true, "text": "Iteration", "color": "black" },
+        "ticks": { "color": "black", "padding": 10 }
+      },
+      "y": {
+        "title": { "display": true, "text": "pi value", "color": "black" },
+        "ticks": { "color": "black", "padding": 10 },
+        "min": 2.9,
+        "max": 3.3
       }
     }
-  }}
-  data={{
-      datasets: [
-        {
-          type: 'line',
-          label: 'pi value',
-          data: [
-            {'x': 0, 'y': 3.14},
-            {'x': 1000000, 'y': 3.14}
-          ],
-        },
-        {
-          type: 'scatter',
-          label: 'pi approximations',
-          data: [
-            {'x': 10, 'y': 3.2},
-            {'x': 20, 'y': 3.6},
-            {'x': 50, 'y': 2.96},
-            {'x': 100, 'y': 2.92},
-            {'x': 200, 'y': 3.26},
-            {'x': 500, 'y': 3.208},
-            {'x': 1000, 'y': 3.128},
-            {'x': 2000, 'y': 3.16},
-            {'x': 5000, 'y': 3.1224},
-            {'x': 10000, 'y': 3.124},
-            {'x': 20000, 'y': 3.1336},
-            {'x': 50000, 'y': 3.15224},
-            {'x': 70000, 'y': 3.1414857142857144},
-            {'x': 100000, 'y': 3.1408},
-            {'x': 200000, 'y': 3.14},
-            {'x': 500000, 'y': 3.142152},
-            {'x': 700000, 'y': 3.1442342857142855},
-            {'x': 1000000, 'y': 3.140408}
-          ],
-          borderColor: 'rgb(42, 65, 177)',
-          backgroundColor: 'rgba(42, 65, 177, 0.5)',
-        }
-      ],
-      pointRadius: 10,
-  }}
-/>
+  }
+}
+```
 
 ```julia
 function approximate_pi(n)
