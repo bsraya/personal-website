@@ -1,5 +1,4 @@
 import { createSignal, onMount, onCleanup } from 'solid-js';
-import { ChevronUp } from 'lucide-solid';
 
 export default function BackToTop() {
   const [visible, setVisible] = createSignal(false);
@@ -34,9 +33,9 @@ export default function BackToTop() {
         type='button'
         onClick={scrollToTopFn}
         aria-label="Back to top"
-        class={`flex items-center gap-2 p-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-transform duration-250 cursor-pointer ${visible() ? "translate-y-0" : "translate-y-[calc(100%+2.5rem)]"}`}
+        class={`flex items-center gap-2 p-4 rounded-full border border-slate-200 backdrop-blur-xs hover:bg-slate-50 transition-transform duration-250 cursor-pointer ${visible() ? "translate-y-0" : "translate-y-[calc(100%+2.5rem)]"}`}
       >
-        <ChevronUp size={24} class="text-slate-500 block" />
+        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 block"><path d="m18 15-6-6-6 6" /></svg>
       </button>
     </div>
   );
