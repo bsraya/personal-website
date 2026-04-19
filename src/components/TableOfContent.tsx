@@ -48,7 +48,7 @@ export default function TableOfContent({ url, headings }: { url: string, heading
   return (
     <div
       ref={containerRef}
-      class={`fixed top-0 left-1/2 -translate-x-1/2 z-20 w-[250px] rounded-xl border border-slate-200 backdrop-blur-xs overflow-hidden transition-transform duration-250 ease-in-out ${visible() ? "translate-y-4" : "-translate-y-full"}`}
+      class={`fixed top-0 left-1/2 -translate-x-1/2 z-20 w-[250px] rounded-xl border border-slate-200 backdrop-blur-xs overflow-hidden transition-transform ${visible() ? "duration-300 ease-out translate-y-4" : "duration-500 ease-in -translate-y-full"}`}
     >
       <button
         class="flex w-full items-center gap-2 px-4 py-2 font-semibold text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
