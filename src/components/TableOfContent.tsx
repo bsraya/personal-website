@@ -1,42 +1,20 @@
 import { createSignal, For, onMount, onCleanup } from "solid-js";
 import type { Heading } from "../types/heading";
+import { useDismiss } from "../lib/use-dismiss";
 
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
   const [visible, setVisible] = createSignal(false);
   const toggleToc = () => setTocOpen(!tocOpen());
+  const closeToc = () => setTocOpen(false);
   let containerRef: HTMLDivElement | undefined;
 
+  useDismiss(() => containerRef, closeToc);
+
   onMount(() => {
-    let lastScrollY = window.scrollY;
-
-    const onScroll = () => {
-      const currentY = window.scrollY;
-      const scrollingDown = currentY > lastScrollY;
-
-      // Close dropdown on any scroll
-      setTocOpen(false);
-
-      // Show when scrolled past threshold and scrolling up; hide otherwise
-      if (currentY <= 100) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
-
-      lastScrollY = currentY;
-    };
-
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => setVisible(window.scrollY > 100);
+    window.addEventListener("scroll", onScroll, { passive: true });
     onCleanup(() => window.removeEventListener("scroll", onScroll));
-
-    const onClickOutside = (e: MouseEvent) => {
-      if (containerRef && !e.composedPath().includes(containerRef)) {
-        setTocOpen(false);
-      }
-    };
-    document.addEventListener("click", onClickOutside);
-    onCleanup(() => document.removeEventListener("click", onClickOutside));
   });
 
   const depthStyles: Record<number, string> = {

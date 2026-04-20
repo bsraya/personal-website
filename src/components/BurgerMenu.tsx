@@ -1,4 +1,5 @@
 import { Show, createSignal, onMount, onCleanup } from "solid-js";
+import { useDismiss } from "../lib/use-dismiss";
 
 const navLinks = [
   { href: "/", label: "Home", external: false },
@@ -16,19 +17,13 @@ export default function BurgerMenuSolid() {
   const close = () => setShow(false);
   let containerRef: HTMLDivElement | undefined;
 
+  useDismiss(() => containerRef, close);
+
   onMount(() => {
     const onScroll = () => setSticky(window.scrollY > 100);
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     onCleanup(() => window.removeEventListener("scroll", onScroll));
-
-    const onClickOutside = (e: MouseEvent) => {
-      if (containerRef && !e.composedPath().includes(containerRef)) {
-        close();
-      }
-    };
-    document.addEventListener("click", onClickOutside);
-    onCleanup(() => document.removeEventListener("click", onClickOutside));
   });
 
   return (
