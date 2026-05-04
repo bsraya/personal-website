@@ -113,8 +113,8 @@ export default function VectorSpaceVisualizer() {
               </>
             )}
           </For>
-          <line x1="5" y1="95" x2="95" y2="95" stroke="rgb(148,163,184)" stroke-width="0.6" />
-          <line x1="5" y1="5" x2="5" y2="95" stroke="rgb(148,163,184)" stroke-width="0.6" />
+          <line x1="5" y1="95" x2="95" y2="95" stroke="rgb(148,163,184)" stroke-width="1" />
+          <line x1="5.5" y1="5" x2="5.5" y2="95" stroke="rgb(148,163,184)" stroke-width="1" />
         </svg>
 
         {/* Connection lines at stage 2 */}
@@ -201,14 +201,14 @@ export default function VectorSpaceVisualizer() {
           dim[0]
         </span>
         <span
-          class="absolute top-2 left-1 text-[9px] font-[family-name:var(--font-monospace)] text-slate-400 pointer-events-none"
+          class="absolute top-2 left-3 text-[9px] font-[family-name:var(--font-monospace)] text-slate-400 pointer-events-none"
           style="writing-mode: vertical-rl; transform: rotate(180deg);"
         >
           dim[1]
         </span>
 
         {/* Legend */}
-        <div class="bg-white absolute top-5 right-4 flex flex-col gap-1.5 pointer-events-none p-3 rounded-lg" style="z-index: 5;">
+        <div class="bg-white absolute top-5 left-12 flex flex-col gap-1.5 pointer-events-none p-3 rounded-lg" style="z-index: 5;">
           <div class="flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-blue-500 opacity-60 shrink-0" />
             <span class="text-[9px] font-[family-name:var(--font-monospace)] text-slate-500">safe_cluster</span>
