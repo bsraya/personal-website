@@ -85,7 +85,7 @@ const blogPostingSchema = {
         <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
         <span>All posts</span>
     </a>
-    <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-slate-700">
+    <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-text-subtle">
         {
             post.data.tag && (
                 <a
@@ -109,10 +109,10 @@ const blogPostingSchema = {
         }
     </Heading>
     <div class="mb-10">
-        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl"
+        <Heading as="h1" size="3xl" weight="bold" class="lg:text-4xl"
             >{post.data.title}</Heading
         >
-        <p class="text-slate-600">{post.data.description}</p>
+        <p class="text-text-muted">{post.data.description}</p>
     </div>
     {
         post.data.series && (

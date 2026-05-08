@@ -74,7 +74,7 @@ const creativeWorkSchema = {
         <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
         <span>All works</span>
     </a>
-    <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-slate-700">
+    <Heading as="h3" size="sm" class="flex gap-2 mt-5 mb-2 text-text-subtle">
         {work.data.tag && <p>{work.data.tag}</p>}
         <p>•</p>
         {
@@ -89,10 +89,10 @@ const creativeWorkSchema = {
         }
     </Heading>
     <div class="mb-10">
-        <Heading as="h1" weight="bold" class="lg:text-4xl text-3xl"
+        <Heading as="h1" size="3xl" weight="bold" class="lg:text-4xl"
             >{work.data.title}</Heading
         >
-        <p class="text-slate-600">{work.data.description}</p>
+        <p class="text-text-muted">{work.data.description}</p>
     </div>
     <Content components={MdxComponents} />
     {

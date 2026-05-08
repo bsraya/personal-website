@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System — bijonsetyawan.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       DESIGN TOKENS — this :root block is the source of truth.
+       Mirror into global.css via @theme (see § Implementation).
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      /* ─── Fonts ──────────────────────────────────────────────── */
+      --font-body:    'DM Sans',         sans-serif;
+      --font-heading: 'Newsreader',      serif;
+      --font-mono:    'Share Tech Mono', monospace;
+
+      /* ─── Type scale (minor third ×1.25 from 16px base) ─────── */
+      --text-xs:   0.64rem;    /* ~10px */
+      --text-sm:   0.8rem;     /* ~13px */
+      --text-base: 1rem;       /*  16px */
+      --text-lg:   1.25rem;    /*  20px */
+      --text-xl:   1.563rem;   /* ~25px */
+      --text-2xl:  1.953rem;   /* ~31px */
+      --text-3xl:  2.441rem;   /* ~39px */
+      --text-4xl:  3.052rem;   /* ~49px */
+      --text-5xl:  3.815rem;   /* ~61px */
+
+      /* ─── Semantic type roles ─────────────────────────────────── */
+      --role-label:   var(--text-sm);    /* dates, tags, meta        */
+      --role-body:    var(--text-base);  /* prose paragraphs         */
+      --role-lead:    var(--text-lg);    /* descriptions, subtitles  */
+      --role-h3:      var(--text-xl);    /* subsections, card titles */
+      --role-h2:      var(--text-2xl);   /* section headings         */
+      --role-h1:      var(--text-3xl);   /* page / post titles       */
+      --role-display: var(--text-4xl);   /* hero name                */
+
+      /* ─── Line heights ───────────────────────────────────────── */
+      --leading-tight:   1.1;
+      --leading-snug:    1.25;
+      --leading-normal:  1.5rem;
+
+      /* ─── Letter spacing ─────────────────────────────────────── */
+      --tracking-tight:   -0.02em;
+      --tracking-normal:   0em;
+      --tracking-wide:     0.05em;
+      --tracking-widest:   0.1em;
+
+      /* ─── Raw neutral scale (OKLCH, slightly cool tilt) ─────── */
+      --neutral-950: oklch(10%  0.005 250);
+      --neutral-900: oklch(18%  0.008 250);
+      --neutral-800: oklch(28%  0.010 250);
+      --neutral-700: oklch(38%  0.010 250);
+      --neutral-600: oklch(48%  0.010 250);
+      --neutral-500: oklch(58%  0.010 250);
+      --neutral-400: oklch(68%  0.010 250);
+      --neutral-300: oklch(78%  0.008 250);
+      --neutral-200: oklch(88%  0.006 250);
+      --neutral-100: oklch(94%  0.004 250);
+      --neutral-50:  oklch(98%  0.002 250);
+
+      /* ─── Accent (blue) ──────────────────────────────────────── */
+      --blue-600: oklch(50% 0.15 252);
+      --blue-800: oklch(38% 0.13 252);
+
+      /* ─── Semantic color tokens ──────────────────────────────── */
+      --color-text:          var(--neutral-950);
+      --color-text-muted:    var(--neutral-600);
+      --color-text-subtle:   var(--neutral-500);
+      --color-text-disabled: var(--neutral-400);
+      --color-bg:            #ffffff;
+      --color-surface:       var(--neutral-50);
+      --color-border:        var(--neutral-200);
+      --color-border-strong: var(--neutral-300);
+      --color-accent:        var(--blue-600);
+      --color-accent-hover:  var(--blue-800);
+
+      /* ─── Spacing (4px base) ─────────────────────────────────── */
+      --space-1:  0.25rem;
+      --space-2:  0.5rem;
+      --space-3:  0.75rem;
+      --space-4:  1rem;
+      --space-5:  1.25rem;
+      --space-6:  1.5rem;
+      --space-8:  2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+
+      /* ─── Semantic spacing ───────────────────────────────────── */
+      --space-element: var(--space-4);   /* within a component      */
+      --space-block:   var(--space-8);   /* between sibling cards   */
+      --space-section: var(--space-20);  /* between page sections   */
+
+      /* ─── Border radius ──────────────────────────────────────── */
+      --radius-sm:   0.25rem;
+      --radius-md:   0.5rem;
+      --radius-lg:   0.75rem;
+      --radius-xl:   1.25rem;
+      --radius-full: 9999px;
+
+      /* ─── Shadows ────────────────────────────────────────────── */
+      --shadow-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.04);
+      --shadow-md: 0 4px 12px -2px oklch(0% 0 0 / 0.07);
+      --shadow-lg: 0 8px 24px -4px oklch(0% 0 0 / 0.12);
+
+      /* ─── Motion ─────────────────────────────────────────────── */
+      --duration-fast:  100ms;
+      --duration-base:  200ms;
+      --duration-slow:  400ms;
+      --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-in-out: cubic-bezier(0.40, 0, 0.20, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* ─── Z-index ─────────────────────────────────────────────── */
+      --z-raised:  10;
+      --z-overlay: 20;
+      --z-modal:   30;
+      --z-toast:   40;
+      --z-tooltip: 50;
+    }
+
+    /* ─── Base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .page { max-width: 52rem; margin: 0 auto; padding: 0 var(--space-6); }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .ds-header {
+      padding: var(--space-16) 0 var(--space-10);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-16);
+    }
+    .ds-eyebrow {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+      margin-bottom: var(--space-3);
+    }
+    .ds-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-5xl);
+      font-weight: 300;
+      font-style: italic;
+      line-height: var(--leading-tight);
+      letter-spacing: var(--tracking-tight);
+    }
+    .ds-subtitle {
+      margin-top: var(--space-4);
+      font-size: var(--text-lg);
+      color: var(--color-text-muted);
+      line-height: var(--leading-normal);
+    }
+    .ds-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-6);
+      margin-top: var(--space-8);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+    }
+    .ds-toc a {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+    .ds-toc a:hover { color: var(--color-accent); }
+
+    /* ─── Section ────────────────────────────────────────────── */
+    .ds-section {
+      padding-bottom: var(--space-20);
+      margin-bottom: var(--space-20);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .ds-section:last-of-type { border-bottom: none; }
+    .ds-section-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-3xl);
+      font-weight: 400;
+      font-style: italic;
+      line-height: var(--leading-snug);
+      letter-spacing: var(--tracking-tight);
+      margin-bottom: var(--space-10);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    /* ─── Group ──────────────────────────────────────────────── */
+    .ds-group { margin-bottom: var(--space-12); }
+    .ds-group:last-child { margin-bottom: 0; }
+    .ds-group-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+      margin-bottom: var(--space-5);
+    }
+
+    /* ─── Utilities ──────────────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+    @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-10) 0; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      color: var(--color-accent);
+      background: var(--color-surface);
+      padding: 0.1em 0.35em;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: var(--leading-normal);
+      color: var(--color-text);
+      tab-size: 2;
+    }
+    pre code { all: unset; font-family: inherit; font-size: inherit; }
+    .c { color: var(--color-text-subtle); }
+    .p { color: var(--color-accent); }
+    .v { color: var(--color-text-muted); }
+    .s { color: var(--color-text); font-weight: 500; }
+    .k { color: var(--color-text); font-weight: 700; }
+
+    /* ═══════════════════════════════════════════════════════════
+       TYPOGRAPHY SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .font-demo {
+      padding: var(--space-5) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .font-demo:last-child { border-bottom: none; }
+    .font-demo-meta {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+    .font-demo-name {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+    }
+    .font-demo-specs {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--color-text-subtle);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 9rem 1fr;
+      gap: var(--space-4);
+      align-items: baseline;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-row-meta { text-align: right; }
+    .type-row-token { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); display: block; }
+    .type-row-size  { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-disabled); display: block; }
+
+    .role-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    .role-table th {
+      text-align: left;
+      padding: var(--space-2) var(--space-3) var(--space-3);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .role-table td { padding: var(--space-3); border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); }
+    .role-table td:first-child { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); }
+    .role-table td:nth-child(2) { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); }
+    .role-table tr:last-child td { border-bottom: none; }
+
+    /* ═══════════════════════════════════════════════════════════
+       COLOR SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+      gap: var(--space-3);
+    }
+    .color-swatch { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); }
+    .swatch-chip { height: 3.5rem; }
+    .swatch-info { padding: var(--space-2) var(--space-3); background: var(--color-surface); }
+    .swatch-token { font-family: var(--font-mono); font-size: 0.62rem; color: var(--color-text-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .swatch-alias { font-family: var(--font-mono); font-size: 0.58rem; color: var(--color-text-subtle); }
+
+    .neutral-strip { display: flex; height: 2.5rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); margin-bottom: var(--space-2); }
+    .neutral-step { flex: 1; }
+    .neutral-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+    .usage-row {
+      display: grid;
+      grid-template-columns: 0.75rem 1fr auto;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .usage-row:last-child { border-bottom: none; }
+    .usage-dot { width: 0.75rem; height: 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); }
+    .usage-token { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); white-space: nowrap; }
+
+    /* ═══════════════════════════════════════════════════════════
+       SPACING SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .spacing-row { display: grid; grid-template-columns: 9rem auto 1fr; align-items: center; gap: var(--space-4); padding: var(--space-2) 0; }
+    .spacing-label { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+    .spacing-bar { height: 1.25rem; background: var(--color-accent); opacity: 0.2; border-radius: 2px; min-width: 2px; }
+    .spacing-bar.hi { opacity: 0.65; }
+    .spacing-value { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+    /* ═══════════════════════════════════════════════════════════
+       RADIUS & SHADOW SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .radius-grid { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+    .radius-wrap { text-align: center; }
+    .radius-box { width: 4.5rem; height: 4.5rem; background: var(--color-surface); border: 1.5px solid var(--color-border-strong); margin-bottom: var(--space-2); }
+    .radius-name { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+    .shadow-grid { display: flex; gap: var(--space-10); flex-wrap: wrap; }
+    .shadow-wrap { text-align: center; }
+    .shadow-box { width: 5.5rem; height: 4rem; background: var(--color-bg); border-radius: var(--radius-md); margin-bottom: var(--space-2); }
+    .shadow-name { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOTION SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .motion-grid { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+    .motion-wrap { text-align: center; }
+    .motion-box {
+      width: 3.5rem; height: 3.5rem;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      margin-bottom: var(--space-2);
+    }
+    .motion-box:hover { background: var(--color-accent); border-color: var(--color-accent); transform: translateY(-6px); }
+    .t-fast   { transition: all var(--duration-fast)  var(--ease-out); }
+    .t-base   { transition: all var(--duration-base)  var(--ease-out); }
+    .t-slow   { transition: all var(--duration-slow)  var(--ease-out); }
+    .t-spring { transition: all var(--duration-base)  var(--ease-spring); }
+    .motion-label { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+    /* ═══════════════════════════════════════════════════════════
+       COMPONENT SECTION
+       ═══════════════════════════════════════════════════════════ */
+    .c-frame {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+    .c-frame:last-child { margin-bottom: 0; }
+    .c-frame-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+      margin-bottom: var(--space-6);
+    }
+    .c-note {
+      font-size: var(--text-xs);
+      color: var(--color-text-subtle);
+      font-style: italic;
+      margin-top: var(--space-5);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* Component: Nav */
+    .c-nav { display: flex; align-items: center; justify-content: space-between; }
+    .c-nav-brand { font-family: var(--font-heading); font-size: var(--text-xl); font-weight: 500; color: var(--color-text); text-decoration: none; }
+    .c-nav-btn {
+      width: 2.25rem; height: 2.25rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--color-text-muted); background: transparent;
+      transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+    }
+    .c-nav-btn:hover { background: var(--color-surface); color: var(--color-text); }
+
+    /* Component: ContentCard */
+    .c-card-date { font-size: var(--role-label); color: var(--color-text-subtle); margin-bottom: var(--space-1); }
+    .c-card-title {
+      font-family: var(--font-heading);
+      font-size: var(--role-h2);
+      font-weight: 500;
+      line-height: var(--leading-snug);
+      letter-spacing: var(--tracking-tight);
+      margin-bottom: var(--space-2);
+    }
+    .c-card-title a { text-decoration: none; color: var(--color-text); }
+    .c-card-title a:hover { text-decoration: underline; text-decoration-color: var(--color-border-strong); text-underline-offset: 3px; }
+    .c-card-desc { font-size: var(--role-body); color: var(--color-text-muted); line-height: var(--leading-normal); }
+
+    /* Component: Post header */
+    .c-post-meta { display: flex; align-items: center; gap: var(--space-3); font-size: var(--role-label); color: var(--color-text-subtle); margin-bottom: var(--space-4); }
+    .c-post-meta a { color: var(--color-text-subtle); text-decoration: underline; text-underline-offset: 2px; }
+    .c-post-title { font-family: var(--font-heading); font-size: var(--role-h1); font-weight: 700; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); margin-bottom: var(--space-3); }
+    .c-post-desc { font-size: var(--role-lead); color: var(--color-text-muted); line-height: var(--leading-normal); }
+
+    /* Component: Back link */
+    .c-back { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--role-body); color: var(--color-text); text-decoration: none; transition: gap var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+    .c-back:hover { gap: var(--space-2); color: var(--color-accent); }
+
+    /* Component: Inline link */
+    .c-link { color: var(--color-accent); text-decoration: underline; text-decoration-color: oklch(50% 0.15 252 / 0.4); text-underline-offset: 2px; transition: color var(--duration-fast) var(--ease-out), text-decoration-color var(--duration-fast) var(--ease-out); }
+    .c-link:hover { color: var(--color-accent-hover); text-decoration-color: var(--color-accent-hover); }
+    .c-link-ext::after { content: ' ↗'; font-size: 0.75em; opacity: 0.6; }
+
+    /* Component: Blockquote */
+    .c-blockquote { border-left: 3px solid var(--color-accent); background: oklch(50% 0.15 252 / 0.05); padding: var(--space-4) var(--space-5); margin: var(--space-8) 0; border-radius: 0 var(--radius-md) var(--radius-md) 0; font-style: italic; color: var(--color-text-muted); line-height: var(--leading-normal); }
+
+    /* Component: Tag chip */
+    .c-tag { display: inline-flex; align-items: center; font-size: var(--text-xs); font-weight: 500; letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-text-muted); background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-1) var(--space-2); border-radius: var(--radius-full); text-decoration: none; transition: border-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+    .c-tag:hover { border-color: var(--color-border-strong); color: var(--color-text); }
+
+    /* Component: See more */
+    .c-see-more { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--role-body); color: var(--color-text); text-decoration: none; transition: gap var(--duration-fast) var(--ease-out); }
+    .c-see-more:hover { gap: var(--space-2); }
+
+    /* Footer */
+    .ds-footer { padding: var(--space-12) 0 var(--space-20); font-size: var(--text-sm); color: var(--color-text-subtle); }
+
+    /* Generic table shared by z-index and motion sections */
+    .ds-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    .ds-table th { text-align: left; padding: var(--space-2) var(--space-3) var(--space-3); font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-text-subtle); border-bottom: 1px solid var(--color-border); }
+    .ds-table td { padding: var(--space-3); border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); }
+    .ds-table td.mono { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); }
+    .ds-table td.mono-muted { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); }
+    .ds-table tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ Header ═══════════════════════════════════════════════ -->
+  <header class="ds-header">
+    <p class="ds-eyebrow">bijonsetyawan.com</p>
+    <h1 class="ds-title">Design System</h1>
+    <p class="ds-subtitle">Token definitions and component reference for a consistent, maintainable visual language across the personal website.</p>
+    <nav class="ds-toc" aria-label="Design system sections">
+      <a href="#typography">Typography</a>
+      <a href="#color">Color</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#radius-shadow">Radius &amp; Shadow</a>
+      <a href="#motion">Motion</a>
+      <a href="#z-index">Z-Index</a>
+      <a href="#components">Components</a>
+      <a href="#implementation">Implementation</a>
+    </nav>
+  </header>
+
+  <!-- ═══ TYPOGRAPHY ══════════════════════════════════════════ -->
+  <section class="ds-section" id="typography">
+    <h2 class="ds-section-title">Typography</h2>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Font Families</p>
+      <div class="font-demo">
+        <div class="font-demo-meta">
+          <span class="font-demo-name">Newsreader</span>
+          <span class="font-demo-specs">--font-heading · variable 300–700 · serif · headings, display, nav brand</span>
+        </div>
+        <p style="font-family:var(--font-heading);font-size:var(--text-2xl);line-height:var(--leading-snug);font-weight:400;margin-bottom:var(--space-1);">Introduction to Variational Autoencoders</p>
+        <p style="font-family:var(--font-heading);font-size:var(--text-2xl);line-height:var(--leading-snug);font-weight:400;font-style:italic;margin-bottom:var(--space-2);color:var(--color-text-muted);">Introduction to Variational Autoencoders</p>
+        <p style="font-family:var(--font-heading);font-size:var(--text-base);color:var(--color-text-subtle);">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789 &amp; fi fl</p>
+      </div>
+      <div class="font-demo">
+        <div class="font-demo-meta">
+          <span class="font-demo-name">DM Sans</span>
+          <span class="font-demo-specs">--font-body · variable 300–700 · sans-serif · body text, UI, captions</span>
+        </div>
+        <p style="font-size:var(--text-lg);line-height:var(--leading-normal);margin-bottom:var(--space-2);">A technical look at how autoencoders learn compact representations of data through a bottleneck architecture.</p>
+        <p style="font-size:var(--text-base);color:var(--color-text-subtle);">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789</p>
+      </div>
+      <div class="font-demo">
+        <div class="font-demo-meta">
+          <span class="font-demo-name">Share Tech Mono</span>
+          <span class="font-demo-specs">--font-mono · regular 400 · monospace · code blocks, token names, metadata</span>
+        </div>
+        <p style="font-family:var(--font-mono);font-size:var(--text-base);margin-bottom:var(--space-2);">const encoder = (x: Tensor) =&gt; latent_mean + eps * latent_std;</p>
+        <p style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-text-subtle);">ABCDEFGHIJKLMNabcdefghijklmn 0123456789 {}[]()=&gt;&lt;+-*/</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ds-group">
+      <p class="ds-group-label">Type Scale · Minor Third (×1.25 from 16px)</p>
+      <div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-5xl</span>
+            <span class="type-row-size">3.815rem · ~61px</span>
+          </div>
+          <p style="font-family:var(--font-heading);font-size:var(--text-5xl);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);font-weight:300;font-style:italic;">Bijon</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-4xl</span>
+            <span class="type-row-size">3.052rem · ~49px</span>
+          </div>
+          <p style="font-family:var(--font-heading);font-size:var(--text-4xl);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);font-weight:400;font-style:italic;">Bijon Setyawan Raya</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-3xl</span>
+            <span class="type-row-size">2.441rem · ~39px</span>
+          </div>
+          <p style="font-family:var(--font-heading);font-size:var(--text-3xl);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);font-weight:700;">Introduction to Autoencoders</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-2xl</span>
+            <span class="type-row-size">1.953rem · ~31px</span>
+          </div>
+          <p style="font-family:var(--font-heading);font-size:var(--text-2xl);line-height:var(--leading-snug);letter-spacing:var(--tracking-tight);font-weight:500;">Encoder Architecture</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-xl</span>
+            <span class="type-row-size">1.563rem · ~25px</span>
+          </div>
+          <p style="font-family:var(--font-heading);font-size:var(--text-xl);line-height:var(--leading-snug);font-weight:500;">Latent Space Representation</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-lg</span>
+            <span class="type-row-size">1.25rem · 20px</span>
+          </div>
+          <p style="font-size:var(--text-lg);line-height:var(--leading-normal);color:var(--color-text-muted);">A technical look at unsupervised representation learning.</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-base</span>
+            <span class="type-row-size">1rem · 16px</span>
+          </div>
+          <p style="font-size:var(--text-base);line-height:var(--leading-normal);max-width:60ch;">The encoder maps inputs to a lower-dimensional latent space, forcing the network to learn the most salient features of the data distribution, discarding noise in the process.</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-sm</span>
+            <span class="type-row-size">0.8rem · ~13px</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--color-text-subtle);">May 8, 2026 · Machine Learning · 8 min read</p>
+        </div>
+        <div class="type-row">
+          <div class="type-row-meta">
+            <span class="type-row-token">--text-xs</span>
+            <span class="type-row-size">0.64rem · ~10px</span>
+          </div>
+          <p style="font-size:var(--text-xs);font-weight:600;letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--color-text-subtle);">Machine Learning · Deep Learning · Neural Networks</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ds-group">
+      <p class="ds-group-label">Semantic Type Roles</p>
+      <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-5);">Reference role variables in components rather than raw scale tokens. Adjusting a role here propagates to every component that uses it.</p>
+      <table class="role-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Resolves to</th>
+            <th>Used for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>--role-display</td><td>--text-4xl</td><td>Hero name, large display headings</td></tr>
+          <tr><td>--role-h1</td><td>--text-3xl</td><td>Post/page title — the semantic &lt;h1&gt;</td></tr>
+          <tr><td>--role-h2</td><td>--text-2xl</td><td>Section headings, content card titles</td></tr>
+          <tr><td>--role-h3</td><td>--text-xl</td><td>Subsections, in-article h3</td></tr>
+          <tr><td>--role-lead</td><td>--text-lg</td><td>Post descriptions, hero subtitle</td></tr>
+          <tr><td>--role-body</td><td>--text-base</td><td>Prose, nav links, UI text</td></tr>
+          <tr><td>--role-label</td><td>--text-sm</td><td>Dates, tags, metadata, captions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ COLOR ════════════════════════════════════════════════ -->
+  <section class="ds-section" id="color">
+    <h2 class="ds-section-title">Color</h2>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Semantic Tokens</p>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-text);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-text</span><span class="swatch-alias">neutral-950</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-text-muted);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-text-muted</span><span class="swatch-alias">neutral-600</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-text-subtle);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-text-subtle</span><span class="swatch-alias">neutral-500</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-text-disabled);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-text-disabled</span><span class="swatch-alias">neutral-400</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-accent);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-accent</span><span class="swatch-alias">blue-600</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-accent-hover);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-accent-hover</span><span class="swatch-alias">blue-800</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-border);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-border</span><span class="swatch-alias">neutral-200</span></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-chip" style="background:var(--color-surface);border-bottom:1px solid var(--color-border);"></div>
+          <div class="swatch-info"><span class="swatch-token">--color-surface</span><span class="swatch-alias">neutral-50</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Neutral Scale · OKLCH (slightly cool tilt)</p>
+      <div class="neutral-strip">
+        <div class="neutral-step" style="background:var(--neutral-50);"></div>
+        <div class="neutral-step" style="background:var(--neutral-100);"></div>
+        <div class="neutral-step" style="background:var(--neutral-200);"></div>
+        <div class="neutral-step" style="background:var(--neutral-300);"></div>
+        <div class="neutral-step" style="background:var(--neutral-400);"></div>
+        <div class="neutral-step" style="background:var(--neutral-500);"></div>
+        <div class="neutral-step" style="background:var(--neutral-600);"></div>
+        <div class="neutral-step" style="background:var(--neutral-700);"></div>
+        <div class="neutral-step" style="background:var(--neutral-800);"></div>
+        <div class="neutral-step" style="background:var(--neutral-900);"></div>
+        <div class="neutral-step" style="background:var(--neutral-950);"></div>
+      </div>
+      <div class="neutral-labels">
+        <span>50</span><span>100</span><span>200</span><span>300</span><span>400</span>
+        <span>500</span><span>600</span><span>700</span><span>800</span><span>900</span><span>950</span>
+      </div>
+    </div>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Text Color Usage</p>
+      <div>
+        <div class="usage-row">
+          <div class="usage-dot" style="background:var(--color-text);"></div>
+          <span style="font-size:var(--text-sm);color:var(--color-text);">Primary — headings, body copy, nav links</span>
+          <code class="usage-token">--color-text</code>
+        </div>
+        <div class="usage-row">
+          <div class="usage-dot" style="background:var(--color-text-muted);"></div>
+          <span style="font-size:var(--text-sm);color:var(--color-text-muted);">Muted — descriptions, secondary content</span>
+          <code class="usage-token">--color-text-muted</code>
+        </div>
+        <div class="usage-row">
+          <div class="usage-dot" style="background:var(--color-text-subtle);"></div>
+          <span style="font-size:var(--text-sm);color:var(--color-text-subtle);">Subtle — dates, tag labels, captions</span>
+          <code class="usage-token">--color-text-subtle</code>
+        </div>
+        <div class="usage-row">
+          <div class="usage-dot" style="background:var(--color-text-disabled);"></div>
+          <span style="font-size:var(--text-sm);color:var(--color-text-disabled);">Disabled — placeholders, disabled states</span>
+          <code class="usage-token">--color-text-disabled</code>
+        </div>
+        <div class="usage-row">
+          <div class="usage-dot" style="background:var(--color-accent);"></div>
+          <span style="font-size:var(--text-sm);color:var(--color-accent);">Accent — inline links, hover states, active indicators</span>
+          <code class="usage-token">--color-accent</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SPACING ══════════════════════════════════════════════ -->
+  <section class="ds-section" id="spacing">
+    <h2 class="ds-section-title">Spacing</h2>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Semantic Spacing</p>
+      <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-5);">Prefer these semantic names in components. Change one value here to adjust spacing globally.</p>
+      <div>
+        <div class="spacing-row">
+          <span class="spacing-label">--space-element</span>
+          <div class="spacing-bar hi" style="width:var(--space-4);"></div>
+          <span class="spacing-value">1rem · 16px — tight gaps within a component (date→title, title→desc)</span>
+        </div>
+        <div class="spacing-row">
+          <span class="spacing-label">--space-block</span>
+          <div class="spacing-bar hi" style="width:var(--space-8);"></div>
+          <span class="spacing-value">2rem · 32px — between sibling cards in a list</span>
+        </div>
+        <div class="spacing-row">
+          <span class="spacing-label">--space-section</span>
+          <div class="spacing-bar hi" style="width:var(--space-20);"></div>
+          <span class="spacing-value">5rem · 80px — between page-level sections</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Raw Scale (4px base)</p>
+      <div>
+        <div class="spacing-row"><span class="spacing-label">--space-1</span><div class="spacing-bar" style="width:var(--space-1);"></div><span class="spacing-value">0.25rem · 4px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-2</span><div class="spacing-bar" style="width:var(--space-2);"></div><span class="spacing-value">0.5rem · 8px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-3</span><div class="spacing-bar" style="width:var(--space-3);"></div><span class="spacing-value">0.75rem · 12px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-4</span><div class="spacing-bar" style="width:var(--space-4);"></div><span class="spacing-value">1rem · 16px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-5</span><div class="spacing-bar" style="width:var(--space-5);"></div><span class="spacing-value">1.25rem · 20px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-6</span><div class="spacing-bar" style="width:var(--space-6);"></div><span class="spacing-value">1.5rem · 24px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-8</span><div class="spacing-bar" style="width:var(--space-8);"></div><span class="spacing-value">2rem · 32px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-10</span><div class="spacing-bar" style="width:var(--space-10);"></div><span class="spacing-value">2.5rem · 40px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-12</span><div class="spacing-bar" style="width:var(--space-12);"></div><span class="spacing-value">3rem · 48px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-16</span><div class="spacing-bar" style="width:var(--space-16);"></div><span class="spacing-value">4rem · 64px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-20</span><div class="spacing-bar" style="width:var(--space-20);"></div><span class="spacing-value">5rem · 80px</span></div>
+        <div class="spacing-row"><span class="spacing-label">--space-24</span><div class="spacing-bar" style="width:var(--space-24);"></div><span class="spacing-value">6rem · 96px</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RADIUS & SHADOW ══════════════════════════════════════ -->
+  <section class="ds-section" id="radius-shadow">
+    <h2 class="ds-section-title">Radius &amp; Shadow</h2>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Border Radius</p>
+      <div class="radius-grid">
+        <div class="radius-wrap">
+          <div class="radius-box" style="border-radius:var(--radius-sm);"></div>
+          <p class="radius-name">--radius-sm<br>0.25rem</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-box" style="border-radius:var(--radius-md);"></div>
+          <p class="radius-name">--radius-md<br>0.5rem</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-box" style="border-radius:var(--radius-lg);"></div>
+          <p class="radius-name">--radius-lg<br>0.75rem</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-box" style="border-radius:var(--radius-xl);"></div>
+          <p class="radius-name">--radius-xl<br>1.25rem</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-box" style="border-radius:var(--radius-full);width:4.5rem;height:4.5rem;"></div>
+          <p class="radius-name">--radius-full<br>9999px</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="ds-group">
+      <p class="ds-group-label">Shadows</p>
+      <div class="shadow-grid">
+        <div class="shadow-wrap">
+          <div class="shadow-box" style="box-shadow:var(--shadow-sm);"></div>
+          <p class="shadow-name">--shadow-sm<br>subtle lift</p>
+        </div>
+        <div class="shadow-wrap">
+          <div class="shadow-box" style="box-shadow:var(--shadow-md);"></div>
+          <p class="shadow-name">--shadow-md<br>card, dropdown</p>
+        </div>
+        <div class="shadow-wrap">
+          <div class="shadow-box" style="box-shadow:var(--shadow-lg);"></div>
+          <p class="shadow-name">--shadow-lg<br>modal, overlay</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MOTION ════════════════════════════════════════════════ -->
+  <section class="ds-section" id="motion">
+    <h2 class="ds-section-title">Motion</h2>
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-8);">Hover the boxes to compare durations and easing curves.</p>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Durations &amp; Easing</p>
+      <div class="motion-grid">
+        <div class="motion-wrap">
+          <div class="motion-box t-fast"></div>
+          <p class="motion-label">fast · 100ms<br>ease-out</p>
+        </div>
+        <div class="motion-wrap">
+          <div class="motion-box t-base"></div>
+          <p class="motion-label">base · 200ms<br>ease-out</p>
+        </div>
+        <div class="motion-wrap">
+          <div class="motion-box t-slow"></div>
+          <p class="motion-label">slow · 400ms<br>ease-out</p>
+        </div>
+        <div class="motion-wrap">
+          <div class="motion-box t-spring" style="border-style:dashed;"></div>
+          <p class="motion-label">spring · 200ms<br>overshoot</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-group">
+      <p class="ds-group-label">Usage Guidelines</p>
+      <table class="ds-table">
+        <thead><tr><th>Token</th><th>Value</th><th>Use for</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--duration-fast</td><td class="mono-muted">100ms</td><td>Color changes, border transitions, icon swaps</td></tr>
+          <tr><td class="mono">--duration-base</td><td class="mono-muted">200ms</td><td>Layout shifts, nav open/close, gap animations</td></tr>
+          <tr><td class="mono">--duration-slow</td><td class="mono-muted">400ms</td><td>Page-level reveals, large panel transitions</td></tr>
+          <tr><td class="mono">--ease-out</td><td class="mono-muted">cubic-bezier(0.22,1,0.36,1)</td><td>Default for all interactive transitions</td></tr>
+          <tr><td class="mono">--ease-in-out</td><td class="mono-muted">cubic-bezier(0.4,0,0.2,1)</td><td>Symmetric transitions (open and close paired)</td></tr>
+          <tr><td class="mono">--ease-spring</td><td class="mono-muted">cubic-bezier(0.34,1.56,0.64,1)</td><td>Playful only — tag chips, icon reveals</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══ Z-INDEX ══════════════════════════════════════════════ -->
+  <section class="ds-section" id="z-index">
+    <h2 class="ds-section-title">Z-Index</h2>
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-6);">Never use raw numbers in components. Reference these tokens so the stacking order stays auditable in one place.</p>
+    <table class="ds-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">--z-raised</td><td class="mono-muted">10</td><td>Sticky nav, scroll-reveal elements</td></tr>
+        <tr><td class="mono">--z-overlay</td><td class="mono-muted">20</td><td>Dropdown menus, burger menu panel</td></tr>
+        <tr><td class="mono">--z-modal</td><td class="mono-muted">30</td><td>Modal dialogs</td></tr>
+        <tr><td class="mono">--z-toast</td><td class="mono-muted">40</td><td>Toast notifications</td></tr>
+        <tr><td class="mono">--z-tooltip</td><td class="mono-muted">50</td><td>Tooltips — always on top</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══ COMPONENTS ════════════════════════════════════════════ -->
+  <section class="ds-section" id="components">
+    <h2 class="ds-section-title">Components</h2>
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-8);">Live renders using the tokens above. Annotations note correct semantic HTML and which tokens each element references.</p>
+
+    <!-- Navigation -->
+    <div class="c-frame">
+      <p class="c-frame-label">Navigation</p>
+      <nav class="c-nav">
+        <a class="c-nav-brand" href="#">Bijon Setyawan</a>
+        <button class="c-nav-btn" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </nav>
+      <p class="c-note">Brand: <code>--font-heading</code> at <code>--text-xl</code> weight 500. Button border animates from transparent → <code>--color-border</code> via CSS scroll-timeline (<code>burger-sticky-border</code>). Button uses <code>--radius-md</code>, hover transitions at <code>--duration-fast</code>.</p>
+    </div>
+
+    <!-- ContentCard -->
+    <div class="c-frame">
+      <p class="c-frame-label">Content Card · Posts &amp; Works listing</p>
+      <article>
+        <p class="c-card-date">May 8, 2026</p>
+        <h3 class="c-card-title"><a href="#">Introduction to Autoencoders</a></h3>
+        <p class="c-card-desc">A deep dive into how autoencoders learn compact representations of data through an encoder–decoder bottleneck architecture.</p>
+      </article>
+      <p class="c-note">Uses <code>&lt;h3&gt;</code> — not h1 — because cards appear under a section <code>&lt;h2&gt;</code>. Title: <code>--font-heading</code> at <code>--role-h2</code>. Date: <code>--role-label</code> / <code>--color-text-subtle</code>. Description: <code>--role-body</code> / <code>--color-text-muted</code>. Cards are separated by <code>--space-block</code>.</p>
+    </div>
+
+    <!-- Post header -->
+    <div class="c-frame">
+      <p class="c-frame-label">Post Header</p>
+      <a class="c-back" href="#" style="margin-bottom:var(--space-6);display:inline-flex;">← All posts</a>
+      <div class="c-post-meta">
+        <a href="#">Machine Learning</a>
+        <span>·</span>
+        <span>May 8, 2026</span>
+      </div>
+      <h1 class="c-post-title">Introduction to Autoencoders</h1>
+      <p class="c-post-desc">A deep dive into how autoencoders learn compact representations of data through an encoder–decoder bottleneck architecture.</p>
+      <p class="c-note">Page title: <code>&lt;h1&gt;</code> at <code>--role-h1</code> (2.441rem) bold, <code>--leading-tight</code>. Description: <code>--role-lead</code> / <code>--color-text-muted</code>. Back link gap animates from <code>--space-1</code> → <code>--space-2</code> on hover.</p>
+    </div>
+
+    <!-- Inline prose elements -->
+    <div class="c-frame">
+      <p class="c-frame-label">Inline Prose Elements</p>
+      <p style="font-size:var(--role-body);line-height:var(--leading-normal);margin-bottom:var(--space-5);">
+        The encoder learns to map inputs to a lower-dimensional
+        <a class="c-link" href="#">latent space</a>, while the decoder reconstructs the original signal.
+        See the <a class="c-link c-link-ext" href="#">original paper</a> for full derivations.
+      </p>
+      <blockquote class="c-blockquote">
+        "A good representation is one that disentangles the underlying factors of variation." — Bengio et al.
+      </blockquote>
+      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-5);">
+        <a class="c-tag" href="#">Machine Learning</a>
+        <a class="c-tag" href="#">Deep Learning</a>
+        <a class="c-tag" href="#">Autoencoders</a>
+      </div>
+      <p class="c-note">Internal links: underline only. External links: <code>↗</code> appended via <code>::after</code>. Tags: <code>--radius-full</code>, <code>--text-xs</code> uppercase, border → <code>--color-border-strong</code> on hover. Blockquote border: 3px solid <code>--color-accent</code>.</p>
+    </div>
+
+    <!-- See more -->
+    <div class="c-frame">
+      <p class="c-frame-label">"See more" navigation link</p>
+      <a class="c-see-more" href="#">See more <span>→</span></a>
+      <p class="c-note">Gap between text and arrow widens from <code>--space-1</code> → <code>--space-2</code> on hover at <code>--duration-fast</code>, creating a physical pull effect. Used at the bottom of Selected Works and Latest Posts on the home page.</p>
+    </div>
+  </section>
+
+  <!-- ═══ IMPLEMENTATION ════════════════════════════════════════ -->
+  <section class="ds-section" id="implementation">
+    <h2 class="ds-section-title">Implementation</h2>
+    <p style="font-size:var(--text-base);color:var(--color-text-muted);margin-bottom:var(--space-4);">
+      Add an <code>@theme</code> block to <code>src/styles/global.css</code> after <code>@import "tailwindcss"</code>. In Tailwind v4, variables in <code>@theme</code> are registered as utility classes automatically: <code>--color-accent</code> becomes <code>text-accent</code>, <code>bg-accent</code>, <code>border-accent</code>; <code>--font-heading</code> becomes <code>font-heading</code>; <code>--radius-lg</code> becomes <code>rounded-lg</code>; and so on.
+    </p>
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-8);">
+      The <code>--role-*</code> semantic aliases and <code>--neutral-*</code> raw palette stay in <code>:root</code> — they're internal references, not utility classes.
+    </p>
+
+<pre><span class="c">/* src/styles/global.css */</span>
+@import "tailwindcss";
+
+<span class="k">@plugin</span> <span class="v">"daisyui"</span> { themes: lofi --default; }
+
+<span class="c">/* ──────────────────────────────────────────────────────────
+   Design tokens. Tailwind v4 exposes @theme vars as utilities.
+   Change a value here; it propagates everywhere.
+   ────────────────────────────────────────────────────────── */</span>
+<span class="k">@theme</span> {
+  <span class="c">/* Fonts → font-body, font-heading, font-mono */</span>
+  <span class="p">--font-body</span>:    <span class="v">'DM Sans', sans-serif</span>;
+  <span class="p">--font-heading</span>: <span class="v">'Newsreader', serif</span>;
+  <span class="p">--font-mono</span>:    <span class="v">'Share Tech Mono', monospace</span>;
+
+  <span class="c">/* Type scale → text-xs … text-5xl (overrides Tailwind defaults) */</span>
+  <span class="p">--text-xs</span>:   <span class="v">0.64rem</span>;
+  <span class="p">--text-sm</span>:   <span class="v">0.8rem</span>;
+  <span class="p">--text-base</span>: <span class="v">1rem</span>;
+  <span class="p">--text-lg</span>:   <span class="v">1.25rem</span>;
+  <span class="p">--text-xl</span>:   <span class="v">1.563rem</span>;
+  <span class="p">--text-2xl</span>:  <span class="v">1.953rem</span>;
+  <span class="p">--text-3xl</span>:  <span class="v">2.441rem</span>;
+  <span class="p">--text-4xl</span>:  <span class="v">3.052rem</span>;
+  <span class="p">--text-5xl</span>:  <span class="v">3.815rem</span>;
+
+  <span class="c">/* Colors → text-text, bg-surface, border-border, text-accent … */</span>
+  <span class="p">--color-text</span>:          <span class="v">oklch(10%  0.005 250)</span>;
+  <span class="p">--color-text-muted</span>:    <span class="v">oklch(48%  0.010 250)</span>;
+  <span class="p">--color-text-subtle</span>:   <span class="v">oklch(58%  0.010 250)</span>;
+  <span class="p">--color-text-disabled</span>: <span class="v">oklch(68%  0.010 250)</span>;
+  <span class="p">--color-bg</span>:            <span class="v">#ffffff</span>;
+  <span class="p">--color-surface</span>:       <span class="v">oklch(98%  0.002 250)</span>;
+  <span class="p">--color-border</span>:        <span class="v">oklch(88%  0.006 250)</span>;
+  <span class="p">--color-border-strong</span>: <span class="v">oklch(78%  0.008 250)</span>;
+  <span class="p">--color-accent</span>:        <span class="v">oklch(50%  0.15  252)</span>;
+  <span class="p">--color-accent-hover</span>:  <span class="v">oklch(38%  0.13  252)</span>;
+
+  <span class="c">/* Radius → rounded-sm, rounded-md, rounded-lg, rounded-xl */</span>
+  <span class="p">--radius-sm</span>:   <span class="v">0.25rem</span>;
+  <span class="p">--radius-md</span>:   <span class="v">0.5rem</span>;
+  <span class="p">--radius-lg</span>:   <span class="v">0.75rem</span>;
+  <span class="p">--radius-xl</span>:   <span class="v">1.25rem</span>;
+  <span class="p">--radius-full</span>: <span class="v">9999px</span>;
+
+  <span class="c">/* Shadows → shadow-sm, shadow-md, shadow-lg */</span>
+  <span class="p">--shadow-sm</span>: <span class="v">0 1px 2px 0 oklch(0% 0 0 / 0.04)</span>;
+  <span class="p">--shadow-md</span>: <span class="v">0 4px 12px -2px oklch(0% 0 0 / 0.07)</span>;
+  <span class="p">--shadow-lg</span>: <span class="v">0 8px 24px -4px oklch(0% 0 0 / 0.12)</span>;
+
+  <span class="c">/* Motion → duration-fast, duration-base, duration-slow */</span>
+  <span class="p">--duration-fast</span>:  <span class="v">100ms</span>;
+  <span class="p">--duration-base</span>:  <span class="v">200ms</span>;
+  <span class="p">--duration-slow</span>:  <span class="v">400ms</span>;
+  <span class="p">--ease-out</span>:    <span class="v">cubic-bezier(0.22, 1, 0.36, 1)</span>;
+  <span class="p">--ease-in-out</span>: <span class="v">cubic-bezier(0.40, 0, 0.20, 1)</span>;
+  <span class="p">--ease-spring</span>: <span class="v">cubic-bezier(0.34, 1.56, 0.64, 1)</span>;
+}
+
+<span class="c">/* Semantic aliases — internal references, not utility classes */</span>
+<span class="s">:root</span> {
+  <span class="c">/* Type roles — change here to remap a role site-wide */</span>
+  <span class="p">--role-label</span>:   <span class="v">var(--text-sm)</span>;
+  <span class="p">--role-body</span>:    <span class="v">var(--text-base)</span>;
+  <span class="p">--role-lead</span>:    <span class="v">var(--text-lg)</span>;
+  <span class="p">--role-h3</span>:      <span class="v">var(--text-xl)</span>;
+  <span class="p">--role-h2</span>:      <span class="v">var(--text-2xl)</span>;
+  <span class="p">--role-h1</span>:      <span class="v">var(--text-3xl)</span>;
+  <span class="p">--role-display</span>: <span class="v">var(--text-4xl)</span>;
+
+  <span class="c">/* Semantic spacing */</span>
+  <span class="p">--space-element</span>: <span class="v">1rem</span>;    <span class="c">/* was: gap-4 hardcoded */</span>
+  <span class="p">--space-block</span>:   <span class="v">2rem</span>;    <span class="c">/* was: gap-8 hardcoded */</span>
+  <span class="p">--space-section</span>: <span class="v">5rem</span>;    <span class="c">/* was: gap-20 hardcoded */</span>
+
+  <span class="c">/* Z-index ladder */</span>
+  <span class="p">--z-raised</span>:  <span class="v">10</span>;
+  <span class="p">--z-overlay</span>: <span class="v">20</span>;
+  <span class="p">--z-modal</span>:   <span class="v">30</span>;
+  <span class="p">--z-toast</span>:   <span class="v">40</span>;
+  <span class="p">--z-tooltip</span>: <span class="v">50</span>;
+}
+
+<span class="c">/* After adding @theme, migrate components one at a time:
+   text-slate-600   →  text-text-muted
+   text-slate-500   →  text-text-subtle
+   text-blue-600    →  text-accent
+   text-[1.5rem]    →  text-xl          (magic value → token)
+   leading-[1.5]    →  leading-normal   (magic value → token)
+   gap-20           →  (use --space-section in CSS or keep gap-20
+                        since Tailwind's gap-20 = 5rem = same value)
+
+   Also fix ContentCard: change as="h1" → as="h3" on card titles.
+   The post slug page: remove class="lg:text-4xl text-3xl" and use
+   the Heading size prop instead. See § Components above.          */</span>
+</pre>
+
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-6);">One additional bug to fix: <code>Heading.astro</code> maps <code>size="md"</code> to <code>text-md</code>, which is not a valid Tailwind class. Change the mapping to <code>text-base</code> for the medium size.</p>
+  </section>
+
+  <footer class="ds-footer">
+    Design System · bijonsetyawan.com · May 2026
+  </footer>
+
+</div>
+</body>
+</html>

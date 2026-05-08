@@ -15,7 +15,7 @@ import { Image } from "astro:assets";
                 class="w-full rounded-sm"
                 loading="lazy"
             />
-            <figcaption class="image-caption text-center text-slate-400 text-sm mt-2">
+            <figcaption class="font-heading text-center text-text-subtle text-sm mt-2">
                 Figure: {props.title}
             </figcaption>
         </figure>
@@ -31,9 +31,3 @@ import { Image } from "astro:assets";
         />
     )
 }
-
-<style>
-    .image-caption {
-        font-family: var(--font-heading);
-    }
-</style>

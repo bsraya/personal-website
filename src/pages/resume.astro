@@ -81,7 +81,7 @@ const education = [
             <div class="grid gap-8">
                 {experience.map((job) => (
                     <div>
-                        <Heading as="h5" size="sm" class="text-slate-400">{job.period}</Heading>
+                        <Heading as="h5" size="sm" class="text-text-subtle">{job.period}</Heading>
                         <Heading as="h3" size="xl" weight="bold">{job.title}</Heading>
                         <Heading as="h4" size="md" class="italic">{job.company} - {job.location}</Heading>
                         {
@@ -106,7 +106,7 @@ const education = [
             <div class="grid gap-8">
                 {education.map((edu) => (
                 <div class="">
-                    <Heading as="h5" size="sm" class="text-slate-400">{edu.year}</Heading>
+                    <Heading as="h5" size="sm" class="text-text-subtle">{edu.year}</Heading>
                     <Heading as="h3" size="md" weight="bold">{edu.institution}</Heading>
                     <Heading as="h4" size="md" class="italic">{edu.degree}</Heading>
                 </div>
