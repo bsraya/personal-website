@@ -5,6 +5,7 @@ import { useDismiss } from "../lib/use-dismiss";
 export default function TableOfContent({ url, headings }: { url: string, headings: Heading[] }) {
   const [tocOpen, setTocOpen] = createSignal(false);
   const [visible, setVisible] = createSignal(false);
+  const [activeSlug, setActiveSlug] = createSignal<string | null>(null);
   const toggleToc = () => setTocOpen(!tocOpen());
   const closeToc = () => setTocOpen(false);
   let containerRef: HTMLDivElement | undefined;
@@ -12,7 +13,25 @@ export default function TableOfContent({ url, headings }: { url: string, heading
   useDismiss(() => containerRef, closeToc);
 
   onMount(() => {
-    const onScroll = () => setVisible(window.scrollY > 100);
+    const updateActive = () => {
+      // Find the last heading whose top edge is above the scroll midpoint.
+      // The 80px offset matches scroll-padding-top so the active heading
+      // flips at the same moment the section visually arrives.
+      const threshold = window.scrollY + 80;
+      let current: string | null = null;
+      for (const h of headings) {
+        const el = document.getElementById(h.slug);
+        if (el && el.offsetTop <= threshold) current = h.slug;
+      }
+      setActiveSlug(current);
+    };
+
+    const onScroll = () => {
+      setVisible(window.scrollY > 100);
+      updateActive();
+    };
+
+    updateActive();
     window.addEventListener("scroll", onScroll, { passive: true });
     onCleanup(() => window.removeEventListener("scroll", onScroll));
   });
@@ -55,7 +74,7 @@ export default function TableOfContent({ url, headings }: { url: string, heading
                   <a
                     href={`${url}#${heading.slug}`}
                     onClick={() => setTocOpen(false)}
-                    class="block leading-snug hover:text-blue-600 transition-colors"
+                    class={`block leading-snug transition-colors ${activeSlug() === heading.slug ? "text-blue-600" : "hover:text-blue-600"}`}
                   >
                     {heading.text}
                   </a>
