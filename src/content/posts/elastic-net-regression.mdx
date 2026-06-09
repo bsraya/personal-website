@@ -2,13 +2,31 @@
 title: Elastic Net Regression
 description: Implementing a combination of Lasso and Ridge regression in Python
 publishedDate: 2025-04-30
-keywords: []
+keywords: [Regression]
 tag: Machine Learning
 series: Regression Algorithms
-published: false
+published: true
+hasMath: true
 ---
 
+## Introduction
 
-## What is Elastic Net Regression?
+Elastic Net Regression is a combination of Lasso Regression and Ridge Regression.[^1]
+It combines the penalties of both Lasso and Ridge Regression to create a model that is more robust to outliers and multicollinearity.[^2]
 
-Elastic Net Regression is a combination of Lasso Regression and Ridge Regression. It combines the penalties of both Lasso and Ridge Regression to create a model that is more robust to outliers and multicollinearity.
+[^1]: Originally proposed by Zou and Hastie in their 2005 paper *Regularization and Variable Selection via the Elastic Net*.
+[^2]: Multicollinearity occurs when two or more predictors in a model are highly correlated, making coefficient estimates unstable.
+
+## Mathematics Behind Elastic Net Regression
+
+$$
+\min _\beta\left( \frac{1}{N} \sum_{i=1}^{n} (\hat{y}_i - y_i)^2 + \lambda_1 \sum_{j=1}^{p} |\theta_j| + \lambda_2 \sum_{j=1}^{p} |\theta_j^2| \right)
+$$
+
+where
+1. $1/N \sum_{i=1}^{n} (\hat{y}_i - y_i)^2$ is the avg. Mean Squared Error.
+2. $\lambda_1$ is the regularization parameter for Lasso penalty.
+3. $\lambda_2$ is the regularization parameter for Ridge penalty.
+4. $\theta_j$ is the coefficient of the $j^{th}$ feature.
+4. $\lambda_1 \sum_{j=1}^{p} |\theta_j|$ is Lasso Penalty
+5. $\lambda_2 \sum_{j=1}^{p} |\theta_j^2|$ is Ridge Penalty

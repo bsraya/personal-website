@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import { remarkChart } from './src/lib/rehype-chart.mjs';
+import { rehypeSidenotes } from './src/lib/rehype-sidenotes.mjs';
 
 // Astro Intregrations
 import expressiveCode from "astro-expressive-code";
@@ -45,7 +45,6 @@ export default defineConfig({
     remarkPlugins: [
       remarkMath,
       [remarkToc, { heading: 'toc', maxDepth: 3 }],
-      remarkChart
     ],
     rehypePlugins: [
       rehypeKatex,
@@ -53,6 +52,7 @@ export default defineConfig({
       rehypeSlug,
       rehypeAccessibleEmojis,
       [rehypeAutolinkHeadings, { behavior: 'append' }],
+      rehypeSidenotes,
     ],
     remarkRehype: { footnoteLabel: 'Footnotes' },
     gfm: true
@@ -76,6 +76,7 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: { allowedHosts: ["pc", "portfolio.raven-byzantine.ts.net"] }
+    server: { allowedHosts: true },
+    watch: { ignored: ['**/.codegraph/**'] }
   }
 });

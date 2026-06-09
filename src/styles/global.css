@@ -138,18 +138,28 @@ code::after {
 
 @layer utilities {
   .burger-sticky-border {
+    border-color: transparent;
     animation: burger-sticky-border both;
+    animation-duration: auto;
     animation-timeline: scroll();
     animation-range: 0 100px;
   }
 
   @keyframes burger-sticky-border {
-    from {
+    from { border-color: transparent; }
+    to   { border-color: var(--color-border); }
+  }
+
+  /* Fallback for browsers without scroll-driven animations (Safari < 18) */
+  @supports not (animation-timeline: scroll()) {
+    .burger-sticky-border {
+      animation: none;
+      transition: border-color var(--duration-base) var(--ease-out);
       border-color: transparent;
     }
 
-    to {
-      border-color: var(--color-slate-200);
+    .burger-sticky .burger-sticky-border {
+      border-color: var(--color-border);
     }
   }
 }
