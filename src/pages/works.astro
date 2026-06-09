@@ -8,7 +8,7 @@ import Heading from "@component/Heading.astro";
 const pageTitle = "Works";
 const pageDescription =
   "A collection of projects built by Bijon Setyawan Raya.";
-const works = getSortedWorks();
+const works = await getSortedWorks();
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
@@ -17,8 +17,8 @@ const works = getSortedWorks();
     {
       works.map((work) => (
         <ContentCard
-          path={work.url}
-          frontmatter={work.frontmatter}
+          path={work.id}
+          frontmatter={work.data}
           type="works"
         />
       ))

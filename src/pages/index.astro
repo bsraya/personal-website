@@ -42,8 +42,8 @@ const webSiteSchema = {
   author: { "@type": "Person", name: "Bijon Setyawan Raya", url: siteUrl },
 };
 
-const posts = getSortedPosts().slice(0, 3);
-const works = getSortedWorks().slice(0, 3);
+const posts = (await getSortedPosts()).slice(0, 3);
+const works = (await getSortedWorks()).slice(0, 3);
 ---
 
 <BaseLayout
@@ -71,8 +71,8 @@ const works = getSortedWorks().slice(0, 3);
         {
           works.map((work) => (
             <ContentCard
-              path={work.url}
-              frontmatter={work.frontmatter}
+              path={work.id}
+              frontmatter={work.data}
               type="works"
             />
           ))
@@ -89,8 +89,8 @@ const works = getSortedWorks().slice(0, 3);
         {
           posts.map((post) => (
             <ContentCard
-              path={post.url}
-              frontmatter={post.frontmatter}
+              path={post.id}
+              frontmatter={post.data}
               type="posts"
             />
           ))

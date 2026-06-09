@@ -9,24 +9,25 @@ import { ArrowLeft } from "@lucide/astro";
 import { slugify, deslugify } from "@lib/string";
 import { getAllPosts, getPostsByTag } from "@lib/content";
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
   const tags = new Set<string>();
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
 
   for (const post of posts) {
-    if (post.frontmatter.tag) {
-      tags.add(slugify(post.frontmatter.tag));
+    if (post.data.tag) {
+      tags.add(slugify(post.data.tag));
     }
   }
 
   return Array.from(tags).map((tag) => ({
-    params: { tag: tag },
+    params: { tag },
   }));
 }
+
 const { tag } = Astro.params;
 const pageTitle = `${slugify(tag)} posts`;
 const pageDescription = `${slugify(tag)} posts written by ${import.meta.env.AUTHOR}.`;
-const allPosts = getPostsByTag(tag);
+const allPosts = await getPostsByTag(tag);
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
@@ -46,8 +47,8 @@ const allPosts = getPostsByTag(tag);
     {
       allPosts.map((post) => (
         <ContentCard
-          path={post.url}
-          frontmatter={post.frontmatter}
+          path={post.id}
+          frontmatter={post.data}
           type="posts"
         />
       ))

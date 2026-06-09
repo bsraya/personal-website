@@ -6,7 +6,7 @@ import { getSortedPosts } from "@lib/content";
 
 const pageTitle = "Posts";
 const pageDescription = "A collection of posts written by Bijon Setyawan Raya.";
-const posts = getSortedPosts();
+const posts = await getSortedPosts();
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
@@ -15,8 +15,8 @@ const posts = getSortedPosts();
     {
       posts.map((post) => (
         <ContentCard
-          path={post.url}
-          frontmatter={post.frontmatter}
+          path={post.id}
+          frontmatter={post.data}
           type="posts"
         />
       ))

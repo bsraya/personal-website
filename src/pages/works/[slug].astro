@@ -11,14 +11,13 @@ import TableOfContent from "@component/TableOfContent";
 
 import { MdxComponents } from "@component/MdxComponents";
 
-import { getSortedWorks } from "@lib/content";
-import { slugify } from "@lib/string";
+import { getAllWorks } from "@lib/content";
 
-export function getStaticPaths() {
-    const allWorks = getSortedWorks();
+export async function getStaticPaths() {
+    const allWorks = await getAllWorks();
 
-    return Array.from(allWorks).map((work) => ({
-        params: { slug: slugify(work.frontmatter.title) },
+    return allWorks.map((work) => ({
+        params: { slug: work.id },
     }));
 }
 
@@ -35,7 +34,8 @@ if (!work.data.published) {
     return Astro.redirect("/404");
 }
 
-const { Content, headings } = await render(work);
+const { Content, headings: rawHeadings } = await render(work);
+const headings = rawHeadings.filter((h) => h.slug !== 'footnote-label');
 
 const siteUrl = "https://www.bijonsetyawan.com";
 const workUrl = `${siteUrl}/works/${slug}`;
@@ -64,7 +64,7 @@ const creativeWorkSchema = {
 ---
 
 <BaseLayout
-    hasMath={true}
+    hasMath={work.data.hasMath}
     pageTitle={work.data.title}
     pageDescription={work.data.description}
     keywords={work.data.keywords ?? []}

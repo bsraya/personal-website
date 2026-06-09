@@ -13,7 +13,8 @@ const posts = defineCollection({
     keywords: z.array(z.string()).nullable(),
     tag: z.string(),
     series: z.string().nullable(),
-    published: z.boolean()
+    published: z.boolean(),
+    hasMath: z.boolean().optional().default(false),
   })
 })
 
@@ -28,7 +29,8 @@ const works = defineCollection({
     publishedDate: z.coerce.date(),
     keywords: z.array(z.string()).nullable(),
     tag: z.string().nullable(),
-    published: z.boolean()
+    published: z.boolean(),
+    hasMath: z.boolean().optional().default(false),
   })
 })
 

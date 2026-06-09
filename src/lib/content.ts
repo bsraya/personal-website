@@ -1,68 +1,41 @@
-import type { MarkdownInstance } from "astro";
-import type { Frontmatter } from "@type/frontmatter";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { slugify } from "@lib/string";
 
-enum SortOrder {
-    Ascending = "ascending",
-    Descending = "descending",
+type Post = CollectionEntry<"posts">;
+type Work = CollectionEntry<"works">;
+
+export async function getAllPosts(): Promise<Post[]> {
+  return getCollection("posts");
 }
 
-export function getAllPosts() {
-    return Object.values(
-        import.meta.glob<MarkdownInstance<Frontmatter>>("../content/posts/*.mdx", { eager: true })
-    );
+export async function getAllWorks(): Promise<Work[]> {
+  return getCollection("works");
 }
 
-export function getAllWorks() {
-    return Object.values(
-        import.meta.glob<MarkdownInstance<Frontmatter>>("../content/works/*.mdx", { eager: true })
-    );
+function sortByDate<T extends Post | Work>(entries: T[], order: "asc" | "desc" = "desc"): T[] {
+  return [...entries].sort((a, b) => {
+    const diff = new Date(a.data.publishedDate).getTime() - new Date(b.data.publishedDate).getTime();
+    return order === "desc" ? -diff : diff;
+  });
 }
 
-
-export function sortContent(posts: MarkdownInstance<Frontmatter>[], sortOrder: SortOrder = SortOrder.Descending) {
-    return posts.sort((a, b) => {
-        const dateA = new Date(a.frontmatter.publishedDate);
-        const dateB = new Date(b.frontmatter.publishedDate);
-        if (sortOrder === SortOrder.Ascending) {
-            return dateA.getTime() - dateB.getTime();
-        }
-        if (sortOrder === SortOrder.Descending) {
-            return dateB.getTime() - dateA.getTime();
-        }
-    })
+export async function getSortedPosts(order: "asc" | "desc" = "desc"): Promise<Post[]> {
+  const all = await getAllPosts();
+  return sortByDate(all.filter((p) => p.data.published), order);
 }
 
-
-export function getSortedPosts(sortOrder: SortOrder = SortOrder.Descending) {
-    const posts = getAllPosts();
-
-    const publishedPosts = posts.filter((item) => item.frontmatter.published === true);
-    return sortContent(publishedPosts, sortOrder = sortOrder);
+export async function getSortedWorks(order: "asc" | "desc" = "desc"): Promise<Work[]> {
+  const all = await getAllWorks();
+  return sortByDate(all.filter((w) => w.data.published), order);
 }
 
-
-export function getSortedWorks() {
-    const works = getAllWorks();
-
-    const publishedWorks = works.filter((item) => item.frontmatter.published === true);
-    return sortContent(publishedWorks);
+export async function getSeriesPosts(series: string): Promise<Post[]> {
+  const posts = await getSortedPosts("asc");
+  return posts.filter((p) => p.data.series === series);
 }
 
-
-export function getSeriesPosts(series: string) {
-    const posts = getSortedPosts(SortOrder.Ascending);
-
-    return Array.from(posts).filter((post) => {
-        if (post.frontmatter.series === series) {
-            return post
-        }
-    });
-}
-
-
-export function getPostsByTag(tag: string) {
-    const posts = getAllPosts();
-
-    return posts.filter(post => post.frontmatter.tag && (slugify(post.frontmatter.tag) == tag));
+export async function getPostsByTag(tag: string): Promise<Post[]> {
+  const all = await getAllPosts();
+  return all.filter((p) => p.data.tag && slugify(p.data.tag) === tag);
 }

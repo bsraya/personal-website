@@ -7,6 +7,8 @@ tag: Generative AI
 published: true
 ---
 
+import VectorSpaceVisualizer from '@component/custom/VectorSpaceVisualizer'
+
 ![Prompt Filtration Analysis Visualization](/assets/works/guardrails/overview.png "Prompt Filtration Analysis Visualization")
 
 To understand what Guardrails are, please refer to my previous post, 
@@ -119,7 +121,7 @@ dashboard for further analysis.
 If we expand one of the messages, it would show the
 candidate matches and the best matches of the message in the database.
 
-<VectorSpaceVisualizer />
+<VectorSpaceVisualizer client:visible />
 
 Knowing the best matches of each message will help
 human moderators understand why the system takes certain actions and further improve the system.

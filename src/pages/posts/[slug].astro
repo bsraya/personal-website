@@ -14,13 +14,11 @@ import TableOfContent from "@component/TableOfContent";
 
 import { MdxComponents } from "@component/MdxComponents.ts";
 
-export function getStaticPaths() {
-    const allPosts = getAllPosts();
+export async function getStaticPaths() {
+    const allPosts = await getAllPosts();
 
-    return Array.from(allPosts).map((post) => ({
-        params: {
-            slug: post.frontmatter.title.toLowerCase().replace(/ /g, "-"),
-        },
+    return allPosts.map((post) => ({
+        params: { slug: post.id },
     }));
 }
 
@@ -37,7 +35,8 @@ if (!post.data.published) {
     return Astro.redirect("/404");
 }
 
-const { Content, headings } = await render(post);
+const { Content, headings: rawHeadings } = await render(post);
+const headings = rawHeadings.filter((h) => h.slug !== 'footnote-label');
 
 const siteUrl = "https://www.bijonsetyawan.com";
 const postUrl = `${siteUrl}/posts/${slug}`;
@@ -72,7 +71,7 @@ const blogPostingSchema = {
 ---
 
 <BaseLayout
-    hasMath={true}
+    hasMath={post.data.hasMath}
     pageTitle={post.data.title}
     pageDescription={post.data.description}
     keywords={post.data.keywords ?? []}
@@ -118,7 +117,7 @@ const blogPostingSchema = {
         post.data.series && (
             <SeriesTable
                 series={post.data.series}
-                posts={getSeriesPosts(post.data.series)}
+                posts={await getSeriesPosts(post.data.series)}
                 currentPost={post.data.title}
             />
         )

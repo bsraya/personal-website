@@ -46,11 +46,11 @@ const { series, posts, currentPost } = Astro.props;
         <ol class="flex flex-col gap-1.5">
             {
                 posts.map((post: any, index: number) => {
-                    const isCurrent = currentPost === post.frontmatter.title;
+                    const isCurrent = currentPost === post.data.title;
                     return (
                         <li>
                             <a
-                                href={`/posts/${slugify(post.frontmatter.title)}`}
+                                href={`/posts/${post.id}`}
                                 aria-current={isCurrent ? "page" : undefined}
                                 class:list={[
                                     "flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors duration-150",
@@ -75,7 +75,7 @@ const { series, posts, currentPost } = Astro.props;
                                         isCurrent && "font-semibold",
                                     ]}
                                 >
-                                    {post.frontmatter.title}
+                                    {post.data.title}
                                     {isCurrent && (
                                         <span class="ml-2 inline-block rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase">
                                             You are here
