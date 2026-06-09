@@ -39,23 +39,23 @@ const experience = [
 const skills = [
   {
     category: "Programming Languages",
-    items: "C/C++, Golang, Python, SQL, Zig",
+    items: ["C/C++", "Golang", "Python", "SQL", "Zig"],
   },
   {
     category: "Deep Learning & Machine Learning",
-    items: "CUDA, HIP/ROCm, MLflow, cuML, PyTorch, Scikit-learn",
+    items: ["CUDA", "HIP/ROCm", "MLflow", "cuML", "PyTorch", "Scikit-learn"],
   },
   {
     category: "Data Engineering",
-    items: "Apache Airflow, Apache Iceberg, dbt, DuckDB, MongoDB, PostgreSQL, SQLite, Redis, Qdrant",
+    items: ["Apache Airflow", "Apache Iceberg", "dbt", "DuckDB", "MongoDB", "PostgreSQL", "SQLite", "Redis", "Qdrant"],
   },
   {
     category: "Systems & Infrastructure",
-    items: "Docker, Git, Kubernetes, Terraform, Linux/Unix, Podman",
+    items: ["Docker", "Git", "Kubernetes", "Terraform", "Linux/Unix", "Podman"],
   },
   {
     category: "Cloud Services",
-    items: "Amazon Web Services, Google Cloud Platform",
+    items: ["Amazon Web Services", "Google Cloud Platform"],
   },
 ];
 
@@ -76,20 +76,20 @@ const education = [
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
     <div class="grid divide-y divide-slate-200">
         <!-- Experience -->
-        <section class="gap-5 pb-6">
+        <section class="flex flex-col gap-5 pb-6">
             <Heading as="h2" size="xl" class="mb-2">Experience</Heading>
             <div class="grid gap-8">
                 {experience.map((job) => (
                     <div>
-                        <Heading as="h5" size="sm" class="text-text-subtle">{job.period}</Heading>
                         <Heading as="h3" size="xl" weight="bold">{job.title}</Heading>
-                        <Heading as="h4" size="md" class="italic">{job.company} - {job.location}</Heading>
+                        <p class="text-base italic">{job.company} — {job.location}</p>
+                        <time class="text-sm text-text-subtle">{job.period}</time>
                         {
                             job.descriptions.length > 0 && (
-                                <ul class="mt-1">
+                                <ul class="list-disc pl-5 mt-1">
                                     {
                                         job.descriptions.map((d) => (
-                                            <li class="list-disc">{d}</li>
+                                            <li>{d}</li>
                                         ))
                                     }
                                 </ul>
@@ -105,24 +105,28 @@ const education = [
             <Heading as="h2" size="xl" class="mb-2">Education</Heading>
             <div class="grid gap-8">
                 {education.map((edu) => (
-                <div class="">
-                    <Heading as="h5" size="sm" class="text-text-subtle">{edu.year}</Heading>
+                <div>
                     <Heading as="h3" size="md" weight="bold">{edu.institution}</Heading>
-                    <Heading as="h4" size="md" class="italic">{edu.degree}</Heading>
+                    <p class="text-base italic">{edu.degree}</p>
+                    <time class="text-sm text-text-subtle">{edu.year}</time>
                 </div>
                 ))}
             </div>
         </section>
 
         <!-- Technical Skills -->
-        <section class="gap-5 pt-6">
+        <section class="flex flex-col gap-5 pt-6">
             <Heading as="h2" size="xl" class="mb-2">Technical Skills</Heading>
             <div class="grid gap-8">
                 {
                     skills.map((skill) => (
                         <div>
                             <Heading as="h3" size="md" weight="bold">{skill.category}</Heading>
-                            <div>{skill.items}</div>
+                            <div class="flex flex-wrap gap-1.5 mt-1">
+                                {skill.items.map((item) => (
+                                    <span class="border border-border rounded-md text-xs px-2 py-0.5 text-text-subtle">{item}</span>
+                                ))}
+                            </div>
                         </div>
                     ))
                 }
