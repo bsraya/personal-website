@@ -1,14 +1,12 @@
 ---
 import ExternalLinkIcon from "@component/ExternalLinkIcon.astro";
 const props = Astro.props;
-const isExternal = props.href.includes("http");
+const isExternal = props.href?.startsWith("http");
 ---
 
 <a
     {...props}
     class="text-accent underline decoration-accent/60 underline-offset-2 hover:text-accent-hover hover:decoration-accent-hover transition-colors cursor-pointer"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label={props.label || "Link"}
+    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     ><slot />{isExternal && <ExternalLinkIcon />}</a
 >

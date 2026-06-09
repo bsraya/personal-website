@@ -13,14 +13,12 @@ const slug = getSlugFromPath(path);
 ---
 
 <div>
-    <Heading as="h3" size="sm" class="text-text-subtle">
-        {
-            new Date(frontmatter.publishedDate).toLocaleDateString(
-                "en-US",
-                dateObject,
-            )
-        }
-    </Heading>
+    <time
+        datetime={new Date(frontmatter.publishedDate).toISOString()}
+        class="text-sm text-text-subtle"
+    >
+        {new Date(frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}
+    </time>
     <Heading as="h3" size="2xl">
         <a class="hover:underline" href={`/${type}/${slug}`}>
             {frontmatter.title}
