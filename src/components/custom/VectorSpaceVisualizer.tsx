@@ -1,13 +1,13 @@
 import { createSignal, For, Show } from "solid-js";
 
-interface DbVector {
+export interface DbVector {
   id: string;
   x: number;
   y: number;
   type: "safe" | "toxic";
 }
 
-interface QueryVector {
+export interface QueryVector {
   id: string;
   x: number;
   y: number;
@@ -15,12 +15,22 @@ interface QueryVector {
   toxic: boolean;
 }
 
-interface KnnResult {
+export interface KnnResult {
   label: string;
   score: number;
 }
 
-const DB_VECTORS: DbVector[] = [
+export interface VectorSpaceVisualizerProps {
+  dbVectors?: DbVector[];
+  queryVectors?: QueryVector[];
+  /** IDs of db vectors to highlight as nearest neighbors */
+  targetNeighborIds?: string[];
+  knnResults?: KnnResult[];
+  stageLabels?: string[];
+  stageDescriptions?: string[];
+}
+
+const DEFAULT_DB_VECTORS: DbVector[] = [
   { id: "s1", x: 18, y: 58, type: "safe" },
   { id: "s2", x: 22, y: 72, type: "safe" },
   { id: "s3", x: 30, y: 64, type: "safe" },
@@ -41,22 +51,22 @@ const DB_VECTORS: DbVector[] = [
   { id: "t8", x: 55, y: 18, type: "toxic" },
 ];
 
-const QUERY_VECTORS: QueryVector[] = [
+const DEFAULT_QUERY_VECTORS: QueryVector[] = [
   { id: "q_safe", x: 32, y: 68, label: "query_safe", toxic: false },
   { id: "q_toxic", x: 70, y: 25, label: "query_toxic", toxic: true },
 ];
 
-const TARGET_NEIGHBOR_IDS = new Set(["t1", "t2", "t3"]);
+const DEFAULT_TARGET_NEIGHBOR_IDS = ["t1", "t2", "t3"];
 
-const KNN_RESULTS: KnnResult[] = [
+const DEFAULT_KNN_RESULTS: KnnResult[] = [
   { label: "doc_0x1A2F", score: 0.97 },
   { label: "doc_0x3C8D", score: 0.94 },
   { label: "doc_0x7E4B", score: 0.91 },
 ];
 
-const STAGE_LABELS = ["Index Space", "Query Projection", "K-Nearest Neighbors"];
+const DEFAULT_STAGE_LABELS = ["Index Space", "Query Projection", "K-Nearest Neighbors"];
 
-const STAGE_DESCRIPTIONS = [
+const DEFAULT_STAGE_DESCRIPTIONS = [
   "Encoded vectors are stored in the index. Safe and toxic messages form distinct clusters in the embedding space.",
   "Incoming query vectors are projected into the same space for similarity comparison.",
   "The 3 nearest neighbors to the toxic query are retrieved by cosine similarity score.",
@@ -64,17 +74,24 @@ const STAGE_DESCRIPTIONS = [
 
 const GRID_LINES = [20, 40, 60, 80];
 
-export default function VectorSpaceVisualizer() {
+export default function VectorSpaceVisualizer(props: VectorSpaceVisualizerProps) {
   const [stage, setStage] = createSignal(0);
 
-  const toxicQuery = QUERY_VECTORS.find((q) => q.toxic)!;
-  const neighborVectors = DB_VECTORS.filter((v) => TARGET_NEIGHBOR_IDS.has(v.id));
+  const dbVectors = () => props.dbVectors ?? DEFAULT_DB_VECTORS;
+  const queryVectors = () => props.queryVectors ?? DEFAULT_QUERY_VECTORS;
+  const targetNeighborIds = () => new Set(props.targetNeighborIds ?? DEFAULT_TARGET_NEIGHBOR_IDS);
+  const knnResults = () => props.knnResults ?? DEFAULT_KNN_RESULTS;
+  const stageLabels = () => props.stageLabels ?? DEFAULT_STAGE_LABELS;
+  const stageDescriptions = () => props.stageDescriptions ?? DEFAULT_STAGE_DESCRIPTIONS;
+
+  const toxicQuery = () => queryVectors().find((q) => q.toxic)!;
+  const neighborVectors = () => dbVectors().filter((v) => targetNeighborIds().has(v.id));
 
   return (
     <div class="my-8 rounded-xl border border-slate-200 overflow-hidden bg-white not-prose">
       {/* Stage header */}
       <div class="flex items-center gap-4 px-4 py-3 border-b border-slate-200 bg-slate-50 overflow-x-auto">
-        <For each={STAGE_LABELS}>
+        <For each={stageLabels()}>
           {(label, i) => (
             <button
               onClick={() => setStage(i())}
@@ -125,11 +142,11 @@ export default function VectorSpaceVisualizer() {
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
-            <For each={neighborVectors}>
+            <For each={neighborVectors()}>
               {(neighbor) => (
                 <line
-                  x1={toxicQuery.x}
-                  y1={toxicQuery.y}
+                  x1={toxicQuery().x}
+                  y1={toxicQuery().y}
                   x2={neighbor.x}
                   y2={neighbor.y}
                   stroke="rgb(239,68,68)"
@@ -146,11 +163,11 @@ export default function VectorSpaceVisualizer() {
         </Show>
 
         {/* DB vector dots */}
-        <For each={DB_VECTORS}>
+        <For each={dbVectors()}>
           {(vec) => (
             <div
               class={`absolute w-2.5 h-2.5 rounded-full -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${vec.type === "safe" ? "bg-blue-500 opacity-60" : "bg-red-500 opacity-60"
-                } ${stage() >= 2 && TARGET_NEIGHBOR_IDS.has(vec.id)
+                } ${stage() >= 2 && targetNeighborIds().has(vec.id)
                   ? "ring-2 ring-offset-1 ring-red-400 opacity-100 scale-125"
                   : ""
                 }`}
@@ -161,7 +178,7 @@ export default function VectorSpaceVisualizer() {
 
         {/* Query vectors at stage >= 1 */}
         <Show when={stage() >= 1}>
-          <For each={QUERY_VECTORS}>
+          <For each={queryVectors()}>
             {(qv) => (
               <div
                 class="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2"
@@ -229,7 +246,7 @@ export default function VectorSpaceVisualizer() {
               top-3 / cosine
             </p>
             <div class="flex flex-col gap-1.5">
-              <For each={KNN_RESULTS}>
+              <For each={knnResults()}>
                 {(result) => (
                   <div class="flex items-center justify-between">
                     <span class="text-[10px] font-[family-name:var(--font-monospace)] text-slate-600">
@@ -249,7 +266,7 @@ export default function VectorSpaceVisualizer() {
       {/* Stage description */}
       <div class="px-4 py-3 border-t border-slate-100 min-h-[3rem] flex items-center">
         <p class="text-sm text-slate-500 leading-snug font-[family-name:var(--font-monospace)]">
-          {STAGE_DESCRIPTIONS[stage()]}
+          {stageDescriptions()[stage()]}
         </p>
       </div>
 
@@ -267,12 +284,12 @@ export default function VectorSpaceVisualizer() {
         </button>
 
         <span class="text-[10px] font-[family-name:var(--font-monospace)] text-slate-400 tabular-nums">
-          {stage() + 1} / {STAGE_LABELS.length}
+          {stage() + 1} / {stageLabels().length}
         </span>
 
         <button
-          onClick={() => setStage((s) => Math.min(STAGE_LABELS.length - 1, s + 1))}
-          disabled={stage() === STAGE_LABELS.length - 1}
+          onClick={() => setStage((s) => Math.min(stageLabels().length - 1, s + 1))}
+          disabled={stage() === stageLabels().length - 1}
           class="flex items-center gap-1.5 text-xs font-[family-name:var(--font-monospace)] text-slate-500 hover:text-slate-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
         >
           next

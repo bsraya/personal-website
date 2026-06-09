@@ -1,4 +1,3 @@
-import VectorSpaceVisualizerIsland from "@mdxComponent/VectorSpaceVisualizerIsland.astro";
 import Blockquote from "@mdxComponent/Blockquote.astro";
 import H1 from "@mdxComponent/H1.astro";
 import H2 from "@mdxComponent/H2.astro";
@@ -33,5 +32,4 @@ export const MdxComponents = {
     blockquote: Blockquote,
     img: Img,
     p: Paragraph,
-    VectorSpaceVisualizer: VectorSpaceVisualizerIsland,
 }
