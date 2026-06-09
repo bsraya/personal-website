@@ -18,3 +18,4 @@ docker compose down && \
     docker build -t johnbjohn/personal-website:latest . && \
     docker compose up -d
 ```
+

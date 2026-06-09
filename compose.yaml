@@ -13,4 +13,6 @@ services:
       - ./tsconfig.json:/app/tsconfig.json
     ports:
       - 2389:2389
-    command: bunx -- bun run dev --host 0.0.0.0 --port 2389
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: bunx --bun astro dev --host --port 2389
