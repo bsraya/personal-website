@@ -237,3 +237,62 @@ span.katex-display {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0);   }
 }
+
+/* ── Sidenotes ──────────────────────────────────────────────────────────────
+   Large screens (≥ 1280 px): float into the right viewport margin.
+   At max-w-2xl (672 px) centered in a 1280 px viewport the right margin is
+   304 px — enough for a 200 px note with a 24 px gap.
+   Small screens (< 1280 px): inline callout block below the citing paragraph.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 1280px) {
+  .sidenote {
+    float: right;
+    clear: right;
+    width: 200px;
+    /* 200px width + 24px gap = 224px past the body's right edge */
+    margin-right: -224px;
+    margin-top: 0.2rem;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--color-text-subtle);
+    border-left: 2px solid var(--color-border);
+    padding-left: 0.6rem;
+  }
+
+  .sidenote p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 1279px) {
+  .sidenote {
+    display: block;
+    margin-top: -0.5rem;
+    margin-bottom: 1.25rem;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--color-text-subtle);
+    border-left: 2px solid var(--color-border);
+    padding: 0.3rem 0 0.3rem 0.6rem;
+  }
+
+  .sidenote p {
+    margin: 0;
+  }
+}
+
+/* In-text footnote reference superscript (rendered as <span> by the plugin) */
+span[data-footnote-ref] {
+  color: var(--color-accent);
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: default;
+}
+
+/* Number prefix inside the sidenote */
+.sidenote-number {
+  font-weight: 700;
+  color: var(--color-text-muted);
+}

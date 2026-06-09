@@ -29,7 +29,7 @@ export default function BurgerMenuSolid() {
   return (
     <div
       ref={containerRef}
-      class="z-40 fixed top-4 right-4 md:relative md:top-auto md:right-auto md:[animation:none]"
+      class={`z-40 fixed top-4 right-4 md:relative md:top-auto md:right-auto md:[animation:none] ${sticky() ? "burger-sticky" : ""}`}
     >
       <div class="rounded-xl border burger-sticky-border overflow-hidden md:rounded-none md:border-0 md:bg-transparent">
         <button
