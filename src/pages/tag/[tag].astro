@@ -25,8 +25,8 @@ export async function getStaticPaths() {
 }
 
 const { tag } = Astro.params;
-const pageTitle = `${slugify(tag)} posts`;
-const pageDescription = `${slugify(tag)} posts written by ${import.meta.env.AUTHOR}.`;
+const pageTitle = `${deslugify(tag)} posts`;
+const pageDescription = `${deslugify(tag)} posts written by ${import.meta.env.AUTHOR}.`;
 const allPosts = await getPostsByTag(tag);
 ---
 
@@ -35,14 +35,9 @@ const allPosts = await getPostsByTag(tag);
       <ArrowLeft size={14} class="group-hover:-translate-x-1 transition-transform duration-150" />
       <span>All posts</span>
   </a>
-  <div class="flex flex-row gap-2 xl">
-    <Heading as="h1">Posts tagged with</Heading>
-    <Heading
-      as="h1"
-      weight="bold"
-      class="underline">{deslugify(tag)}</Heading
-    >
-  </div>
+  <Heading as="h1" size="lg" class="mt-5 mb-6 text-text-subtle">
+    Posts tagged with <span class="font-bold underline">{deslugify(tag)}</span>
+  </Heading>
   <div class="grid grid-col gap-8 mb-5">
     {
       allPosts.map((post) => (
