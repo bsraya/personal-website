@@ -7,14 +7,14 @@ const pageDescription = "Bijon Setyawan Raya's professional resume.";
 
 const experience = [
   {
-    title: "Senior Machine Learning Engineer",
+    title: "Machine Learning Engineer",
     company: "IKG Team Ltd.",
     location: "Taipei, Taiwan",
     period: "October 2025 - Present",
     descriptions: [
-      "Engineered a content moderator in Go with sub-second latency and a 90% reduction in resource usage.",
-      "Provisioned a Medallion Architecture Data Lakehouse for business analytics.",
-      "Designed a financial observability platform with sub-second queries and granular revenue metrics.",
+        "Designed and shipped a content moderation system from scratch, replacing an LLM-based PoC with a Go-based embedding + reranker pipeline — reducing response time by 99% (8s to ~785ms) and reducing inference costs by 99% (100k to <1k tokens)",
+        "Built a precomputed financial metrics layer using tiered data architecture (Bronze/Silver/Gold), reducing 70% avg. query time (10s+ to <3s)",
+        "Architected and deployed the first automated data pipeline on all environments, transforming raw source data into governed financial metrics at 1M+ records/day — maintaining 99.9% SLA"
     ],
   },
   {
@@ -23,16 +23,19 @@ const experience = [
     location: "Taipei, Taiwan",
     period: "November 2024 - October 2025",
     descriptions: [
-      "Developed Guardrails on AWS that eliminates 99% of unsafe interactions while reducing latency by 90%.",
-      "Profiled bare-metal vs. virtualized GPU environments, identified bottlenecks in model serving frameworks.",
+        "Architected a 3-tier content safety system, reducing response time from 50s+ to under 5s while blocking 99% of unsafe interactions",
+        "Prototyped a no-code MLOps pipeline enabling scientists to train, validate, and deploy scikit-learn models, cut training time 5× with cuML and automated model deployment for real-time inference"
     ],
   },
   {
-    title: "Intermediate Fullstack Developer",
+    title: "Fullstack Developer",
     company: "Faria Education Group",
     location: "Taipei, Taiwan",
     period: "October 2022 - March 2024",
-    descriptions: [],
+    descriptions: [
+        "Migrated 25% of legacy CoffeeScript codebase to Stimulus.js, cutting build times by 40%",
+        "Optimized file export pipeline, reducing export times from 5+ minutes to under 3 seconds (99% faster)"
+    ],
   },
 ];
 
