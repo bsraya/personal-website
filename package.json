@@ -32,7 +32,7 @@
     "@fujocoded/expressive-code-output": "^0.0.1",
     "@lucide/astro": "^0.575.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@videojs/html": "^10.0.0-beta.32",
+    "@videojs/html": "^10.0.0-rc.2",
     "astro": "6.4.4",
     "astro-expressive-code": "^0.40.2",
     "astro-mermaid": "^1.4.0",
@@ -41,7 +41,7 @@
     "astro-seo": "^0.8.4",
     "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
-    "daisyui": "^5.7.28",
+    "daisyui": "^5.7.36",
     "lucide-solid": "^0.575.0",
     "mermaid": "^11.17.2",
     "rehype-accessible-emojis": "^0.3.2",
@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",
-    "@types/bun": "^1.4.1",
+    "@types/bun": "^1.4.2",
     "@types/sharp": "^0.32.0"
   }
 }
