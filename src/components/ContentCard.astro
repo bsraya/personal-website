@@ -22,7 +22,7 @@ const slug = getSlugFromPath(path);
         datetime={new Date(frontmatter.publishedDate).toISOString()}
         class="text-sm text-text-subtle"
     >
-        {new Date(frontmatter.publishedDate).toLocaleDateString("en-US", dateObject)}
+        {new Date(frontmatter.publishedDate).toLocaleDateString("en-GB", dateObject)}
     </time>
     <p class="text-text-muted">{frontmatter.description}</p>
 </div>
