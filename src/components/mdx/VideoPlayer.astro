@@ -5,12 +5,21 @@ interface Props {
 }
 
 const { src, title } = Astro.props;
+const isYouTube =
+  /^[\w-]{11}$/.test(src) ||
+  /^https?:\/\/(www\.|m\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be)\//.test(src);
 ---
 
 <figure class="w-full my-8">
   <video-player>
     <video-skin>
-      <video src={src} playsinline controls></video>
+      {
+        isYouTube ? (
+          <youtube-video src={src} class="w-full aspect-video" />
+        ) : (
+          <video src={src} playsinline controls />
+        )
+      }
     </video-skin>
   </video-player>
   {
@@ -27,4 +36,6 @@ const { src, title } = Astro.props;
   import "@videojs/html/video/player";
   // @ts-ignore
   import "@videojs/html/video/skin";
+  // @ts-ignore
+  import "@videojs/html/media/youtube-video";
 </script>
